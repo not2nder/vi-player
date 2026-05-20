@@ -1,32 +1,36 @@
 import os
 
-from util import pretty as p
+from util.pretty import *
 
-MAIN_BACKGROUND = "#24252d"
-MAIN_TEXT = "#bebebe"
-MAIN_SECONDARY = "#7b99b9"
+PRIMARY = "#24252d"
+TEXT = "#bebebe"
+SECONDARY = "#7b99b9"
 
 def draw_statusbar(current: str):
-    p.printf(p.center(f"{current}"), pos="start")
-
-    p.printf("-"*p.cols, pos="start", offset=1)
+    printf(center(f"{current}"), pos="start")
+    printf("─"*cols, pos="start", offset=1)
 
 def draw_songs(songs: list, current):
+    digits = max(2, len(str(len(songs))))
     for i, song in enumerate(songs):
-        text = f"{i+1}. {song.name}"
- 
+        index = f"{str(i+1).rjust(digits)}"
+
         if i == current:
-            text = p.reverse(text)
+            text = f"{fg(bold(index), SECONDARY)} {bg(bold(padding(song.name)), SECONDARY)}"
+        else:
+            text = f"{index} {song.name}"
 
-        line = p.fill(text)
+        line = fill(text)
 
-        p.printf(line, pos="start", offset=i+2)
+        printf(line, pos="start", offset=i+2)
 
 def draw_player(paused: bool, mode: str):
     state = "PAUSA" if paused else "TOCANDO"
-    text = p.justify(state, f"[{mode} MODE]")
+    
+    line = justify(f" {mode}", state)
 
-    p.printf(p.colorize(text, MAIN_BACKGROUND), pos="end", offset=-1)
+    printf(bg(line, SECONDARY), pos="end", offset=-1)
 
 def draw_commandline(command: str):
-    p.printf(f"MUSIC>{command}", pos="end")
+    printf(f">{command}", pos="end")
+

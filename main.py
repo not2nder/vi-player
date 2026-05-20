@@ -39,7 +39,6 @@ def draw():
     print("\x1b[2J",end="")
     print("\x1b[H",end="")
 
-    #ui.fill()
     ui.draw_statusbar(songs[current].name)
     ui.draw_songs(songs, current)
     ui.draw_player(player.pause, mode)
