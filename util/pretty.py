@@ -18,10 +18,10 @@ def padding(text: str, value: int = 1) -> str:
     return f"{' '*value}{text}{' '*value}"
 
 def bg(text: str, color: str):
-    return f"{hxtoansi(color)}{text}\x1b[48m"
+    return f"{hxtoansi(color)}{text}\x1b[49m"
 
 def fg(text: str, color: str):
-    return f"{hxtoansi(color, False)}{text}\x1b[38m"
+    return f"{hxtoansi(color, False)}{text}\x1b[39m"
 
 def bold(text: str):
     return f"\x1b[1m{text}\x1b[22m"
