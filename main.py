@@ -13,14 +13,19 @@ cols, lines = os.get_terminal_size()
 
 pending_next = False
 
+if len(sys.argv) > 1:
+    path = Path(sys.argv[1])
+else:
+    path = Path.home()/"vip"
+
 player = mpv.MPV(video=False)
-home = Path.home()/"vip"
-songs = list(home.glob("*.mp3"))
+songs = list(path.glob("*.mp3"))
 current = 0
 
 print("\x1b[?1049h",end="")
-print("\x1b[2J", end="")
-print("\x1b[H", end="", flush=True)
+print("\x1b[?25l", end="")
+#print("\x1b[2J", end="")
+#print("\x1b[H", end="", flush=True)
 
 def getch():
     fd = sys.stdin.fileno()
@@ -36,10 +41,10 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
 
 def draw():
-    print("\x1b[2J",end="")
-    print("\x1b[H",end="")
+    #print("\x1b[2J",end="")
+    #print("\x1b[H",end="")
 
-    ui.draw_statusbar(songs[current].name)
+    ui.draw_statusbar()
     ui.draw_songs(songs, current)
     ui.draw_player(player.pause, mode)
     ui.draw_commandline(command)
@@ -142,29 +147,4 @@ while True:
         else:
             command += key
 
-    #args = shlex.split(text)
-
-    #if not args:
-    #    draw()
-    #    continue
-
-    #cmd = args[0]
-
-    #match cmd:
-    #    case ":pl":
-    #        play_current()
-    #    case ":ps":
-    #        player.pause = not player.pause
-    #    case ":sk":
-    #        if len(args) < 2:
-    #            draw()
-    #            continue
-    #        skip(int(args[1]))
-    #    case ":nx":
-    #        next_song()
-    #    case ":q":
-    #        player.terminate()
-    #        break
-
-    #draw()
-print("\x1b[?1049l", end="", flush=True)
+print("\x1b[?1049l", end="")
