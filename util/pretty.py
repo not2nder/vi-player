@@ -1,11 +1,16 @@
+import sys
 import re
 import os
+from wcwidth import wcswidth
 
 cols, lines = os.get_terminal_size()
 
+RESET = "\x1b[0m"
+
+ANSI_ESCAPE = re.compile(r'\x1b\[[0-9;?]*[ -/]*[@-~]')
+
 def length(text):
-    ANSI_ESCAPE = re.compile(r'\x1b\[[0-9;?]*[ -/]*[@-~]')
-    return len(ANSI_ESCAPE.sub('', text))
+    return wcswidth(ANSI_ESCAPE.sub('', text))
 
 def fill(text: str, width: int = cols) -> str:
     visible = length(text)
@@ -14,14 +19,17 @@ def fill(text: str, width: int = cols) -> str:
 
     return text + pad
 
+def paint(text: str, fg_color: str, bg_color: str):
+    return bg(bg_color) + fg(fg_color) + text
+
 def padding(text: str, value: int = 1) -> str:
     return f"{' '*value}{text}{' '*value}"
 
-def bg(text: str, color: str):
-    return f"{hxtoansi(color)}{text}\x1b[49m"
+def bg(color: str):
+    return hxtoansi(color)
 
-def fg(text: str, color: str):
-    return f"{hxtoansi(color, False)}{text}\x1b[39m"
+def fg(color: str):
+    return hxtoansi(color, False)
 
 def bold(text: str):
     return f"\x1b[1m{text}\x1b[22m"
@@ -59,12 +67,15 @@ def justify(*args, width: int = cols) -> str:
 
 def center(text: str, width: int = cols) -> str:
     visible = length(text)
+
     if visible >= width:
         return text
 
     total = width - visible
+    
     left = total//2
     right = total - left
+    
     return f"{' '*left}{text}{' '*right}"
 
 def reverse(text: str) -> str:
@@ -78,20 +89,14 @@ def hxtoansi(color: str, bg: bool = True) -> str:
 def printf(text: str, pos: str, offset: int = 0):
     line = 1
 
-    if pos == "start":
-        line = 1
-
-    elif pos == "mid":
+    if pos == "mid":
         line = (lines//2)
 
     elif pos == "end":
         line = lines
     
-    print(
+    sys.stdout.write(
         f"\x1b[{line+offset};1H"
-        f"\x1b[2K"
-        f"{text}",
-        end="",
-        flush=True
+        f"{text}"
     )
 

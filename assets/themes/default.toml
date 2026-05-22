@@ -1,0 +1,10 @@
+[colors]
+
+bg = "#000000"
+fg = "#ffffff"
+
+secondary_bg = "#ffffff"
+secondary_fg = "#000000"
+
+index_bg = "#000000"
+index_fg = "#ffffff"

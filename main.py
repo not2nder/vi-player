@@ -24,8 +24,9 @@ current = 0
 
 print("\x1b[?1049h",end="")
 print("\x1b[?25l", end="")
-#print("\x1b[2J", end="")
-#print("\x1b[H", end="", flush=True)
+
+ui.draw_background()
+sys.stdout.flush()
 
 def getch():
     fd = sys.stdin.fileno()
@@ -41,13 +42,11 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
 
 def draw():
-    #print("\x1b[2J",end="")
-    #print("\x1b[H",end="")
-
-    ui.draw_statusbar()
+    ui.draw_statusbar(path)
     ui.draw_songs(songs, current)
     ui.draw_player(player.pause, mode)
     ui.draw_commandline(command)
+    sys.stdout.flush()
 
 def play_current():
     song = songs[current]
@@ -136,6 +135,8 @@ while True:
                 case ":q":
                     player.terminate()
                     break
+                case _:
+                    pass
             command = ""
             mode = "NORMAL"
  
