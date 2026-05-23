@@ -1,16 +1,15 @@
 import sys, tty, termios
-
 import os
 import shlex
 from pathlib import Path
 
 import mpv
 
-from util import pretty as p
 from util import ui
 
 cols, lines = os.get_terminal_size()
 
+state = "AGUARDANDO"
 pending_next = False
 
 if len(sys.argv) > 1:
@@ -42,22 +41,22 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
 
 def draw():
-    ui.draw_statusbar(path)
+    ui.draw_header(path)
     ui.draw_songs(songs, current)
-    ui.draw_player(mode, current+1, len(songs))
+    ui.draw_warning(state)
+    ui.draw_statusbar(mode, current+1, len(songs))
     ui.draw_commandline(command)
     sys.stdout.flush()
 
 def play_current():
+    global state
     song = songs[current]
-    
+    state = "TOCANDO"
     player.play(str(song))
 
 def next_song():
     global current
-
     current = (current+1) % len(songs)
-
     play_current()    
 
 @player.event_callback("end-file")
@@ -66,6 +65,16 @@ def on_end(event):
 
     if event.data.reason == "eof":
         pending_next = True
+
+def pause():
+    global state
+
+    if player.pause:
+        state = "TOCANDO"
+    else:
+        state = "PAUSA"
+
+    player.pause = not player.pause
 
 def skip(to: int = 1):
     global current
@@ -93,7 +102,7 @@ while True:
     if mode == "NORMAL":
         match key:
             case ":":
-                mode = "COMMAND"
+                mode = "COMANDO"
                 command = ":"
             case "h":
                 current = 0
@@ -112,7 +121,7 @@ while True:
                 player.terminate()
                 break
 
-    elif mode == "COMMAND":
+    elif mode == "COMANDO":
         if key == "\r":
             args = shlex.split(command)
             
@@ -127,7 +136,7 @@ while True:
                 case ":p":
                     play_current()
                 case ":P":
-                    player.pause = not player.pause
+                    pause()
                 case ":sk":
                     if len(args) < 2:
                         skip(1)

@@ -1,6 +1,6 @@
 # vi-player
 
-![Player](img/player.png)
+![Player](img/player.gif)
 
 O **vi-player** é um player de música inspirado diretamente na filosofia do [Vim](https://github.com/vim/vim) e [NeoVim](https://github.com/neovim/neovim).
 A proposta do projeto não é apenas reproduzir músicas no terminal, mas transformar a experiência de navegação musical em algo novo, orientado a:
@@ -72,7 +72,7 @@ NO futuro, o projeto terá:
 - instalação de dependências
 - geração inicial de configurações
 
-# Nacegação
+# Navegação
 
 O vi-player utiliza navegação inspirada diretamente no Vim.
 
@@ -101,8 +101,8 @@ Exemplo:
 ```
 
 ## Comandos atuais
-#
-#| Comando | Função |
+
+| Comando | Função |
 |---|---|
 | `:p` | Reproduzir música |
 | `:P` | Pause/Resume |

@@ -47,7 +47,7 @@ def draw_background():
     for y in range(lines):
         sys.stdout.write(f"\x1b[{y+1};1H{line}")
 
-def draw_statusbar(path: str):
+def draw_header(path: str):
     text = center(f"vi-player {path}")
     
     line = paint(
@@ -70,15 +70,13 @@ def draw_songs(songs: list, current: int):
     
     for i, song in enumerate(songs):
         index = str(i+1).rjust(digits)
-
         songname = Path(song.name).stem
-        
         duration = get_time(song)
 
         text = f"{songname} {duration}"
 
         if i == current:
-            line = f"{paint(bold(index), INDEX_FG, INDEX_BG)} "+paint(padding(bold(text)), HG_FG, HG_BG)
+            line = f"{paint(bold(index), INDEX_FG, INDEX_BG)} {paint('', INDEX_BG, HG_BG)}"+paint(padding(bold(text)), HG_FG, HG_BG)
         else:
             line = paint(fill(f"{index} {text}"), PLAYER_FG, PLAYER_BG)
 
@@ -86,14 +84,21 @@ def draw_songs(songs: list, current: int):
 
         printf(line, pos="start", offset=i+2)
 
-def draw_player(mode: str, current: int, qtd: int):
+def draw_statusbar(mode: str, current: int, qtd: int):
     state = f"MOSTRANDO {current} de {qtd}"
     left = paint(padding(bold(mode)), STATUS_FG, STATUS_BG) 
     right = paint(padding(bold(state)), HG_FG, HG_BG)
 
     line = justify(left, right)
 
-    printf(line, pos="end", offset=-1)
+    printf(line, pos="end", offset = -1)
+
+def draw_warning(state: str):
+    line = paint(padding(bold(state)), HG_FG, HG_BG)
+    tail = paint('', HG_BG, HG_FG)
+
+    line = fill(line + tail) + RESET
+    printf(line, pos="end", offset = -2)
 
 TOKEN_STYLES = {
     "COMMAND": lambda x: x,
