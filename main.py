@@ -44,7 +44,7 @@ def getch():
 def draw():
     ui.draw_statusbar(path)
     ui.draw_songs(songs, current)
-    ui.draw_player(player.pause, mode)
+    ui.draw_player(mode, current+1, len(songs))
     ui.draw_commandline(command)
     sys.stdout.flush()
 

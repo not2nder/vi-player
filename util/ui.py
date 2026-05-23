@@ -4,21 +4,13 @@ import mutagen
 import shutil
 
 from util.pretty import *
-from util.highlight import highlight
 from util import lexer
 
 import tomllib
 
 config_path = Path.home()/".config"/"vi-player"
 
-def setup():
-    config_path.mkdir(parents=True, exist_ok=True)
-    assets = Path(__file__).parent.parent/"assets"
-    shutil.copytree(assets, config_path, dirs_exist_ok=True)
-
 config_file = config_path/"config.toml"
-
-#setup()
 
 with open(config_file, "rb") as f:
     config = tomllib.load(f)
@@ -46,6 +38,9 @@ HG_FG = theme_colors.get("highlight_fg", SCD_FG)
 INDEX_BG = theme_colors.get("index_bg", SCD_BG)
 INDEX_FG = theme_colors.get("index_fg", SCD_FG)
 
+COMMAND_BG = theme_colors.get("command_bg", PLAYER_BG)
+ARGS_FG = theme_colors.get("args_fg", PLAYER_FG)
+
 def draw_background():
     line = bg(PLAYER_BG)+(" "*cols)+RESET
 
@@ -53,7 +48,7 @@ def draw_background():
         sys.stdout.write(f"\x1b[{y+1};1H{line}")
 
 def draw_statusbar(path: str):
-    text = center(bold(f"vi-player {path}"))
+    text = center(f"vi-player {path}")
     
     line = paint(
         fill(text),
@@ -85,19 +80,18 @@ def draw_songs(songs: list, current: int):
         if i == current:
             line = f"{paint(bold(index), INDEX_FG, INDEX_BG)} "+paint(padding(bold(text)), HG_FG, HG_BG)
         else:
-            line = paint(fill(f"{index} {padding(text)}"), PLAYER_FG, PLAYER_BG)
+            line = paint(fill(f"{index} {text}"), PLAYER_FG, PLAYER_BG)
 
         line += RESET
 
         printf(line, pos="start", offset=i+2)
 
-def draw_player(paused: bool, mode: str):
-    state = "PAUSA" if paused else "TOCANDO"
-    
-    left = paint(padding(bold(mode)), STATUS_FG, STATUS_BG)
-    right = paint(padding(state), PLAYER_FG, PLAYER_BG)
+def draw_player(mode: str, current: int, qtd: int):
+    state = f"MOSTRANDO {current} de {qtd}"
+    left = paint(padding(bold(mode)), STATUS_FG, STATUS_BG) 
+    right = paint(padding(bold(state)), HG_FG, HG_BG)
 
-    line = left+right+RESET
+    line = justify(left, right)
 
     printf(line, pos="end", offset=-1)
 
@@ -105,19 +99,19 @@ TOKEN_STYLES = {
     "COMMAND": lambda x: x,
     "PATH": lambda x: underline(x),
     "SPACE": lambda x: x,
-    "DIGIT": lambda x: bold(x),
+    "DIGIT": lambda x: paint(x, ARGS_FG, PLAYER_BG),
     "TEXT": lambda x: x
 }
 
 def highlight(text: str):
     result = ""
-    for token in lexer.tokenizer(text):
+    for token in lexer.tokenize(text):
         result += TOKEN_STYLES[token.tipo](token.texto)
     return result
 
 def draw_commandline(command: str):
     text = highlight(command)
 
-    line = paint(fill(text), PLAYER_FG, PLAYER_BG) + RESET
+    line = paint(fill(text), PLAYER_FG, COMMAND_BG) + RESET
     printf(line, pos="end")
 

@@ -10,9 +10,8 @@ class Token:
     def __repr__(self):
         return f"Token({self.tipo}, '{self.texto}')"
 
-def tokenizer(text: str):
+def tokenize(text: str):
     cursor = 0
-
     tokens = []
 
     while cursor < len(text):
@@ -33,11 +32,19 @@ def tokenizer(text: str):
             fim = cursor
             tokens.append(Token(text[inicio:fim], "COMMAND", inicio, fim))
 
+        elif char.isdigit():
+            inicio = cursor
+            while cursor < len(text) and not text[cursor].isspace():
+                cursor +=1
+            fim = cursor
+            tokens.append(Token(text[inicio:fim], "DIGIT", inicio, fim))
+        
         elif (
             text.startswith("~/", cursor) or
             text.startswith("./", cursor) or
             text.startswith("../", cursor) or
-            text.startswith("/", cursor)
+            text.startswith("/", cursor) or 
+            text.startswith("~", cursor)
         ):
             inicio = cursor
             while cursor < len(text) and not text[cursor].isspace():
