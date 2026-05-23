@@ -98,11 +98,14 @@ while True:
             case "h":
                 current = 0
             case "l":
-                current = len(songs) - 1
+                if len(songs) > 1:
+                    current = len(songs) - 1
             case "j":
-                current = (current+1) % len(songs)
+                if len(songs) > 1:
+                    current = (current+1) % len(songs)
             case "k":
-                current = (current-1) % len(songs)
+                if len(songs) > 1:
+                    current = (current-1) % len(songs)
             case " ":
                 player.pause = not player.pause
             case "q":
@@ -135,6 +138,12 @@ while True:
                 case ":q":
                     player.terminate()
                     break
+                case ":o":
+                    path = Path(str(args[1])).expanduser()
+                    if path.exists():
+                        songs = list(path.glob("*.mp3"))
+                        current = 0
+                        ui.draw_background()
                 case _:
                     pass
             command = ""

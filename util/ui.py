@@ -4,6 +4,8 @@ import mutagen
 import shutil
 
 from util.pretty import *
+from util.highlight import highlight
+from util import lexer
 
 import tomllib
 
@@ -16,7 +18,7 @@ def setup():
 
 config_file = config_path/"config.toml"
 
-setup()
+#setup()
 
 with open(config_file, "rb") as f:
     config = tomllib.load(f)
@@ -99,7 +101,23 @@ def draw_player(paused: bool, mode: str):
 
     printf(line, pos="end", offset=-1)
 
+TOKEN_STYLES = {
+    "COMMAND": lambda x: x,
+    "PATH": lambda x: underline(x),
+    "SPACE": lambda x: x,
+    "DIGIT": lambda x: bold(x),
+    "TEXT": lambda x: x
+}
+
+def highlight(text: str):
+    result = ""
+    for token in lexer.tokenizer(text):
+        result += TOKEN_STYLES[token.tipo](token.texto)
+    return result
+
 def draw_commandline(command: str):
-    line = paint(fill(command), PLAYER_FG, PLAYER_BG) + RESET
+    text = highlight(command)
+
+    line = paint(fill(text), PLAYER_FG, PLAYER_BG) + RESET
     printf(line, pos="end")
 

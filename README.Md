@@ -2,68 +2,114 @@
 
 ![Player](img/player.png)
 
-A proposta do projeto é de trazer a filosofia de ferramentas como [Vim](https://github.com/vimvim)/[NeoVim](https://github.com/neovim/neovim) para o controle e navegação musical. Em vez de depender de interfaces gráficas, mouse ou menus tradicionais, o vi-player transforma a reprodução de música em uma nova experiência baseada em:
+O **vi-player** é um player de música inspirado diretamente na filosofia do [Vim](https://github.com/vim/vim) e [NeoVim](https://github.com/neovim/neovim).
+A proposta do projeto não é apenas reproduzir músicas no terminal, mas transformar a experiência de navegação musical em algo novo, orientado a:
+
 - comandos
 - modos
 - atalhos de teclado
 - renderização direta no terminal
 
-## Sobre o Projeto
+## Filosofia
 
-A ideia central não é apenas tocar música no terminal, mas trazer a experiência de navegação do vim para um contexto diferente e experimental. Inspirado em ferramentas como:
-- ranger
-- cmus
-- ncmpcpp
-- tmux
+O projeto parte da ideia de que interfaces gráficas tradicionais nem sempre são a única forma de interagir com mídia. Em vez de botões, menus, mouse, múltiplas janelas, o vi-player aposta em comandos, navegação modal, atalhos inspirados no Vim, interface renderizada diretamente via ANSI Escape Codes.
+
+A intnção é criar uma experiência que lembre ferramentas como:
+
+- [Ranger](https://github.com/ranger/ranger)
+- [Cmus](https://github.com/cmus/cmus)
+- [Ncmcpp](https://github.com/ncmpcpp/ncmpcpp)
+- [tmux](https://github.com/tmux/tmux)
 
 ## Objetivos
 
-O foco e diferencial do projeto está em:
+O foco principal é:
+
 - navegação rápída
-- fluxo orientado ao teclado, por meio de modos, sem a necessidade de um mouse
+- fluxo orientado ao teclado
 - sistema de comandos extensível
 - renderização manual de interface
-- futura customização da experiência do usuário por meio de scripts
+- arquitetura leve e extensível
+- customização
+- futura integração com scripts/plugins
+
+## Estado Atual
+
+Atualmente o projeto já possui funções básicas como:
+
+- reprodução de músicas locais
+- navegação entre faixas
+- modos básicos
+- destaque visual de seleção
+- suporte inicial a temas
+
+Grande parte da arquitetura ainda está sendo construída e refatorada conforme o projeto evolui.
+
+## Funcionalidades
+
+- [x] Reprodução de músicas locais
+- [x] Navegação entre faixas
+- [x] Pause/Resume
+- [x] Tema Customizável (Em desenvolvimento)
+- [ ] Sistema de fila 
+- [ ] Keybinds customizáveis
+- [ ] Busca
+- [ ] Configuração via [Lua](https://www.lua.org)
 
 ## Dependências
-O projeto foi 100% desenvolvido em python, por meio de comandos nativos e ANSI Escape Codes, com abordagem semelhante a bibliotecas como curses e ncurses(C).
+
+O projeto foi desenvolvido em **PYthon**, utilizando renderização manual, sem frameworks TUI completos.
+
+Bibliotecas atualmente utilizadas:
 
 ```
 python-mpv
 mutagen
 ```
 
-Futuramente, irei adicionar um sistema de setup para instalar as dependências e arquivos de configurações iniciais, como temas e preferências.
+NO futuro, o projeto terá:
+- Sistema de setup automático
+- instalação de dependências
+- geração inicial de configurações
 
-### Como Usar
+# Nacegação
 
-Execute o arquivo main.py. Ao executar, informe na frente, o diretório das músicas salvas no seu computador:
+O vi-player utiliza navegação inspirada diretamente no Vim.
+
+## Movimento
+
+| Tecla | Ação |
+|---|---|
+| `j` | Próxima música |
+| `k` | Música anterior |
+| `h` | Início da lista |
+| `l` | Final da lista |
+
+## Modos
+
+Como já foi explicado, o player funciona através de modos.
+
+### NORMAL
+Modo principal de navegação.
+
+### COMMAND
+Acesse pressionando `:`.
+
+Exemplo:
+```vim
+:sk 10
 ```
-python main.py ~/Músicas/
-```
 
-Ao iniciar, use as teclas `j` e `k` para navegar entre as faixas.
-Assim como no vim, digite `:` para entrar no modo de comando. Nele você pode usar a lista de comandos disponível nesse guia para navegar entre as faixas.
-Use o comando `:q` quando quiser sair do player.
+## Comandos atuais
+#
+#| Comando | Função |
+|---|---|
+| `:p` | Reproduzir música |
+| `:P` | Pause/Resume |
+| `:sk N` | Pular para música |
+| `:nx` | Próxima música |
+| `:q` | Sair |
 
-## Estado Atual do Projeto
+# Aviso
 
-Atualmente, o vi-player já possui:
-- reprodução de músicas locais
-- navegação entre faixas
-- sistema básico de comandos e modos
-- destaque visual básico das faixas selecionadas
-
-Grande parte da arquitetura ainda está sendo construída e refatorada.
-
-## Funcionalidades
-
-- [x] Reprodução de músicas locais
-- [x] Próxima música
-- [x] Skip
-- [x] Pause/Resume
-- [x] Tema Customizável (Em desenvolvimento)
-- [ ] Sistema de fila 
-- [ ] Keybinds 
-- [ ] Busca
-
+O projeto ainda está em desenvolvimento inicial e diversas partes da arquitetura estão sendo reestruturadas constantemente. Portanto, há muitos bugs e erros a serem tratados e corrigidos.
