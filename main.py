@@ -1,5 +1,4 @@
 import sys, tty, termios
-import os
 import shlex
 from pathlib import Path
 
@@ -7,25 +6,10 @@ import mpv
 
 from util import ui
 
-cols, lines = os.get_terminal_size()
-
-state = "AGUARDANDO"
-pending_next = False
-
 if len(sys.argv) > 1:
     path = Path(sys.argv[1])
 else:
     path = Path.home()/"vip"
-
-player = mpv.MPV(video=False)
-songs = list(path.glob("*.mp3"))
-current = 0
-
-print("\x1b[?1049h",end="")
-print("\x1b[?25l", end="")
-
-ui.draw_background()
-sys.stdout.flush()
 
 def getch():
     fd = sys.stdin.fileno()
@@ -42,7 +26,7 @@ def getch():
 
 def draw():
     ui.draw_header(path)
-    ui.draw_songs(songs, current)
+    ui.draw_songs(songs, indicator)
     ui.draw_warning(state)
     ui.draw_statusbar(mode, current+1, len(songs))
     ui.draw_commandline(command)
@@ -50,21 +34,16 @@ def draw():
 
 def play_current():
     global state
-    song = songs[current]
+    song = songs[indicator]
     state = "TOCANDO"
     player.play(str(song))
 
 def next_song():
     global current
+    global indicator
     current = (current+1) % len(songs)
+    indicator = current
     play_current()    
-
-@player.event_callback("end-file")
-def on_end(event):
-    global pending_next
-
-    if event.data.reason == "eof":
-        pending_next = True
 
 def pause():
     global state
@@ -78,23 +57,30 @@ def pause():
 
 def skip(to: int = 1):
     global current
+    global indicator
 
     if not 1 <= to <= len(songs):
         return
     
     current = to - 1
+    indicator = current
 
     play_current()
 
-mode = "NORMAL"
+ui.initscreen()
+
 command = ""
+mode = "NORMAL"
+state = "AGUARDANDO"
+
+player = mpv.MPV(video=False)
+songs = list(path.glob("*.mp3"))
+
+current = 0
+indicator = 0
 
 draw()
 while True:
-    if pending_next:
-        next_song()
-        pending_next = False
-    
     draw()
 
     key = getch()
@@ -104,19 +90,19 @@ while True:
             case ":":
                 mode = "COMANDO"
                 command = ":"
+            case "p":
+                mode = "PLAYER"
             case "h":
-                current = 0
+                indicator = 0
             case "l":
                 if len(songs) > 1:
-                    current = len(songs) - 1
+                    indicator = len(songs) - 1
             case "j":
                 if len(songs) > 1:
-                    current = (current+1) % len(songs)
+                    indicator = (indicator+1) % len(songs)
             case "k":
                 if len(songs) > 1:
-                    current = (current-1) % len(songs)
-            case " ":
-                player.pause = not player.pause
+                    indicator = (indicator-1) % len(songs)
             case "q":
                 player.terminate()
                 break
@@ -151,19 +137,21 @@ while True:
                     path = Path(str(args[1])).expanduser()
                     if path.exists():
                         songs = list(path.glob("*.mp3"))
-                        current = 0
+                        indicator = 0
                         ui.draw_background()
                 case _:
                     pass
+
             command = ""
             mode = "NORMAL"
- 
+
         elif key == "\x7f":
             command = command[:-1]
         elif key == "\x1b":
+            cmd_buffer.append(command)
             command = ""
             mode = "NORMAL"
         else:
             command += key
 
-print("\x1b[?1049l", end="")
+ui.exitscreen()
