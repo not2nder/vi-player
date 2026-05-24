@@ -1,12 +1,9 @@
-import os
 from pathlib import Path
 import mutagen
-import shutil
 
 from util.pretty import *
 from util import Lexer
 
-import time
 import tomllib
 
 config_path = Path.home()/".config"/"vi-player"
@@ -60,11 +57,7 @@ def draw_background():
 def draw_header(path: str):
     text = center(f"vi-player {path}")
     
-    line = paint(
-        fill(text),
-        SCD_FG,
-        SCD_BG
-    ) + RESET
+    line = paint(fill(text), SCD_FG, SCD_BG) + RESET
 
     printf(line, pos="start")
 
@@ -74,10 +67,6 @@ def get_time(song):
     secs = int(duration%60)
 
     return f"{mins}:{str(secs).rjust(2,'0')}" 
-
-def show_warning(warning: str):
-    line = paint(padding(bold(warning)), HG_FG, HG_BG)
-    printf(line, pos="end", offset=-2)
 
 def draw_songs(songs: list, current: int):
     digits = max(2, len(str(len(songs))))
