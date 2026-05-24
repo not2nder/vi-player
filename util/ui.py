@@ -4,8 +4,9 @@ import mutagen
 import shutil
 
 from util.pretty import *
-from util import lexer
+from util import Lexer
 
+import time
 import tomllib
 
 config_path = Path.home()/".config"/"vi-player"
@@ -17,7 +18,7 @@ with open(config_file, "rb") as f:
 
 default_theme = config["general"]["theme"]
 
-theme_path = (Path.home()/".config"/"vi-player"/"themes"/f"{default_theme}.toml")
+theme_path = config_path/"themes"/f"{default_theme}.toml"
 
 with open(theme_path, "rb") as f:
     theme = tomllib.load(f)
@@ -40,6 +41,15 @@ INDEX_FG = theme_colors.get("index_fg", SCD_FG)
 
 COMMAND_BG = theme_colors.get("command_bg", PLAYER_BG)
 ARGS_FG = theme_colors.get("args_fg", PLAYER_FG)
+
+def initscreen():
+    print("\x1b[?1049h", end="")
+    print("\x1b[?125l", end="")
+    draw_background()
+    sys.stdout.flush()
+
+def exitscreen():
+    print("\x1b[?1049l", end="")
 
 def draw_background():
     line = bg(PLAYER_BG)+(" "*cols)+RESET
@@ -65,6 +75,10 @@ def get_time(song):
 
     return f"{mins}:{str(secs).rjust(2,'0')}" 
 
+def show_warning(warning: str):
+    line = paint(padding(bold(warning)), HG_FG, HG_BG)
+    printf(line, pos="end", offset=-2)
+
 def draw_songs(songs: list, current: int):
     digits = max(2, len(str(len(songs))))
     
@@ -76,7 +90,7 @@ def draw_songs(songs: list, current: int):
         text = f"{songname} {duration}"
 
         if i == current:
-            line = f"{paint(bold(index), INDEX_FG, INDEX_BG)} {paint('', INDEX_BG, HG_BG)}"+paint(padding(bold(text)), HG_FG, HG_BG)
+            line = f"{paint(bold(index), INDEX_FG, INDEX_BG)} "+paint(padding(bold(text)), HG_FG, HG_BG)
         else:
             line = paint(fill(f"{index} {text}"), PLAYER_FG, PLAYER_BG)
 
@@ -85,7 +99,7 @@ def draw_songs(songs: list, current: int):
         printf(line, pos="start", offset=i+2)
 
 def draw_statusbar(mode: str, current: int, qtd: int):
-    state = f"MOSTRANDO {current} de {qtd}"
+    state = f"{current} de {qtd}"
     left = paint(padding(bold(mode)), STATUS_FG, STATUS_BG) 
     right = paint(padding(bold(state)), HG_FG, HG_BG)
 
@@ -95,22 +109,20 @@ def draw_statusbar(mode: str, current: int, qtd: int):
 
 def draw_warning(state: str):
     line = paint(padding(bold(state)), HG_FG, HG_BG)
-    tail = paint('', HG_BG, HG_FG)
-
+    tail = paint('', HG_BG, HG_FG)
     line = fill(line + tail) + RESET
     printf(line, pos="end", offset = -2)
 
-TOKEN_STYLES = {
-    "COMMAND": lambda x: x,
-    "PATH": lambda x: underline(x),
-    "SPACE": lambda x: x,
-    "DIGIT": lambda x: paint(x, ARGS_FG, PLAYER_BG),
-    "TEXT": lambda x: x
-}
-
-def highlight(text: str):
+def highlight(text: str): 
+    TOKEN_STYLES = {
+        "COMMAND": lambda x: x,
+        "PATH": lambda x: underline(x),
+        "SPACE": lambda x: x,
+        "DIGIT": lambda x: paint(x, ARGS_FG, PLAYER_BG),
+        "TEXT": lambda x: x
+    }
     result = ""
-    for token in lexer.tokenize(text):
+    for token in Lexer.tokenize(text):
         result += TOKEN_STYLES[token.tipo](token.texto)
     return result
 
