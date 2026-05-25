@@ -1,41 +1,58 @@
 # Configurações
 
-Antes de executar o arquivo `main.py`, é preciso fazer algumas configurações externas. Os arquivos de configurações, pré definições e esquemas de cores do player tem ue se encontrar em `~/.config/vi-player/`
+Antes de executar o arquivo `main.py`, é preciso fazer algumas configurações externas. Os arquivos de configurações, pré definições e esquemas de cores do player tem que se encontrar em: `~/.config/vi-player/`
 
 ```
 ~/.config/vi-player/
 ├── config.toml
 └── themes/
-    ├── defult.toml
-    ├── gruvbox.toml
-    └── nord.toml
+    ├── deep-blue.toml
+    ├── linen-light.toml
+    ├── ocean.toml
+    ├── retro.toml
+    ├── slate.toml
+    └── warm.toml
 ```
 
-Antes de executar o arquivo principal, mova o conteúdo da pasta `assets` para a pasta de configuração padrão do vi-player. No arquivo de configuração `config.toml`, você pode definiro esquema de cores padrão alterando o campo `theme`
+Mova o conteúdo da pasta `assets` para a pasta de configuração padrão do vi-player. No arquivo de configuração `config.toml`, você pode definir o esquema de cores padrão alterando o campo `theme`.
 
 ```toml
-theme="nord"
+theme="ocean"
 ```
 
 A partir disso, você já pode criar os próprios temas. Basta criar um arquivo .toml com o nome do seu tema e definir as cores de sua preferência.
 
 ```toml
-[colors]
+[colors] # Obrigatóriamente tem que estar no início do arquivo
 
-bg = "#282828" # Cor de fundo do player
-fg = "#ebdbb2" # Cor do texto
+bg = "#20282B" # Cor de fundo do player
+fg = "#D8DEE4" # Cor do texto do player
 
-secondary_bg = "#3c3836" # Cor de fundo secundária (statusline e header)
-secondary_fg = "#ebdbb2" # Cor do texto secundária
+# Header
+secondary_bg = "#5FA8B8" 
+secondary_fg = "#F4F7F8"
 
-statusline_bg = "#98971a" # Cor de fundo da linha de status
-statusline_fg = "#1s2021" # Cor do texto da linha de status
+# Statusline
+statusline_bg = "#2D6F7A"
+statusline_fg = "#F4F7F8"
 
-highlight_bg = "#b8bb26" # Cor do texto da música selecionada
-highlight_fg = "#1d2021" # Cor de fundo da música selecionada
+# Números das faixas
+index_bg = "#20282B"
+index_fg = "#7E909A"
 
-index_bg = "#458588" # Cor de fundo dos números indicadores
-index_fg = "#ebdbb2" # Cor do textoo dos números indicadores
+# Linha dos indicadores
+indicator_line_bg = "#4EA8B9"
+indicator_line_fg = "#F4F7F8"
+
+# Número dos indicadores
+indicator_num_bg = "#20282B"
+indicator_num_fg = "#5FA8B8"
+
+# Barra de avisos
+warning_bg = "#D65D8F"
+warning_fg = "#FDFDFD"
 ```
 
 Alguns parâmetros são opcionais, mas para o tema funcionar corretamente, é recomendado que tenha no mínimo bg e fg (primário e secundário).
+
+Para alterar o tema durante a execução do player, basta executar o comando `:theme` com o nome do seu tema na frente do comando, sem a extensão .toml

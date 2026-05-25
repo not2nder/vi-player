@@ -50,7 +50,7 @@ Grande parte da arquitetura ainda está sendo construída e refatorada conforme 
 - [x] Reprodução de músicas locais
 - [x] Navegação entre faixas
 - [x] Pause/Resume
-- [x] Tema Customizável (Em desenvolvimento)
+- [x] Tema Customizável
 - [ ] Sistema de fila 
 - [ ] Keybinds customizáveis
 - [ ] Busca
@@ -58,7 +58,7 @@ Grande parte da arquitetura ainda está sendo construída e refatorada conforme 
 
 ## Dependências
 
-O projeto foi desenvolvido em **PYthon**, utilizando renderização manual, sem frameworks TUI completos.
+O projeto foi desenvolvido em **Python**, utilizando renderização manual, com engine própria, sem frameworks TUI ou bibliotecas completas.
 
 Bibliotecas atualmente utilizadas:
 
@@ -67,7 +67,7 @@ python-mpv
 mutagen
 ```
 
-NO futuro, o projeto terá:
+Futuramente, o projeto terá:
 - Sistema de setup automático
 - instalação de dependências
 - geração inicial de configurações
@@ -87,13 +87,13 @@ O vi-player utiliza navegação inspirada diretamente no Vim.
 
 ## Modos
 
-Como já foi explicado, o player funciona através de modos.
+O player funciona através de modos.
 
-### NORMAL
-Modo principal de navegação.
+### MODO NORMAL
+Modo principal de navegação. usando `h`, `j`, `k` e `l` para escolher a faixa
 
-### COMMAND
-Acesse pressionando `:`.
+### MODO DE COMANDO
+Acessado pressionando `:`. É o modo que controla o play, pause e skips
 
 Exemplo:
 ```vim
