@@ -65,6 +65,14 @@ def next_song():
     indicator = current
     play_current()    
 
+def previous_song():
+    global current
+    global indicator
+
+    current = (current-1) % len(songs)
+    indicator = current
+    play_current()
+
 def pause():
     global state
 
@@ -149,6 +157,8 @@ while True:
                     skip(int(args[1]))
                 case ":nx":
                     next_song()
+                case ":pv":
+                    previous_song()
                 case ":q":
                     player.terminate()
                     break
