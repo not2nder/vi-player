@@ -5,9 +5,18 @@ from pathlib import Path
 import mpv
 
 from util import ui
+from util.pretty import length, lines, cols
+
+from util.screenbuffer import ScreenBuffer
+
+import time
 
 if len(sys.argv) > 1:
     path = Path(sys.argv[1])
+    songs = list(path.glob("*.mp3"))
+else:
+    path = ""
+    songs = []
 
 def getch():
     fd = sys.stdin.fileno()
@@ -23,15 +32,20 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
 
 def draw():
-    frame = ""
-    frame += ui.draw_header(path)
-    frame += ui.draw_songs(songs, indicator)
-    frame += ui.draw_warning(state)
-    frame += ui.draw_statusbar(mode, indicator+1, len(songs))
-    frame += ui.draw_commandline(command)
+    buffer = ScreenBuffer()
+    buffer.add(ui.draw_header(path))
+    buffer.add(ui.draw_songs(songs, indicator))
+    buffer.add(ui.draw_warning(state))
+    buffer.add(ui.draw_statusbar(mode, indicator+1, len(songs)))
+    buffer.add(ui.draw_commandline(command))
 
-    sys.stdout.write(frame)
-    sys.stdout.flush()
+    if mode == "COMANDO":
+        buffer.add(ui.show_cursor())
+        buffer.add(ui.move_cursor(lines, length(command)+1))
+    else:
+        buffer.add(ui.hide_cursor())
+
+    buffer.render()
 
 def play_current():
     global state
@@ -46,6 +60,7 @@ def play_current():
 def next_song():
     global current
     global indicator
+
     current = (current+1) % len(songs)
     indicator = current
     play_current()    
@@ -79,7 +94,6 @@ mode = "NORMAL"
 state = "AGUARDANDO"
 
 player = mpv.MPV(video=False)
-songs = list(path.glob("*.mp3"))
 
 current = 0
 indicator = 0
@@ -126,7 +140,7 @@ while True:
             match cmd:
                 case ":p":
                     play_current()
-                case ":P":
+                case ":pp":
                     pause()
                 case ":sk":
                     if len(args) < 2:
@@ -153,7 +167,6 @@ while True:
         elif key == "\x7f":
             command = command[:-1]
         elif key == "\x1b":
-            cmd_buffer.append(command)
             command = ""
             mode = "NORMAL"
         else:
