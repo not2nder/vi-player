@@ -1,0 +1,24 @@
+[colors]
+
+bg = "#001B00"
+fg = "#33FF66"
+
+secondary_bg = "#0F3D0F"
+secondary_fg = "#33FF66"
+
+statusline_bg = "#145214"
+statusline_fg = "#99FF99"
+
+index_bg = "#001B00"
+index_fg = "#1FAF4A"
+
+time_fg = "#1FAF4A"
+
+indicator_line_bg = "#33FF66"
+indicator_line_fg = "#001B00"
+
+indicator_num_bg = "#001B00"
+indicator_num_fg = "#33FF66"
+
+warning_bg = "#FF4444"
+warning_fg = "#001B00"
