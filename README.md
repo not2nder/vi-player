@@ -99,15 +99,18 @@ Exemplo:
 ```vim
 :sk 10
 ```
+Executa o comando de pular para a música de número 10
 
 ## Comandos atuais
 
 | Comando | Função |
 |---|---|
 | `:p` | Reproduzir música |
-| `:P` | Pause/Resume |
-| `:sk N` | Pular para música |
+| `:pp` | Pause/Resume |
+| `:sk` | Pular para música |
 | `:nx` | Próxima música |
+| `:pv` | Música Anterior |
+| `:o` | Abrir novo diretório |
 | `:q` | Sair |
 
 # Aviso
