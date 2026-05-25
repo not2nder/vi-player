@@ -2,7 +2,6 @@ import sys
 import re
 import os
 from wcwidth import wcswidth
-
 cols, lines = os.get_terminal_size()
 
 RESET = "\x1b[0m"
@@ -12,7 +11,7 @@ ANSI_ESCAPE = re.compile(r'\x1b\[[0-9;?]*[ -/]*[@-~]')
 def length(text):
     return wcswidth(ANSI_ESCAPE.sub('', text))
 
-def fill(text: str, width: int = cols) -> str:
+def fill(text: str, width: int) -> str:
     visible = length(text)
 
     pad = " "*max(0, width-visible)
@@ -40,7 +39,7 @@ def underline(text: str):
 def dim(text: str):
     return f"\x1b[2m{text}\x1b[0m"
 
-def justify(*args, width: int = cols) -> str:
+def justify(*args, width: int) -> str:
     if not args:
         return ""
 
@@ -68,7 +67,7 @@ def justify(*args, width: int = cols) -> str:
 
     return result
 
-def center(text: str, width: int = cols) -> str:
+def center(text: str, width: int) -> str:
     visible = length(text)
 
     if visible >= width:
@@ -89,14 +88,14 @@ def hxtoansi(color: str, bg: bool = True) -> str:
     r, g, b = [int(hex_color[i:i+2], 16) for i in (0,2,4)]
     return f"\x1b[{48 if bg else 38};2;{r};{g};{b}m"
 
-def printf(text: str, pos: str, offset: int = 0):
+def printf(text: str, pos: str, screen: object, offset: int = 0):
     line = 1
 
     if pos == "mid":
-        line = (lines//2)
+        line = (screen.height//2)
 
     elif pos == "end":
-        line = lines
+        line = screen.height
     
     return (
         f"\x1b[{line+offset};1H"

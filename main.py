@@ -5,11 +5,13 @@ from pathlib import Path
 import mpv
 
 from util import ui
-from util.pretty import length, lines, cols
+from util.pretty import length
+from util.theme import set_theme
 
+from util.screen import Screen
 from util.screenbuffer import ScreenBuffer
 
-import time
+import signal
 
 if len(sys.argv) > 1:
     path = Path(sys.argv[1])
@@ -17,6 +19,17 @@ if len(sys.argv) > 1:
 else:
     path = ""
     songs = []
+
+set_theme("ocean")
+
+screen = Screen()
+
+def handle_resize(sigun, frame):
+    screen.clear()
+    screen.resize()
+    draw()
+
+signal.signal(signal.SIGWINCH, handle_resize)
 
 def getch():
     fd = sys.stdin.fileno()
@@ -33,15 +46,16 @@ def getch():
 
 def draw():
     buffer = ScreenBuffer()
-    buffer.add(ui.draw_header(path))
-    buffer.add(ui.draw_songs(songs, indicator))
-    buffer.add(ui.draw_warning(state))
-    buffer.add(ui.draw_statusbar(mode, indicator+1, len(songs)))
-    buffer.add(ui.draw_commandline(command))
+    buffer.add(ui.draw_background(screen))
+    buffer.add(ui.draw_header(path, screen=screen))
+    buffer.add(ui.draw_songs(songs, indicator, screen=screen))
+    buffer.add(ui.draw_warning(state, screen=screen))
+    buffer.add(ui.draw_statusbar(mode, indicator+1, len(songs), screen=screen))
+    buffer.add(ui.draw_commandline(command, screen=screen))
 
     if mode == "COMANDO":
         buffer.add(ui.show_cursor())
-        buffer.add(ui.move_cursor(lines, length(command)+1))
+        buffer.add(ui.move_cursor(screen.height, length(command)+1))
     else:
         buffer.add(ui.hide_cursor())
 
@@ -95,7 +109,7 @@ def skip(to: int = 1):
 
     play_current()
 
-ui.initscreen()
+ui.initscreen(screen)
 
 command = ""
 mode = "NORMAL"
@@ -108,6 +122,10 @@ indicator = 0
 
 draw()
 while True:
+
+    if screen.check_resize:
+        screen.resize()
+
     draw()
 
     key = getch()
@@ -143,7 +161,7 @@ while True:
                 command = ""
                 continue
 
-            cmd = args[0]
+                cmd = args[0]
 
             match cmd:
                 case ":p":
@@ -167,7 +185,12 @@ while True:
                     if path.exists():
                         songs = list(path.glob("*.mp3"))
                         indicator = 0
-                        ui.draw_background()
+                case ":theme":
+                    try:
+                        set_theme(args[1])
+                        state="Tema da sessão atualizado!"
+                    except:
+                        state=f"Tema não encontrado: {args[1]}"
                 case _:
                     pass
 
