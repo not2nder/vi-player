@@ -8,8 +8,6 @@ from util import ui
 
 if len(sys.argv) > 1:
     path = Path(sys.argv[1])
-else:
-    path = Path.home()/"vip"
 
 def getch():
     fd = sys.stdin.fileno()
@@ -25,18 +23,25 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
 
 def draw():
-    ui.draw_header(path)
-    ui.draw_songs(songs, indicator)
-    ui.draw_warning(state)
-    ui.draw_statusbar(mode, current+1, len(songs))
-    ui.draw_commandline(command)
+    frame = ""
+    frame += ui.draw_header(path)
+    frame += ui.draw_songs(songs, indicator)
+    frame += ui.draw_warning(state)
+    frame += ui.draw_statusbar(mode, indicator+1, len(songs))
+    frame += ui.draw_commandline(command)
+
+    sys.stdout.write(frame)
     sys.stdout.flush()
 
 def play_current():
     global state
+    global current
+    global indicator
+
     song = songs[indicator]
     state = "TOCANDO"
     player.play(str(song))
+    current = indicator
 
 def next_song():
     global current

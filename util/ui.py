@@ -2,7 +2,7 @@ from pathlib import Path
 import mutagen
 
 from util.pretty import *
-from util import Lexer
+from util import lexer
 
 import tomllib
 
@@ -40,13 +40,18 @@ COMMAND_BG = theme_colors.get("command_bg", PLAYER_BG)
 ARGS_FG = theme_colors.get("args_fg", PLAYER_FG)
 
 def initscreen():
-    print("\x1b[?1049h", end="")
-    print("\x1b[?125l", end="")
+    sys.stdout.write("\x1b[?1049h")
+    sys.stdout.write("\x1b[?25l")
+    sys.stdout.write("\x1b[2J")
+    sys.stdout.write("\x1b[H")
     draw_background()
     sys.stdout.flush()
 
 def exitscreen():
-    print("\x1b[?1049l", end="")
+    sys.stdout.write("\x1b[0m", end="")
+    sys.stdout.write("\x1b[?25h", end="")
+    sys.stdout.write("\x1b[?1049l", end="")
+    sys.stdout.flush()
 
 def draw_background():
     line = bg(PLAYER_BG)+(" "*cols)+RESET
@@ -59,7 +64,7 @@ def draw_header(path: str):
     
     line = paint(fill(text), SCD_FG, SCD_BG) + RESET
 
-    printf(line, pos="start")
+    return printf(line, pos="start", render=False)
 
 def get_time(song):
     duration = mutagen.File(song).info.length
@@ -69,6 +74,7 @@ def get_time(song):
     return f"{mins}:{str(secs).rjust(2,'0')}" 
 
 def draw_songs(songs: list, current: int):
+    frame = ""
     digits = max(2, len(str(len(songs))))
     
     for i, song in enumerate(songs):
@@ -85,7 +91,9 @@ def draw_songs(songs: list, current: int):
 
         line += RESET
 
-        printf(line, pos="start", offset=i+2)
+        frame += printf(line, pos="start", offset=i+2, render=False)
+
+    return frame
 
 def draw_statusbar(mode: str, current: int, qtd: int):
     state = f"{current} de {qtd}"
@@ -94,13 +102,13 @@ def draw_statusbar(mode: str, current: int, qtd: int):
 
     line = justify(left, right)
 
-    printf(line, pos="end", offset = -1)
+    return printf(line, pos="end", offset = -1, render=False)
 
 def draw_warning(state: str):
     line = paint(padding(bold(state)), HG_FG, HG_BG)
     tail = paint('', HG_BG, HG_FG)
     line = fill(line + tail) + RESET
-    printf(line, pos="end", offset = -2)
+    return printf(line, pos="end", offset = -2, render=False)
 
 def highlight(text: str): 
     TOKEN_STYLES = {
@@ -111,7 +119,7 @@ def highlight(text: str):
         "TEXT": lambda x: x
     }
     result = ""
-    for token in Lexer.tokenize(text):
+    for token in lexer.tokenize(text):
         result += TOKEN_STYLES[token.tipo](token.texto)
     return result
 
@@ -119,5 +127,5 @@ def draw_commandline(command: str):
     text = highlight(command)
 
     line = paint(fill(text), PLAYER_FG, COMMAND_BG) + RESET
-    printf(line, pos="end")
+    return printf(line, pos="end", render=False)
 
