@@ -3,58 +3,34 @@ import mutagen
 
 from util.pretty import *
 from util import lexer
+from util.theme import get_current_theme
 
-import tomllib
-
-config_path = Path.home()/".config"/"vi-player"
-
-config_file = config_path/"config.toml"
-
-with open(config_file, "rb") as f:
-    config = tomllib.load(f)
-
-default_theme = config["general"]["theme"]
-
-theme_path = config_path/"themes"/f"{default_theme}.toml"
-
-with open(theme_path, "rb") as f:
-    theme = tomllib.load(f)
-
-theme_colors= theme["colors"]
-PLAYER_BG = theme_colors["bg"]
-PLAYER_FG = theme_colors["fg"]
-
-SCD_BG = theme_colors.get("secondary_bg", PLAYER_BG)
-SCD_FG = theme_colors.get("secondary_fg", PLAYER_FG)
-
-STATUS_BG = theme_colors.get("statusline_bg", SCD_BG)
-STATUS_FG = theme_colors.get("statusline_fg", SCD_FG)
-
-HG_BG = theme_colors.get("highlight_bg", SCD_BG)
-HG_FG = theme_colors.get("highlight_fg", SCD_FG)
-
-INDEX_BG = theme_colors.get("index_bg", SCD_BG)
-INDEX_FG = theme_colors.get("index_fg", SCD_FG)
-
-COMMAND_BG = theme_colors.get("command_bg", PLAYER_BG)
-ARGS_FG = theme_colors.get("args_fg", PLAYER_FG)
+theme = get_current_theme()
 
 def initscreen():
     sys.stdout.write("\x1b[?1049h")
-    sys.stdout.write("\x1b[?25l")
-    sys.stdout.write("\x1b[2J")
+    sys.stdout.write(hide_cursor())
     sys.stdout.write("\x1b[H")
     draw_background()
     sys.stdout.flush()
 
 def exitscreen():
-    sys.stdout.write("\x1b[0m", end="")
-    sys.stdout.write("\x1b[?25h", end="")
-    sys.stdout.write("\x1b[?1049l", end="")
+    sys.stdout.write("\x1b[0m")
+    sys.stdout.write(show_cursor())
+    sys.stdout.write("\x1b[?1049l")
     sys.stdout.flush()
 
+def move_cursor(x,y):
+    return f"\x1b[{x};{y}H"
+
+def show_cursor():
+    return "\x1b[?25h"
+
+def hide_cursor():
+    return "\x1b[?25l"
+
 def draw_background():
-    line = bg(PLAYER_BG)+(" "*cols)+RESET
+    line = bg(theme.bg)+(" "*cols)+RESET
 
     for y in range(lines):
         sys.stdout.write(f"\x1b[{y+1};1H{line}")
@@ -62,9 +38,9 @@ def draw_background():
 def draw_header(path: str):
     text = center(f"vi-player {path}")
     
-    line = paint(fill(text), SCD_FG, SCD_BG) + RESET
+    line = paint(fill(text), theme.secondary_fg, theme.secondary_bg) + RESET
 
-    return printf(line, pos="start", render=False)
+    return printf(line, pos="start")
 
 def get_time(song):
     duration = mutagen.File(song).info.length
@@ -85,37 +61,37 @@ def draw_songs(songs: list, current: int):
         text = f"{songname} {duration}"
 
         if i == current:
-            line = f"{paint(bold(index), INDEX_FG, INDEX_BG)} "+paint(padding(bold(text)), HG_FG, HG_BG)
+            line = f"{paint(bold(index), theme.index_fg, theme.index_bg)} "+paint(padding(bold(text)), theme.hg_fg, theme.hg_bg)
         else:
-            line = paint(fill(f"{index} {text}"), PLAYER_FG, PLAYER_BG)
+            line = paint(fill(f"{index} {text}"), theme.fg, theme.bg)
 
         line += RESET
 
-        frame += printf(line, pos="start", offset=i+2, render=False)
+        frame += printf(line, pos="start", offset=i+2)
 
     return frame
 
 def draw_statusbar(mode: str, current: int, qtd: int):
     state = f"{current} de {qtd}"
-    left = paint(padding(bold(mode)), STATUS_FG, STATUS_BG) 
-    right = paint(padding(bold(state)), HG_FG, HG_BG)
+    left = paint(padding(bold(mode)), theme.statusline_fg, theme.statusline_bg) 
+    right = paint(padding(bold(state)), theme.hg_fg, theme.hg_bg)
 
     line = justify(left, right)
 
-    return printf(line, pos="end", offset = -1, render=False)
+    return printf(line, pos="end", offset = -1)
 
 def draw_warning(state: str):
-    line = paint(padding(bold(state)), HG_FG, HG_BG)
-    tail = paint('', HG_BG, HG_FG)
-    line = fill(line + tail) + RESET
-    return printf(line, pos="end", offset = -2, render=False)
+    line = paint(padding(bold(state)), theme.hg_fg, theme.hg_bg)
+    tail = paint('', theme.fg, theme.bg)
+    line = fill(line+tail)+RESET
+    return printf(line, pos="end", offset = -2)
 
 def highlight(text: str): 
     TOKEN_STYLES = {
         "COMMAND": lambda x: x,
         "PATH": lambda x: underline(x),
         "SPACE": lambda x: x,
-        "DIGIT": lambda x: paint(x, ARGS_FG, PLAYER_BG),
+        "DIGIT": lambda x: x,
         "TEXT": lambda x: x
     }
     result = ""
@@ -125,7 +101,6 @@ def highlight(text: str):
 
 def draw_commandline(command: str):
     text = highlight(command)
-
-    line = paint(fill(text), PLAYER_FG, COMMAND_BG) + RESET
-    return printf(line, pos="end", render=False)
+    line = paint(fill(text), theme.fg, theme.bg) + RESET
+    return printf(line, pos="end")
 
