@@ -9,7 +9,6 @@ from util.pretty import length
 from util.theme import set_theme
 
 from util.screen import Screen
-from util.screenbuffer import ScreenBuffer
 
 import signal
 
@@ -45,21 +44,20 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
 
 def draw():
-    buffer = ScreenBuffer()
-    buffer.add(ui.draw_background(screen))
-    buffer.add(ui.draw_header(path, screen=screen))
-    buffer.add(ui.draw_songs(songs, indicator, screen=screen))
-    buffer.add(ui.draw_warning(state, screen=screen))
-    buffer.add(ui.draw_statusbar(mode, indicator+1, len(songs), screen=screen))
-    buffer.add(ui.draw_commandline(command, screen=screen))
+    screen.add(ui.draw_background(screen))
+    screen.add(ui.draw_header(path, screen=screen))
+    screen.add(ui.draw_songs(songs, indicator, screen=screen))
+    screen.add(ui.draw_warning(state, screen=screen))
+    screen.add(ui.draw_statusbar(mode, indicator+1, len(songs), screen=screen))
+    screen.add(ui.draw_commandline(command, screen=screen))
 
     if mode == "COMANDO":
-        buffer.add(ui.show_cursor())
-        buffer.add(ui.move_cursor(screen.height, length(command)+1))
+        screen.add(ui.show_cursor())
+        screen.add(ui.move_cursor(screen.height, length(command)+1))
     else:
-        buffer.add(ui.hide_cursor())
+        screen.add(ui.hide_cursor())
 
-    buffer.render()
+    screen.render()
 
 def play_current():
     global state
