@@ -161,7 +161,7 @@ while True:
                 command = ""
                 continue
 
-                cmd = args[0]
+            cmd = args[0]
 
             match cmd:
                 case ":p":
