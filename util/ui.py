@@ -57,14 +57,14 @@ def draw_songs(songs: list, current: int, screen: object):
     theme = get_theme()
     frame = ""
     digits = max(2, len(str(len(songs))))
-    # frame += draw_background(screen=screen)
 
     for i, song in enumerate(songs):
         index = str(i+1).rjust(digits)
         songname = Path(song.name).stem
-        duration = get_time(song)
+        duration = padding(get_time(song))
+        freespace = screen.width - (digits+3+length(duration))
 
-        text = f"{justify(songname, padding(duration), width=screen.width-4)}"
+        text = f"{justify(truncate(songname, freespace), duration, width=screen.width-4)}"
 
         if i == current:
             line = f"{paint(bold(index), theme.inum_fg, theme.inum_bg)} {paint(bold(text), theme.iline_fg, theme.iline_bg)}"

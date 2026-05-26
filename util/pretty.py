@@ -67,6 +67,12 @@ def justify(*args, width: int) -> str:
 
     return result
 
+def truncate(text: str, max_width: int):
+    if length(text) <= max_width:
+        return text
+
+    return text[:max_width-3]+"..."
+
 def center(text: str, width: int) -> str:
     visible = length(text)
 
