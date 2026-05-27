@@ -4,7 +4,7 @@ Antes de executar o arquivo `main.py`, é preciso fazer algumas configurações 
 
 ```
 ~/.config/vi-player/
-├── config.toml
+├── config.json
 └── themes/
     ├── deep-blue.toml
     ├── linen-light.toml
@@ -14,10 +14,12 @@ Antes de executar o arquivo `main.py`, é preciso fazer algumas configurações 
     └── warm.toml
 ```
 
-Mova o conteúdo da pasta `assets` para a pasta de configuração padrão do vi-player. No arquivo de configuração `config.toml`, você pode definir o esquema de cores padrão alterando o campo `theme`.
+Mova o conteúdo da pasta `assets` para a pasta de configuração padrão do vi-player. No arquivo de configuração `config.json`, você pode definir o esquema de cores padrão alterando o campo `theme`.
 
-```toml
-theme="ocean"
+```json
+"general": {
+    "theme": "ocean"
+}
 ```
 
 A partir disso, você já pode criar os próprios temas. Basta criar um arquivo .toml com o nome do seu tema e definir as cores de sua preferência.
