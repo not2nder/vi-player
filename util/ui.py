@@ -34,9 +34,7 @@ def draw_background(screen: object):
     line = bg(theme.bg)+(" "*screen.width)+RESET
 
     for y in range(screen.height):
-        frame += f"\x1b[{y+1};1H{line}"
-
-    return frame
+        screen.draw(y+1,line)
 
 def draw_header(path: str, screen: object):
     theme = get_theme()
@@ -44,7 +42,7 @@ def draw_header(path: str, screen: object):
     
     line = paint(fill(text, width=screen.width), theme.secondary_fg, theme.secondary_bg) + RESET
 
-    return printf(line, pos="start", screen=screen)
+    screen.draw(1, line)
 
 def get_time(song):
     duration = mutagen.File(song).info.length
@@ -55,7 +53,6 @@ def get_time(song):
 
 def draw_songs(songs: list, current: int, screen: object):
     theme = get_theme()
-    frame = ""
     digits = max(2, len(str(len(songs))))
 
     for i, song in enumerate(songs):
@@ -72,9 +69,7 @@ def draw_songs(songs: list, current: int, screen: object):
             line = fill(f"{paint(index, theme.index_fg, theme.index_bg)} {paint(text, theme.fg, theme.bg)}", width=screen.width)
         line += RESET
 
-        frame += printf(line, pos="start", offset=i+2, screen=screen)
-
-    return frame
+        screen.draw(i+3, line)
 
 def draw_statusbar(mode: str, current: int, qtd: int, screen: object):
     theme = get_theme()
@@ -83,15 +78,15 @@ def draw_statusbar(mode: str, current: int, qtd: int, screen: object):
     right = paint(padding(bold(state)), theme.secondary_fg, theme.secondary_bg)
 
     line = justify(left, right, width=screen.width)
-
-    return printf(line, pos="end", offset = -1, screen=screen)
+    screen.draw(screen.height-1, line)
 
 def draw_warning(state: str, screen: object):
     theme = get_theme()
     line = paint(padding(bold(state)), theme.warning_fg, theme.warning_bg)
     tail = paint('', theme.fg, theme.bg)
     line = fill(line+tail, width=screen.width)+RESET
-    return printf(line, pos="end", offset = -2, screen=screen)
+
+    screen.draw(screen.height-2, line)
 
 def highlight(text: str): 
     TOKEN_STYLES = {
@@ -110,5 +105,6 @@ def draw_commandline(command: str, screen: object):
     theme = get_theme()
     text = highlight(command)
     line = paint(fill(text, width=screen.width), theme.fg, theme.bg) + RESET
-    return printf(line, pos="end", screen=screen)
+    
+    screen.draw(screen.height, line)
 
