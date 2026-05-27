@@ -7,7 +7,7 @@ import mpv
 from util import ui
 from util.pretty import length
 from util.theme import set_theme
-
+from util.config import load_config, get_config 
 from util.screen import Screen
 
 import signal
@@ -19,12 +19,13 @@ else:
     path = ""
     songs = []
 
-set_theme("ocean")
+load_config()
+config = get_config()
+set_theme(config.theme)
 
 screen = Screen()
 
 def handle_resize(sigun, frame):
-    screen.clear()
     screen.resize()
     draw()
 
@@ -44,28 +45,28 @@ def getch():
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
 
 def draw():
-    screen.add(ui.draw_background(screen))
-    screen.add(ui.draw_header(path, screen=screen))
-    screen.add(ui.draw_songs(songs, indicator, screen=screen))
-    screen.add(ui.draw_warning(state, screen=screen))
-    screen.add(ui.draw_statusbar(mode, indicator+1, len(songs), screen=screen))
-    screen.add(ui.draw_commandline(command, screen=screen))
+    ui.draw_background(screen)
+    ui.draw_header(path, screen=screen)
+    ui.draw_songs(songs, indicator, screen=screen)
+    ui.draw_warning(warning, screen=screen)
+    ui.draw_statusbar(mode, indicator+1, len(songs), screen=screen)
+    ui.draw_commandline(command, screen=screen)
 
     if mode == "COMANDO":
-        screen.add(ui.show_cursor())
-        screen.add(ui.move_cursor(screen.height, length(command)+1))
+        ui.show_cursor()
+        ui.move_cursor(screen.height, length(command)+1)
     else:
-        screen.add(ui.hide_cursor())
+        ui.hide_cursor()
 
     screen.render()
 
 def play_current():
-    global state
+    global warning
     global current
     global indicator
 
     song = songs[indicator]
-    state = "TOCANDO"
+    warning = "TOCANDO"
     player.play(str(song))
     current = indicator
 
@@ -86,12 +87,12 @@ def previous_song():
     play_current()
 
 def pause():
-    global state
+    global warning
 
     if player.pause:
-        state = "TOCANDO"
+        warning = "TOCANDO"
     else:
-        state = "PAUSA"
+        warning = "PAUSA"
 
     player.pause = not player.pause
 
@@ -111,14 +112,13 @@ ui.initscreen(screen)
 
 command = ""
 mode = "NORMAL"
-state = "AGUARDANDO"
+warning = "AGUARDANDO"
 
 player = mpv.MPV(video=False)
 
 current = 0
 indicator = 0
 
-draw()
 while True:
 
     if screen.check_resize:
@@ -186,16 +186,17 @@ while True:
                 case ":theme":
                     try:
                         set_theme(args[1])
-                        state="Tema da sessão atualizado!"
+                        warning = "Tema da sessão atualizado!"
                     except:
-                        state=f"Tema não encontrado: {args[1]}"
+                        warning = f"Tema não encontrado: {args[1]}"
                 case _:
+                    warning = f"Comando desconhecido: <{cmd}>"
                     pass
 
             command = ""
             mode = "NORMAL"
 
-        elif key == "\x7f":
+        elif key == "\x7f": 
             command = command[:-1]
         elif key == "\x1b":
             command = ""

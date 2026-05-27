@@ -41,5 +41,4 @@ def set_theme(name):
     CURRENT_THEME = load_theme(name)
 
 def get_theme():
-    global CURRENT_THEME
     return CURRENT_THEME
