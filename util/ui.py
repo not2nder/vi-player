@@ -19,9 +19,6 @@ def exitscreen():
     sys.stdout.write("\x1b[?1049l")
     sys.stdout.flush()
 
-def move_cursor(x,y):
-    return f"\x1b[{x};{y}H"
-
 def show_cursor():
     return "\x1b[?25h"
 
@@ -30,7 +27,6 @@ def hide_cursor():
 
 def draw_background(screen: object):
     theme = get_theme()
-    frame = ""
     line = bg(theme.bg)+(" "*screen.width)+RESET
 
     for y in range(screen.height):
@@ -56,17 +52,18 @@ def draw_songs(songs: list, current: int, screen: object):
     digits = max(2, len(str(len(songs))))
 
     for i, song in enumerate(songs):
-        index = str(i+1).rjust(digits)
+        index = padding(str(i+1).rjust(digits))
         songname = Path(song.name).stem
         duration = padding(get_time(song))
-        freespace = screen.width - (digits+3+length(duration))
 
-        text = f"{justify(truncate(songname, freespace), duration, width=screen.width-4)}"
+        freespace = screen.width - (length(index)+length(duration))
+
+        text = f"{justify(truncate(songname, freespace-1), duration, width=screen.width-4)}"
 
         if i == current:
-            line = f"{paint(bold(index), theme.inum_fg, theme.inum_bg)} {paint(bold(text), theme.iline_fg, theme.iline_bg)}"
+            line = f"{paint(bold(index), theme.inum_fg, theme.inum_bg)}{paint(bold(text), theme.iline_fg, theme.iline_bg)}"
         else:
-            line = fill(f"{paint(index, theme.index_fg, theme.index_bg)} {paint(text, theme.fg, theme.bg)}", width=screen.width)
+            line = fill(f"{paint(index, theme.index_fg, theme.index_bg)}{paint(text, theme.fg, theme.bg)}", width=screen.width)
         line += RESET
 
         screen.draw(i+3, line)
@@ -81,6 +78,9 @@ def draw_statusbar(mode: str, current: int, qtd: int, screen: object):
     screen.draw(screen.height-1, line)
 
 def draw_warning(state: str, screen: object):
+    if state is None:
+        return
+
     theme = get_theme()
     line = paint(padding(bold(state)), theme.warning_fg, theme.warning_bg)
     tail = paint('', theme.fg, theme.bg)
