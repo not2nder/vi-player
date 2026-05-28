@@ -13,9 +13,11 @@ class Screen:
 
     def resize(self):
         self.width, self.height = os.get_terminal_size()
+        self.previous.clear()
 
     def clear(self):
         sys.stdout.write("\x1b[2J")
+        sys.stdout.flush()
 
     def check_resize(self):
         new_w, new_h = os.get_terminal_size()
@@ -23,7 +25,7 @@ class Screen:
 
     def render(self):
         for y, text in self.current.items():
-            if self.current[y] != self.previous.get(y):
+            if text != self.previous.get(y):
                 sys.stdout.write(move_cursor(y,1)+text)
         
         sys.stdout.flush()

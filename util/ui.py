@@ -3,7 +3,7 @@ import mutagen
 
 from util.pretty import *
 from util import lexer
-from util.theme import get_theme 
+from core.theme import get_theme 
 from util.screen import Screen
 
 def initscreen(screen: object):
@@ -32,9 +32,9 @@ def draw_background(screen: object):
     for y in range(screen.height):
         screen.draw(y+1,line)
 
-def draw_header(path: str, screen: object):
+def draw_header(screen: object):
     theme = get_theme()
-    text = center(f"vi-player {path}", width=screen.width)
+    text = center("vi-player", screen.width)
     
     line = paint(fill(text, width=screen.width), theme.secondary_fg, theme.secondary_bg) + RESET
 
@@ -47,7 +47,7 @@ def get_time(song):
 
     return f"{mins}:{str(secs).rjust(2,'0')}" 
 
-def draw_songs(songs: list, current: int, screen: object):
+def draw_songs(screen: object, songs: list, current: int):
     theme = get_theme()
     digits = max(2, len(str(len(songs))))
 
@@ -68,7 +68,7 @@ def draw_songs(songs: list, current: int, screen: object):
 
         screen.draw(i+3, line)
 
-def draw_statusbar(mode: str, current: int, qtd: int, screen: object):
+def draw_statusbar(screen: object, mode: str, current: int, qtd: int):
     theme = get_theme()
     state = f"{current} de {qtd}"
     left = paint(padding(bold(mode)), theme.status_fg, theme.status_bg) 
@@ -77,14 +77,14 @@ def draw_statusbar(mode: str, current: int, qtd: int, screen: object):
     line = justify(left, right, width=screen.width)
     screen.draw(screen.height-1, line)
 
-def draw_warning(state: str, screen: object):
+def draw_warning(screen: object, state: str):
     if state is None:
         return
 
     theme = get_theme()
     line = paint(padding(bold(state)), theme.warning_fg, theme.warning_bg)
     tail = paint('', theme.fg, theme.bg)
-    line = fill(line+tail, width=screen.width)+RESET
+    line = fill(line+tail, screen.width)
 
     screen.draw(screen.height-2, line)
 
@@ -101,7 +101,7 @@ def highlight(text: str):
         result += TOKEN_STYLES[token.tipo](token.texto)
     return result
 
-def draw_commandline(command: str, screen: object):
+def draw_commandline(screen: object, command: str):
     theme = get_theme()
     text = highlight(command)
     line = paint(fill(text, width=screen.width), theme.fg, theme.bg) + RESET
