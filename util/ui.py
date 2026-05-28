@@ -47,20 +47,27 @@ def get_time(song):
 
     return f"{mins}:{str(secs).rjust(2,'0')}" 
 
-def draw_songs(screen: object, songs: list, current: int):
+def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
     theme = get_theme()
     digits = max(2, len(str(len(songs))))
 
     for i, song in enumerate(songs):
-        index = padding(str(i+1).rjust(digits))
+        if relative and i != cursor:
+            display_number = str(abs(i - cursor)).rjust(digits)
+        elif not relative:
+            display_number = str(i+1).rjust(digits)
+        else:
+            display_number = str(i+1).ljust(digits)
+
+        index = padding(display_number)
         songname = Path(song.name).stem
         duration = padding(get_time(song))
 
-        freespace = screen.width - (length(index)+length(duration))
+        freespace = screen.width - length(index) - length(duration) 
 
         text = f"{justify(truncate(songname, freespace-1), duration, width=screen.width-4)}"
 
-        if i == current:
+        if i == cursor:
             line = f"{paint(bold(index), theme.inum_fg, theme.inum_bg)}{paint(bold(text), theme.iline_fg, theme.iline_bg)}"
         else:
             line = fill(f"{paint(index, theme.index_fg, theme.index_bg)}{paint(text, theme.fg, theme.bg)}", width=screen.width)

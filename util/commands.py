@@ -1,4 +1,6 @@
 import shlex
+from core.theme import set_theme
+import core.config as config
 
 def handle(app, key):
     if key == "\r":
@@ -33,9 +35,23 @@ def handle(app, key):
         elif cmd[0] == ":" and cmd[1:].isdigit():
             app.cursor = int(cmd[1:]) -1
 
+        elif cmd == ":colorscheme":
+            if len(args) > 1:
+                try:
+                    set_theme(args[1])
+                except:
+                    pass
+
+        elif cmd == ":rnu" or cmd == ":relativenumber":
+            app.config.set_relativenumber()
+
+        elif cmd == ":nornu" or cmd == ":norelativenumber":
+            app.config.set_relativenumber(False)
+
         elif cmd == ":q":
             app.exit()
             return
+        
         else:
             pass
         app.command = ""

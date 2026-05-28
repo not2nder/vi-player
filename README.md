@@ -1,118 +1,241 @@
 # vi-player
 
-![Player](img/player.gif)
+Um player de música para terminal, inspirado diretamente na filosofia do Vim e NeoVim.
+A proposta do projeto não é criar apenas mais um player de CLI. O objetivo central é transformar a navegação musical em uma experiência modal, rápida e orientada apenas ao teclado, utilizando motions, comandos e renderização direta no terminal.
 
-O **vi-player** é um player de música inspirado diretamente na filosofia do [Vim](https://github.com/vim/vim) e [NeoVim](https://github.com/neovim/neovim).
-A proposta do projeto não é apenas reproduzir músicas no terminal, mas transformar a experiência de navegação musical em algo novo, orientado a:
-
-- comandos
-- modos
-- atalhos de teclado
-- renderização direta no terminal
-
-## Filosofia
-
-O projeto parte da ideia de que interfaces gráficas tradicionais nem sempre são a única forma de interagir com mídia. Em vez de botões, menus, mouse, múltiplas janelas, o vi-player aposta em comandos, navegação modal, atalhos inspirados no Vim, interface renderizada diretamente via ANSI Escape Codes.
-
-A intnção é criar uma experiência que lembre ferramentas como:
-
+Inspirado em feramentas como:
+- [Vim](https://github.com/vim/vim)
+- [NeoVim](https://github.com/neovim/neovim)
 - [Ranger](https://github.com/ranger/ranger)
 - [Cmus](https://github.com/cmus/cmus)
 - [Ncmcpp](https://github.com/ncmpcpp/ncmpcpp)
 - [tmux](https://github.com/tmux/tmux)
 
-## Objetivos
+# Features
 
-O foco principal é:
+* Navegação modal
+* Reprodução de músicas locais
+* Movimentação diretamente inspirada no Vim
+* Sistema de comandos em runtime
+* Sistema de temas
+* Arquitetura leve e modular
 
-- navegação rápída
-- fluxo orientado ao teclado
-- sistema de comandos extensível
-- renderização manual de interface
-- arquitetura leve e extensível
-- customização
-- futura integração com scripts/plugins
+# Filosofia
 
-## Estado Atual
+O projeto explora uma forma alternativa de interagir com mídia dentro do terminal. 
 
-Atualmente o projeto já possui funções básicas como:
+Ao invés de mouse, botões gráficos, janelas e interfaces tradicionais, ele aposta em:
+* fluxo orientado ao teclado
+* interação modal
+* renderização direta
+* navegação rápida
 
-- reprodução de músicas locais
-- navegação entre faixas
-- modos básicos
-- destaque visual de seleção
-- suporte inicial a temas
+A ideia de longo prazo é criar uma experiência mais próxima de editar texto no Vim do que utilizar um player convencional.
 
-Grande parte da arquitetura ainda está sendo construída e refatorada conforme o projeto evolui.
+# Instalação
 
-## Funcionalidades
+## Requisitos
 
-- [x] Reprodução de músicas locais
-- [x] Navegação entre faixas
-- [x] Pause/Resume
-- [x] Tema Customizável
-- [ ] Sistema de fila 
-- [ ] Keybinds customizáveis
-- [ ] Busca
-- [ ] Configuração via [Lua](https://www.lua.org)
+* Python 3.11+
+* mpv instalado no sistema
 
 ## Dependências
 
-O projeto foi desenvolvido em **Python**, utilizando renderização manual, com engine própria, sem frameworks TUI ou bibliotecas completas.
-
-Bibliotecas atualmente utilizadas:
-
-```
-python-mpv
-mutagen
+```bash
+pip install python-mpv mutagen wcwidth
 ```
 
-Futuramente, o projeto terá:
-- Sistema de setup automático
-- instalação de dependências
-- geração inicial de configurações
+## Clonando o repositório
+
+```bash
+git clone https://github.com/not2nder/ci-player.git
+cd vi-player
+```
+
+# Executando
+
+Sempre que for executar o arquivo .py, passe como argumento o diretório onde estão os arquivos .mp3
+
+```bash
+python main.py ~/Músicas
+```
 
 # Navegação
 
-O vi-player utiliza navegação inspirada diretamente no Vim.
+O vi-player usa navegação diretamente inspirada no Vim.
 
-## Movimento
+## Movimentos básicos
 
-| Tecla | Ação |
-|---|---|
-| `j` | Próxima música |
-| `k` | Música anterior |
-| `h` | Início da lista |
-| `l` | Final da lista |
+| Motion | Ação             |
+| ------ | ---------------- |
+| `j`    | Próximo item     |
+| `k`    | Item anterior    |
+| `gg`   | Ir para o início |
+| `G`    | Ir para o final  |
+| `h`    | Primeiro item    |
+| `l`    | Último item      |
 
-## Modos
+## Movimentos Relativos
+
+Assim como no Vim, é possível usar números antes dos motions.
+
+### Exemplos
+
+```text
+10j
+```
+
+Pula 10 itens abaixo.
+
+```text
+5k
+```
+
+Volta 5 itens para cima.
+
+---
+
+## Navegação por porcentagem
+
+```text
+50%
+```
+
+Vai para o meio da playlist.
+
+```text
+25%
+```
+
+Vai para 25% da playlist.
+
+---
+
+# Modos
 
 O player funciona através de modos.
 
-### MODO NORMAL
-Modo principal de navegação. usando `h`, `j`, `k` e `l` para escolher a faixa
+---
 
-### MODO DE COMANDO
-Acessado pressionando `:`. É o modo que controla o play, pause e skips
+## MODO NORMAL
 
-Exemplo:
-```vim
-:sk 10
+Modo principal de navegação.
+
+Responsável por:
+
+* motions
+* navegação
+* atalhos rápidos
+
+---
+
+## MODO DE COMANDO
+
+Acessado pressionando `:`.
+
+Responsável por executar comandos.
+
+
+| Comando               | Função                       |
+| --------------------- | ---------------------------- |
+| `:p`                  | Reproduzir música atual      |
+| `:pp`                 | Pause/Resume                 |
+| `:n`                  | Próxima música               |
+| `:pv`                 | Música anterior              |
+| `:sk <n>`             | Pular para música específica |
+| `:colorscheme <tema>` | Trocar tema da sessão        |
+| `:q`                  | Sair                         |
+
+---
+
+# Temas
+
+Os temas são carregados de `~/.config/vi-player/themes`. O tema padrão do player é definido em `~/.config/vi-player/config.json`.
+Exemplo de configuração:
+
+```json
+{
+  "general": {
+    "theme": "ocean"
+  }
+}
 ```
-Executa o comando de pular para a música de número 10
 
-## Comandos atuais
+Também é possível trocar o tema durante a execução, executando o comando:
 
-| Comando | Função |
-|---|---|
-| `:p` | Reproduzir música |
-| `:pp` | Pause/Resume |
-| `:sk` | Pular para música |
-| `:nx` | Próxima música |
-| `:pv` | Música Anterior |
-| `:o` | Abrir novo diretório |
-| `:q` | Sair |
+```vim
+:colorscheme ocean
+```
 
-# Aviso
+# Configuração
 
-O projeto ainda está em desenvolvimento inicial e diversas partes da arquitetura estão sendo reestruturadas constantemente. Portanto, há muitos bugs e erros a serem tratados e corrigidos.
+Antes de iniciar o player, mova os arquivos da pasta `assets/` para a pasta `~/.config/vi-player/`:
+
+A estrutura do arquivo `config.json` deve ser algo parecido com isso:
+
+```json
+{
+  "general": {
+    "theme": "ocean"
+  },
+
+  "player": {
+    "relativenumbers": true
+  }
+}
+```
+
+Para mais detalhes, acesse o arquivo README.md na pasta `assets`.
+
+---
+
+# Estado Atual
+
+Implementado:
+
+* reprodução de músicas
+* comandos em runtime
+* navegação modal
+* dirty rendering
+* suporte a resize
+* temas
+* relative numbers
+* motions inspirados no Vim
+
+Em desenvolvimento:
+
+* histórico de comandos
+* sistema de busca
+* viewport/renderização parcial
+* sistema de fila
+* keymaps customizáveis
+* arquitetura de plugins
+
+---
+
+# Objetivo de Longo Prazo
+
+A ideia do projeto não é apenas criar um player de música para terminal.
+
+O objetivo é construir:
+
+* um ambiente modal para mídia
+* um sistema de navegação extensível
+* uma interface altamente customizável
+* um workflow totalmente orientado ao teclado
+* uma experiência inspirada em editores modais
+
+---
+
+# Contribuição
+
+O projeto ainda está em estágio inicial e a arquitetura evolui constantemente. Refatorações são frequentes conforme novos sistemas são modularizados e desacoplados.
+
+Sugestões, ideias e experimentações são bem-vindas.
+
+---
+
+# Licença
+
+GPL License.
+

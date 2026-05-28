@@ -8,13 +8,23 @@ class Config:
     def __init__(self, data):
         self.general = data.get("general", {})
         self.general["theme"] = self.general.get("theme", "default")
+        
+        self.player = data.get("player", {})
+        self.player["relativenumber"] = self.player.get("relativenumber", False)
 
     def set_theme(self, name):
         self.general["theme"] = name
 
+    def set_relativenumber(self, value = None):
+        if value is None:
+            self.player["relativenumber"] = not self.player["relativenumber"]
+        else:
+            self.player["relativenumber"] = value
+
     def to_dict(self):
         return {
-            "general": self.general
+            "general": self.general,
+            "player": self.player
         }
 
 def load_config():
@@ -24,12 +34,6 @@ def load_config():
         config = json.load(f)
 
     CURRENT_CONFIG = Config(config)
-
-def save():
-    global CURRENT_CONFIG
-
-    with open(CONFIG_FILE, "w", encoding="utf-8") as f:
-        json.dump(CURRENT_CONFIG.to_dict(), f, indent=2)
 
 def get_config():
     return CURRENT_CONFIG

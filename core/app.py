@@ -34,7 +34,7 @@ class App:
     def draw(self):
         ui.draw_background(self.screen)
         ui.draw_header(self.screen)
-        ui.draw_songs(self.screen, self.player.playlist, self.cursor)
+        ui.draw_songs(self.screen, self.player.playlist, self.cursor, self.config.player["relativenumber"])
         ui.draw_warning(self.screen, self.player.state)
         ui.draw_statusbar(self.screen, self.mode, self.cursor+1, len(self.player.playlist))
         ui.draw_commandline(self.screen, self.command)
@@ -43,4 +43,5 @@ class App:
 
     def exit(self):
         self.player.exit()
+        ui.exitscreen()
         self.running = False
