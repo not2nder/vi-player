@@ -9,17 +9,23 @@ from util.keyboard import getch
 from core.config import *
 from core.theme import set_theme
 
+from core.enums import Mode 
+
 class App:
     def __init__(self):
         self.player = Player()
         self.screen = Screen()
         self.dirty = True
 
-        self.mode = "NORMAL"
+        self.mode = Mode.NORMAL
+
         self.command = ""
+        self.command_buffer = []
+
         self.motion = ""
 
         self.cursor = 0
+        self.buffer_index = 0
 
         self.running = True
 
@@ -44,24 +50,41 @@ class App:
     def handle_resize(self, signum, frame):
         self.screen.clear()
         self.screen.resize()
-        self.draw()
+        self.dirty = True
 
     def handle_key(self, key):
-        if self.mode == "NORMAL":
+        if self.mode == Mode.NORMAL:
             motions.handle(self, key)
-        elif self.mode == "COMMAND":
+        elif self.mode == Mode.COMMAND:
             commands.handle(self, key)
+
+        self.dirty = True
 
     def draw(self):
         ui.draw_background(self.screen)
         ui.draw_header(self.screen)
         ui.draw_songs(self.screen, self.player.get_playlist(), self.cursor, self.config.player["relativenumber"])
         ui.draw_warning(self.screen, self.player.state)
-        ui.draw_statusbar(self.screen, self.mode, self.cursor+1, len(self.player.get_playlist()))
+        ui.draw_statusbar(self.screen, self.mode.value, self.cursor+1, len(self.player.get_playlist()))
         ui.draw_commandline(self.screen, self.command)
 
         self.screen.render()
-        self.dirty = True
+        self.dirty = False 
+
+    def get_buffer_index(self):
+        return self.buffer_index
+
+    def buffer_add(self, command:str):
+        if command != "":
+            self.command_buffer.insert(0, command)
+
+    def buffer_next(self):
+        if self.get_buffer_index() < len(self.command_buffer) - 1:
+            self.buffer_index += 1
+
+    def buffer_prev(self):
+        if not self.get_buffer_index() < 1:
+            self.buffer_index -= 1
 
     def exit(self):
         self.player.exit()

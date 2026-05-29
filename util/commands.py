@@ -1,13 +1,14 @@
 import shlex
 from core.theme import set_theme
 import core.config as config
+from core.enums import Mode, Key
 
 def handle(app, key):
-    if key == "\r":
+    if isinstance(key, str) and key == "\r":
         args = shlex.split(app.command)
 
         if not args:
-            app.mode = "NORMAL"
+            app.mode = Mode.NORMAL
             app.command = ""
             return
 
@@ -57,10 +58,26 @@ def handle(app, key):
         
         else:
             pass
-        app.command = ""
-        app.mode = "NORMAL"
 
-    elif key == "\x7f":
+        if app.command.startswith(":"):
+            app.buffer_add(app.command)
+        
+        app.command = ""
+        app.mode = Mode.NORMAL 
+
+    elif key == Key.DEL:
         app.command = app.command[:-1]
-    else:
+
+    elif key == Key.UP and len(app.command_buffer) > 0:
+        app.command = app.command_buffer[app.get_buffer_index()]
+        app.buffer_next()
+
+    elif key == Key.DOWN and len(app.command_buffer) > 0:
+        if app.get_buffer_index() == 0:
+            app.command = ":"
+        else:
+            app.buffer_prev()
+            app.command = app.command_buffer[app.get_buffer_index()]
+
+    elif isinstance(key, str):
         app.command += key
