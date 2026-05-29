@@ -1,5 +1,7 @@
+from core.enums import Mode, Key
+
 def handle(app, key):
-    if key.isdigit():
+    if isinstance(key, str) and key.isdigit():
         app.motion+= key
         return
 
@@ -13,10 +15,12 @@ def handle(app, key):
         app.motion = ""
         return
 
-    elif key == 'j' or (key == 'DOWN' and app.config.player['usearrows']):
+    elif key == 'j' or (key == Key.DOWN and app.config.player['usearrows']):
         app.cursor = (app.cursor+1)%len(app.player.playlist)
-    elif key == 'k' or (key == 'UP' and app.config.player['usearrows']):
+
+    elif key == 'k' or (key == Key.UP and app.config.player['usearrows']):
         app.cursor = (app.cursor-1)%len(app.player.playlist)
+    
     elif key == 'g':
         if len(app.motion) == 1:
             app.cursor = 0
@@ -30,10 +34,12 @@ def handle(app, key):
         percent = int(app.motion)/100
         app.cursor = int(len(app.player.playlist)*percent)
         app.motion = ""
+
     elif key == ':':
-        app.mode = "COMMAND"
+        app.mode = Mode.COMMAND
         app.command += key
         return
+    
     elif key == 'q':
         app.exit()
     
