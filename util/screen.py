@@ -19,10 +19,6 @@ class Screen:
         sys.stdout.write("\x1b[2J")
         sys.stdout.flush()
 
-    def check_resize(self):
-        new_w, new_h = os.get_terminal_size()
-        return new_w != self.width or new_h != self.height
-
     def render(self):
         for y, text in self.current.items():
             if text != self.previous.get(y):

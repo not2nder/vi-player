@@ -48,10 +48,12 @@ def get_time(song):
     return f"{mins}:{str(secs).rjust(2,'0')}" 
 
 def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
+
     theme = get_theme()
     digits = max(2, len(str(len(songs))))
 
     for i, song in enumerate(songs):
+
         if relative and i != cursor:
             display_number = str(abs(i - cursor)).rjust(digits)
         elif not relative:
@@ -72,14 +74,15 @@ def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
         else:
             line = fill(f"{paint(index, theme.index_fg, theme.index_bg)}{paint(text, theme.fg, theme.bg)}", width=screen.width)
         line += RESET
-
+        
         screen.draw(i+3, line)
-
+       
 def draw_statusbar(screen: object, mode: str, current: int, qtd: int):
     theme = get_theme()
+
     state = f"{current} de {qtd}"
-    left = paint(padding(bold(mode)), theme.status_fg, theme.status_bg) 
     right = paint(padding(bold(state)), theme.secondary_fg, theme.secondary_bg)
+    left = paint(padding(bold(mode)), theme.status_fg, theme.status_bg) 
 
     line = justify(left, right, width=screen.width)
     screen.draw(screen.height-1, line)

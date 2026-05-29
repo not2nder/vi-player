@@ -50,6 +50,9 @@ class Player:
 
     def get_current(self):
         return self.current
+    
+    def get_playlist(self):
+        return self.playlist
 
     def exit(self):
         self.player.terminate()

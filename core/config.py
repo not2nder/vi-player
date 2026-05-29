@@ -10,10 +10,14 @@ class Config:
         self.general["theme"] = self.general.get("theme", "default")
         
         self.player = data.get("player", {})
-        self.player["relativenumber"] = self.player.get("relativenumber", False)
+        self.player["relativenumber"] = self.player.get("relativenumber", True)
+        self.player["usearrows"] = self.player.get("usearrows", False)
 
     def set_theme(self, name):
         self.general["theme"] = name
+
+    def set_arrows(self):
+        self.player["usearrows"] = not self.player["usearrows"]
 
     def set_relativenumber(self, value = None):
         if value is None:

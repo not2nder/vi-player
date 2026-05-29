@@ -1,5 +1,9 @@
 {
   "general": {
     "theme": "ocean"
+  },
+  "player": {
+    "relativenumber": true,
+    "usearrows": false
   }
 }

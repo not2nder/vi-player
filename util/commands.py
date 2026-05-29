@@ -48,6 +48,9 @@ def handle(app, key):
         elif cmd == ":nornu" or cmd == ":norelativenumber":
             app.config.set_relativenumber(False)
 
+        elif cmd == ":usearrows":
+            app.config.set_arrows()
+
         elif cmd == ":q":
             app.exit()
             return
