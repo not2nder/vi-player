@@ -1,4 +1,5 @@
 import sys, tty, termios
+from core.enums import Key
 
 def getch():
     fd = sys.stdin.fileno()
@@ -10,16 +11,16 @@ def getch():
         if ch == '\x1b':
             ch += sys.stdin.read(2)
             ch = parse_bytes(ch)
+        elif ch == "\x7f":
+            ch = Key.DEL
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
     return ch
 
 def parse_bytes(char: str):
-    SEQUENCES = {
-        '\x1b[A': 'UP',
-        '\x1b[B': 'DOWN',
-        '\x1b[C': 'RIGHT',
-        '\x1b[D': 'LEFT'
-    }
+    if char == '\x1b[A':  return Key.UP
+    elif char == '\x1b[B': return Key.DOWN
+    elif char == '\x1b[C': return Key.RIGHT
+    elif char == '\x1b[D': return Key.LEFT
 
-    return SEQUENCES.get(char, "ESC_SEQ")
+    else: return Key.ESC_SEQ 
