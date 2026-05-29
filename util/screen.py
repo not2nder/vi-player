@@ -17,7 +17,6 @@ class Screen:
 
     def clear(self):
         sys.stdout.write("\x1b[2J")
-        sys.stdout.write("\x1b[H")
         sys.stdout.flush()
 
     def render(self):

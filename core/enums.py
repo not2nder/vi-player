@@ -1,8 +1,8 @@
 from enum import Enum, auto
 
 class Mode(Enum):
-    NORMAL = 'MODO NORMAL'
-    COMMAND = 'MODO DE COMANDO'
+    NORMAL = 'NORMAL'
+    COMMAND = 'COMANDO'
 
 class Key(Enum):
     UP = auto()

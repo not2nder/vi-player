@@ -65,7 +65,7 @@ def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
         songname = Path(song.name).stem
         duration = padding(get_time(song))
 
-        freespace = screen.width - length(index) - length(duration) 
+        freespace = screen.width - length(index) - length(duration)
 
         text = f"{justify(truncate(songname, freespace-1), duration, width=screen.width-4)}"
 
@@ -77,12 +77,15 @@ def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
         
         screen.draw(i+3, line)
        
-def draw_statusbar(screen: object, mode: str, current: int, qtd: int):
+def draw_statusbar(screen: object, app: object):
     theme = get_theme()
 
-    state = f"{current} de {qtd}"
+    state = f"{app.cursor+1} de {len(app.player.get_playlist())}"
+
+    text = f"{app.mode.value} | {app.player.songname}"
+    
     right = paint(padding(bold(state)), theme.secondary_fg, theme.secondary_bg)
-    left = paint(padding(bold(mode)), theme.status_fg, theme.status_bg) 
+    left = paint(padding(bold(text)), theme.status_fg, theme.status_bg) 
 
     line = justify(left, right, width=screen.width)
     screen.draw(screen.height-1, line)

@@ -5,8 +5,9 @@ class Player:
     def __init__(self):
         self.playlist = []
         self.current = 0
-        self.state = None
+        self.state = "AGUARDANDO" 
         self.song = None
+        self.songname = "" 
         self.player = mpv.MPV(video=False)
 
     def load_songs(self, path):
@@ -17,6 +18,7 @@ class Player:
 
     def play(self):
         self.song = str(self.playlist[self.current])
+        self.songname = str(Path(self.song).stem)
         self.player.play(self.song)
         self.set_state("TOCANDO")
 
@@ -26,6 +28,7 @@ class Player:
 
     def next(self):
         self.set_current((self.current+1) % len(self.playlist))
+        self.player.pause = False
         self.play()
 
     def prev(self):

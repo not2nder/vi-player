@@ -49,7 +49,6 @@ class App:
             ui.exitscreen()
 
     def handle_resize(self, signum, frame):
-        self.screen.clear()
         self.screen.resize()
         self.dirty = True
         self.draw()
@@ -67,7 +66,7 @@ class App:
         ui.draw_header(self.screen)
         ui.draw_songs(self.screen, self.player.get_playlist(), self.cursor, self.config.player["relativenumber"])
         ui.draw_warning(self.screen, self.player.state)
-        ui.draw_statusbar(self.screen, self.mode.value, self.cursor+1, len(self.player.get_playlist()))
+        ui.draw_statusbar(self.screen, self)
         ui.draw_commandline(self.screen, self.command)
 
         self.screen.render()
