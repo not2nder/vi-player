@@ -35,6 +35,7 @@ class App:
 
     def run(self):
         ui.initscreen(self.screen)
+        
         signal.signal(signal.SIGWINCH, self.handle_resize)
 
         try:
@@ -51,6 +52,7 @@ class App:
         self.screen.clear()
         self.screen.resize()
         self.dirty = True
+        self.draw()
 
     def handle_key(self, key):
         if self.mode == Mode.NORMAL:
