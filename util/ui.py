@@ -1,10 +1,6 @@
-from pathlib import Path
-import mutagen
-
 from util.pretty import *
 from util import lexer
 from core.theme import get_theme 
-from util.screen import Screen
 
 def initscreen(screen: object):
     sys.stdout.write("\x1b[?1049h")
@@ -32,6 +28,59 @@ def draw_background(screen: object):
     for y in range(screen.height):
         screen.draw(y+1,line)
 
+def draw_home(screen: object, config: object):
+
+    titulo = [
+        "vi-player v0.0.1",
+        "Um player de música inspirado no Vim",
+    ]
+
+    motions = [
+        ("j/k:", "baixo e cima"),
+        ("gg/G:", "início e fim"),
+        ("50%:", "meio da playlist"),
+    ]
+
+    commands = [
+        ('digite  '+bold(':help'), "para mostrar ajuda"),
+        ('digite  '+bold(':q'), "para sair"),
+        ('digite  '+bold(':theme'), "para mudar tema")
+    ]
+
+    total_lines = len(titulo)+len(motions)+len(commands)+2
+    start_y = (screen.height-total_lines)//2
+    
+    max_width = max(length(cmd+desc) for cmd, desc in commands)
+    
+    start_y = draw_centered_lines(screen, titulo, start_y)+1
+    start_y = draw_centered_table(screen, motions, start_y, max_width)+1
+    start_y = draw_centered_table(screen, commands, start_y, max_width)+1
+    draw_centered_lines(screen, [f"Tema: {config.general['theme']}"], start_y)
+
+def draw_centered_lines(screen, lines, start):
+    theme = get_theme()
+    
+    for line in lines:
+        text = center(line, width=screen.width)
+        text = paint(text, theme.fg, theme.bg)
+        screen.draw(start, text)
+        start += 1
+
+    return start
+
+def draw_centered_table(screen, lines, start, max_width):
+    theme = get_theme()
+
+    for cmd, desc in lines:
+        row = justify(cmd, desc, width=max_width)
+        text = center(row, width=screen.width)
+        text = paint(text, theme.fg, theme.bg)
+
+        screen.draw(start, text)
+        start += 1
+
+    return start
+
 def draw_header(screen: object):
     theme = get_theme()
     text = center("vi-player", screen.width)
@@ -39,13 +88,6 @@ def draw_header(screen: object):
     line = paint(fill(text, width=screen.width), theme.secondary_fg, theme.secondary_bg) + RESET
 
     screen.draw(1, line)
-
-def get_time(song):
-    duration = mutagen.File(song).info.length
-    mins = int(duration//60)
-    secs = int(duration%60)
-
-    return f"{mins}:{str(secs).rjust(2,'0')}" 
 
 def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
 
@@ -62,12 +104,11 @@ def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
             display_number = str(i+1).ljust(digits)
 
         index = padding(display_number)
-        songname = Path(song.name).stem
-        duration = padding(get_time(song))
+        duration = padding(song.get_time())
 
         freespace = screen.width - length(index) - length(duration)
 
-        text = f"{justify(truncate(songname, freespace-1), duration, width=screen.width-4)}"
+        text = f"{justify(truncate(song.title, freespace-1), duration, width=screen.width-4)}"
 
         if i == cursor:
             line = f"{paint(bold(index), theme.inum_fg, theme.inum_bg)}{paint(bold(text), theme.iline_fg, theme.iline_bg)}"
@@ -79,12 +120,17 @@ def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
        
 def draw_statusbar(screen: object, app: object):
     theme = get_theme()
+    right = ""
 
-    state = f"{app.cursor+1} de {len(app.player.get_playlist())}"
+    if app.player.playlist:
+        right = paint(
+            padding(bold(f"{app.cursor+1}/{app.player.count}")),
+            theme.secondary_fg,
+            theme.secondary_bg)
 
-    text = f"{app.mode.value} | {app.player.songname}"
+    song = app.player.get_current_song()
+    text = app.mode.value+f" | {song.get_name() if song else 'Sem Música'}"
     
-    right = paint(padding(bold(state)), theme.secondary_fg, theme.secondary_bg)
     left = paint(padding(bold(text)), theme.status_fg, theme.status_bg) 
 
     line = justify(left, right, width=screen.width)
@@ -95,7 +141,7 @@ def draw_warning(screen: object, state: str):
         return
 
     theme = get_theme()
-    line = paint(padding(bold(state)), theme.warning_fg, theme.warning_bg)
+    line = paint(padding(bold(state.value)), theme.warning_fg, theme.warning_bg)
     tail = paint('', theme.fg, theme.bg)
     line = fill(line+tail, screen.width)
 
@@ -106,7 +152,7 @@ def highlight(text: str):
         "COMMAND": lambda x: x,
         "PATH": lambda x: underline(x),
         "SPACE": lambda x: x,
-        "DIGIT": lambda x: x,
+        "DIGIT": lambda x: bold(x),
         "TEXT": lambda x: x
     }
     result = ""

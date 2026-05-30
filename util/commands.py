@@ -15,7 +15,7 @@ def handle(app, key):
         cmd = args[0]
 
         if cmd == ":p":
-            app.player.set_current(app.cursor)
+            app.player.current = app.cursor
             app.player.play()
 
         elif cmd == ":pp":
@@ -23,15 +23,15 @@ def handle(app, key):
 
         elif cmd == ":n":
             app.player.next()
-            app.cursor = app.player.get_current()
+            app.cursor = app.player.current
 
         elif cmd == ":pv":
             app.player.prev()
-            app.cursor = app.player.get_current()
+            app.cursor = app.player.current
         
         elif cmd == ":sk":
             app.player.skip(int(args[1]))
-            app.cursor = app.player.get_current()
+            app.cursor = app.player.current
 
         elif cmd[0] == ":" and cmd[1:].isdigit():
             app.cursor = int(cmd[1:]) -1
@@ -43,10 +43,10 @@ def handle(app, key):
                 except:
                     pass
 
-        elif cmd == ":rnu" or cmd == ":relativenumber":
+        elif cmd in (":rnu", ":relativenumber"):
             app.config.set_relativenumber()
 
-        elif cmd == ":nornu" or cmd == ":norelativenumber":
+        elif cmd in (":nornu", ":norelativenumber"):
             app.config.set_relativenumber(False)
 
         elif cmd == ":usearrows":

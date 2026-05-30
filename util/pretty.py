@@ -37,7 +37,7 @@ def underline(text: str):
     return f"\x1b[4m{text}\x1b[24m"
 
 def dim(text: str):
-    return f"\x1b[2m{text}\x1b[0m"
+    return f"\x1b[2m{text}\x1b[22m"
 
 def justify(*args, width: int) -> str:
     if not args:

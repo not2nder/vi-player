@@ -1,8 +1,8 @@
 from enum import Enum, auto
 
 class Mode(Enum):
-    NORMAL = 'NORMAL'
-    COMMAND = 'COMANDO'
+    NORMAL = "NORMAL"
+    COMMAND = "COMANDO"
 
 class Key(Enum):
     UP = auto()
@@ -11,3 +11,8 @@ class Key(Enum):
     RIGHT = auto()
     ESC_SEQ = auto()
     DEL = auto()
+
+class PlaybackState(Enum):
+    WAITING = "AGUARDANDO"
+    PLAYING = "TOCANDO"
+    PAUSA = "PAUSA"
