@@ -138,7 +138,13 @@ def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
         line += RESET
         
         screen.draw(TOP_MARGIN+i, line)
-       
+
+    for i in range(visible_lines):
+        if i >= len(visible_songs):
+            text = bold("~ ")
+            line = paint(fill(text, width=screen.width), theme.index_fg, theme.bg)
+            screen.draw(TOP_MARGIN+i, line)
+
 def draw_statusbar(screen: object, app: object):
     theme = get_theme()
     right = ""
@@ -178,7 +184,7 @@ def highlight(text: str):
     }
     result = ""
     for token in lexer.tokenize(text):
-        result += TOKEN_STYLES[token.tipo](token.texto)
+        result += TOKEN_STYLES[token.token_type](token.text)
     return result
 
 def draw_commandline(screen: object, command: str):
