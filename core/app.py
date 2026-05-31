@@ -61,7 +61,7 @@ class App:
         if self.mode == Mode.NORMAL:
             motions.handle(self, key)
         elif self.mode == Mode.COMMAND:
-            commands.handle(self, key)
+                commands.handle_key(self, key)
 
         self.dirty = True
 
@@ -86,15 +86,6 @@ class App:
         self.screen.render()
         self.dirty = False 
     
-    def update_scroll(self):
-        visible_lines = self.screen.height - 5
-
-        if self.cursor < self.scroll:
-            self.scroll = self.cursor
-
-        elif self.cursor >= self.scroll + visible_lines:
-            self.scroll = self.cursor - visible_lines + 1
-
     def buffer_add(self, command:str):
         if command:
             self.command_buffer.insert(0, command)
