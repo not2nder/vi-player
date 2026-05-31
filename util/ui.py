@@ -2,8 +2,7 @@ from util.pretty import *
 from util import lexer
 from core.theme import get_theme 
 
-HEADER_Y = 1
-TOP_MARGIN = 3
+TOP_MARGIN = 2
 WARNING_Y= 1
 STATUS_Y = 1
 COMMAND_Y = 1
@@ -86,14 +85,6 @@ def draw_centered_table(screen, lines, start, max_width):
         start += 1
 
     return start
-
-def draw_header(screen: object):
-    theme = get_theme()
-    text = center("vi-player", screen.width)
-    
-    line = paint(fill(text, width=screen.width), theme.secondary_fg, theme.secondary_bg) + RESET
-
-    screen.draw(HEADER_Y, line)
 
 def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
 

@@ -66,7 +66,6 @@ class App:
 
     def draw(self):
         ui.draw_background(self.screen)
-        ui.draw_header(self.screen)
         ui.draw_statusbar(self.screen, self)
         
         if self.mpv.is_empty:
