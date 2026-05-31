@@ -15,15 +15,19 @@ def handle(app, key):
         cmd = args[0]
 
         if cmd == ":p":
-            app.mpv.current = app.cursor
-            app.mpv.play()
+            play(app)
 
         elif cmd == ":pp":
-            app.mpv.pause()
+            pause(app)
 
         elif cmd == ":n":
-            app.mpv.next()
-            app.cursor = app.mpv.current
+            next(app)
+
+        elif cmd == ":pv":
+            prev(app)
+
+        elif cmd == ":sk":
+            skip(app, args[1])
 
         elif cmd == ":open":
             if len(args) > 1:
@@ -39,15 +43,6 @@ def handle(app, key):
                     app.mpv.playlist.add(Song(args[1]))
                 except:
                     pass
-
-        elif cmd == ":pv":
-            app.mpv.prev()
-            app.cursor = app.mpv.current
-        
-        elif cmd == ":sk":
-            app.mpv.skip(int(args[1]))
-            app.cursor = app.mpv.current
-
         elif cmd[0] == ":" and cmd[1:].isdigit():
             app.cursor = int(cmd[1:]) -1
 
@@ -97,3 +92,40 @@ def handle(app, key):
 
     elif isinstance(key, str):
         app.command += key
+
+def play(app):
+    if not app.mpv.playlist:
+        return
+
+    app.mpv.current = app.cursor
+    app.mpv.play()
+
+def pause(app):
+    if not app.mpv.playlist:
+        return
+
+    app.mpv.pause()
+
+def next(app):
+    if not app.mpv.playlist:
+        return
+
+    app.mpv.next()
+    app.cursor = app.mpv.current
+
+def prev(app):
+    if not app.mpv.playlist:
+        return
+
+    app.mpv.prev()
+    app.cursor = app.mpv.current
+        
+
+def skip(app, arg):
+    if not app.mpv.playlist:
+        return
+
+    app.mpv.skip(int(arg))
+    app.cursor = app.mpv.current
+
+

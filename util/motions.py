@@ -4,35 +4,36 @@ def handle(app, key):
     use_arrows = app.config.player["usearrows"]
 
     if isinstance(key, str) and key.isdigit():
-        app.motion+= key
+        app.motion += key
         return
 
     elif (key == 'j' or key == 'k') and app.motion:
-        num = int(app.motion)
-        if key == 'j':
-            app.cursor = (app.cursor+num) % app.mpv.count
-        elif key == 'k':
-            app.cursor = (app.cursor-num) % app.mpv.count
+        steps = int(app.motion)
         
+        if key == 'j':
+            move_down(app, steps)
+        elif key == 'k':
+            move_up(app, steps)
+
         app.motion = ""
         return
 
     elif key == 'j' or (use_arrows and key == Key.DOWN):
-        app.cursor = (app.cursor+1) % app.mpv.count
+        move_down(app)
 
     elif key == 'k' or (use_arrows and key == Key.UP):
-        app.cursor = (app.cursor-1) % app.mpv.count
+        move_up(app)
 
     elif key == 'g':
         if app.motion:
-            app.cursor = 0
+            goto_start(app)
         else:
             app.motion += key
             return
 
     elif key == 'G':
-        app.cursor = app.mpv.count -1
-    
+        goto_end(app)
+
     elif key == '%' and app.motion:
         percent = int(app.motion)/100
         app.cursor = int(app.mpv.count * percent)
@@ -42,8 +43,35 @@ def handle(app, key):
         app.exit()
     
     elif key == ":":
-        app.mode = Mode.COMMAND
-        app.command += key
+        enter_command(app)
         return
 
     app.motion = ""
+
+def move_down(app, steps=1):
+    if not app.mpv.playlist:
+        return
+
+    app.cursor = (app.cursor+steps) % app.mpv.count
+
+def move_up(app, steps=1):
+    if not app.mpv.playlist:
+        return
+    
+    app.cursor = (app.cursor-steps) % app.mpv.count
+
+def goto_start(app):
+    if not app.mpv.playlist:
+        return
+
+    app.cursor = 0
+
+def goto_end(app):
+    if not app.mpv.playlist:
+        return
+
+    app.cursor = app.mpv.count-1
+
+def enter_command(app):
+    app.mode = Mode.COMMAND
+    app.command += ":"
