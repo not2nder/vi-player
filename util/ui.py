@@ -2,6 +2,12 @@ from util.pretty import *
 from util import lexer
 from core.theme import get_theme 
 
+HEADER_Y = 1
+TOP_MARGIN = 3
+WARNING_Y= 1
+STATUS_Y = 1
+COMMAND_Y = 1
+
 def initscreen(screen: object):
     sys.stdout.write("\x1b[?1049h")
     sys.stdout.write(hide_cursor())
@@ -87,21 +93,36 @@ def draw_header(screen: object):
     
     line = paint(fill(text, width=screen.width), theme.secondary_fg, theme.secondary_bg) + RESET
 
-    screen.draw(1, line)
+    screen.draw(HEADER_Y, line)
 
 def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
 
     theme = get_theme()
     digits = max(2, len(str(len(songs))))
+    
+    visible_lines = (
+        screen.height
+        -TOP_MARGIN
+        -WARNING_Y
+        -STATUS_Y
+        -COMMAND_Y
+    )
 
-    for i, song in enumerate(songs):
+    scroll = max(0, cursor-visible_lines//2)
+    max_scroll = max(0, len(songs), visible_lines)
+    scroll = min(scroll, max_scroll)
 
-        if relative and i != cursor:
-            display_number = str(abs(i - cursor)).rjust(digits)
+    visible_songs = songs[scroll:scroll+visible_lines]
+
+    for i, song in enumerate(visible_songs):
+        real_index = scroll+i
+
+        if relative and real_index != cursor:
+            display_number = str(abs(real_index - cursor)).rjust(digits)
         elif not relative:
-            display_number = str(i+1).rjust(digits)
+            display_number = str(real_index+1).rjust(digits)
         else:
-            display_number = str(i+1).ljust(digits)
+            display_number = str(real_index+1).ljust(digits)
 
         index = padding(display_number)
         duration = padding(song.get_time())
@@ -110,25 +131,25 @@ def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
 
         text = f"{justify(truncate(song.title, freespace-1), duration, width=screen.width-4)}"
 
-        if i == cursor:
+        if real_index == cursor:
             line = f"{paint(bold(index), theme.inum_fg, theme.inum_bg)}{paint(bold(text), theme.iline_fg, theme.iline_bg)}"
         else:
             line = fill(f"{paint(index, theme.index_fg, theme.index_bg)}{paint(text, theme.fg, theme.bg)}", width=screen.width)
         line += RESET
         
-        screen.draw(i+3, line)
+        screen.draw(TOP_MARGIN+i, line)
        
 def draw_statusbar(screen: object, app: object):
     theme = get_theme()
     right = ""
 
-    if app.player.playlist:
+    if app.mpv.playlist:
         right = paint(
-            padding(bold(f"{app.cursor+1}/{app.player.count}")),
+            padding(bold(f"{app.cursor+1}/{app.mpv.count}")),
             theme.secondary_fg,
             theme.secondary_bg)
 
-    song = app.player.get_current_song()
+    song = app.mpv.get_current_song()
     text = app.mode.value+f" | {song.get_name() if song else 'Sem Música'}"
     
     left = paint(padding(bold(text)), theme.status_fg, theme.status_bg) 

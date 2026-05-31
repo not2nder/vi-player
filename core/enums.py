@@ -15,4 +15,4 @@ class Key(Enum):
 class PlaybackState(Enum):
     WAITING = "AGUARDANDO"
     PLAYING = "TOCANDO"
-    PAUSA = "PAUSA"
+    PAUSE = "PAUSA"

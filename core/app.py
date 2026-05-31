@@ -9,14 +9,14 @@ from util import ui
 
 from util.keyboard import getch 
 
-from core.config import *
+from core.config import load_config, get_config
 from core.theme import set_theme
 
 from core.enums import Mode 
 
 class App:
     def __init__(self):
-        self.player = Player()
+        self.mpv = Player()
         self.screen = Screen()
         self.dirty = True
 
@@ -27,6 +27,7 @@ class App:
         self.command_buffer = []
 
         self.cursor = 0
+        self.scroll = 0
         self.buffer_index = 0
 
         self.running = True
@@ -69,16 +70,30 @@ class App:
         ui.draw_header(self.screen)
         ui.draw_statusbar(self.screen, self)
         
-        if not self.player.playlist:
+        if not self.mpv.playlist:
             ui.draw_home(self.screen, self.config)
         else:
-            ui.draw_songs(self.screen, self.player.playlist, self.cursor, self.config.player["relativenumber"])
-            ui.draw_warning(self.screen, self.player.state)
-        
+            ui.draw_songs(
+                self.screen,
+                self.mpv.playlist,
+                self.cursor,
+                self.config.player["relativenumber"]
+            )
+
+        ui.draw_warning(self.screen, self.mpv.state)
         ui.draw_commandline(self.screen, self.command)
 
         self.screen.render()
         self.dirty = False 
+    
+    def update_scroll(self):
+        visible_lines = self.screen.height - 5
+
+        if self.cursor < self.scroll:
+            self.scroll = self.cursor
+
+        elif self.cursor >= self.scroll + visible_lines:
+            self.scroll = self.cursor - visible_lines + 1
 
     def buffer_add(self, command:str):
         if command:
@@ -93,5 +108,5 @@ class App:
             self.buffer_index -= 1
 
     def exit(self):
-        self.player.exit()
+        self.mpv.exit()
         self.running = False

@@ -15,23 +15,38 @@ def handle(app, key):
         cmd = args[0]
 
         if cmd == ":p":
-            app.player.current = app.cursor
-            app.player.play()
+            app.mpv.current = app.cursor
+            app.mpv.play()
 
         elif cmd == ":pp":
-            app.player.pause()
+            app.mpv.pause()
 
         elif cmd == ":n":
-            app.player.next()
-            app.cursor = app.player.current
+            app.mpv.next()
+            app.cursor = app.mpv.current
+
+        elif cmd == ":open":
+            if len(args) > 1:
+                app.mpv.playlist.load_directory(args[1])
+
+        elif cmd == ":add":
+            if len(args) > 1:
+                app.mpv.playlist.add_dir(args[1])
+
+        elif cmd == ":addsong":
+            if len(args) > 1:
+                try:
+                    app.mpv.playlist.add(Song(args[1]))
+                except:
+                    pass
 
         elif cmd == ":pv":
-            app.player.prev()
-            app.cursor = app.player.current
+            app.mpv.prev()
+            app.cursor = app.mpv.current
         
         elif cmd == ":sk":
-            app.player.skip(int(args[1]))
-            app.cursor = app.player.current
+            app.mpv.skip(int(args[1]))
+            app.cursor = app.mpv.current
 
         elif cmd[0] == ":" and cmd[1:].isdigit():
             app.cursor = int(cmd[1:]) -1
@@ -49,13 +64,10 @@ def handle(app, key):
         elif cmd in (":nornu", ":norelativenumber"):
             app.config.set_relativenumber(False)
 
-        elif cmd == ":usearrows":
-            app.config.set_arrows()
-
         elif cmd == ":q":
             app.exit()
             return
-        
+
         else:
             pass
 
@@ -66,18 +78,22 @@ def handle(app, key):
         app.mode = Mode.NORMAL 
 
     elif key == Key.DEL:
-        app.command = app.command[:-1]
+        if app.command != ":":
+            app.command = app.command[:-1]
+        else:
+            app.command = ""
+            app.mode = Mode.NORMAL 
 
     elif key == Key.UP and len(app.command_buffer) > 0:
-        app.command = app.command_buffer[app.get_buffer_index()]
+        app.command = app.command_buffer[app.buffer_index]
         app.buffer_next()
 
     elif key == Key.DOWN and len(app.command_buffer) > 0:
-        if app.get_buffer_index() == 0:
+        if app.buffer_index == 0:
             app.command = ":"
         else:
             app.buffer_prev()
-            app.command = app.command_buffer[app.get_buffer_index()]
+            app.command = app.command_buffer[app.buffer_index]
 
     elif isinstance(key, str):
         app.command += key

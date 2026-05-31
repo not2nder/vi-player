@@ -1,13 +1,14 @@
 from pathlib import Path
 
 from core.song import Song
+from core.playlist import Playlist
 from core.enums import PlaybackState
 
 import mpv
 
 class Player:
     def __init__(self):
-        self.playlist: list[Song] = []
+        self.playlist = Playlist()
         
         self.current: int = 0
         self.playing_song: Song = None
@@ -19,17 +20,6 @@ class Player:
     @property
     def count(self):
         return len(self.playlist)
-
-    def load_songs(self, directory) -> list[Song]:
-        path = Path(directory)
-
-        if not path.exists():
-            return self.playlist
-
-        songs = [Song(file) for file in path.glob("*.mp3")]
-
-        self.playlist = songs
-        return self.playlist
 
     def play(self):
         if not self.playlist:
@@ -43,7 +33,7 @@ class Player:
         self.player.pause = not self.player.pause
 
         if self.player.pause:
-            self.state = PlaybackState.PAUSE
+                self.state = PlaybackState.PAUSE
         else:
             self.state = PlaybackState.PLAYING
     

@@ -26,6 +26,7 @@ class Song:
         try:
             audio = EasyID3(self.path)
 
+            self.title = audio.get("title", [self.title])[0]
             self.artist = audio.get("artist", ["Unknown"])[0]
             self.album = audio.get("album", ["Unknown"])[0]
 
