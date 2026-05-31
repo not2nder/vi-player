@@ -12,7 +12,7 @@ from util.keyboard import getch
 from core.config import load_config, get_config
 from core.theme import set_theme
 
-from core.enums import Mode 
+from core.enums import Mode
 
 class App:
     def __init__(self):
@@ -27,7 +27,6 @@ class App:
         self.command_buffer = []
 
         self.cursor = 0
-        self.scroll = 0
         self.buffer_index = 0
 
         self.running = True
@@ -59,9 +58,9 @@ class App:
 
     def handle_key(self, key):
         if self.mode == Mode.NORMAL:
-            motions.handle(self, key)
+            motions.handle_key(self, key)
         elif self.mode == Mode.COMMAND:
-                commands.handle_key(self, key)
+            commands.handle(self, key)
 
         self.dirty = True
 
@@ -70,7 +69,7 @@ class App:
         ui.draw_header(self.screen)
         ui.draw_statusbar(self.screen, self)
         
-        if not self.mpv.playlist:
+        if self.mpv.is_empty:
             ui.draw_home(self.screen, self.config)
         else:
             ui.draw_songs(

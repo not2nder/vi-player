@@ -21,6 +21,13 @@ class Player:
     def count(self):
         return len(self.playlist)
 
+    @property
+    def is_empty(self):
+        if self.playlist:
+            return False 
+        else:
+            return True
+    
     def play(self):
         if not self.playlist:
             return

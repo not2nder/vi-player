@@ -4,27 +4,27 @@ import core.config as config
 from core.enums import Mode, Key
 
 def play(app, args):
-    if not app.mpv.playlist:
+    if app.mpv.is_empty:
         return
 
     app.mpv.current = app.cursor
     app.mpv.play()
 
 def pause(app, args):
-    if not app.mpv.playlist:
+    if app.mpv.is_empty:
         return
 
     app.mpv.pause()
 
 def next(app, args):
-    if not app.mpv.playlist:
+    if app.mpv.is_empty:
         return
 
     app.mpv.next()
     app.cursor = app.mpv.current
 
 def prev(app, args):
-    if not app.mpv.playlist:
+    if app.mpv.is_empty:
         return
 
     app.mpv.prev()
@@ -32,14 +32,14 @@ def prev(app, args):
         
 
 def skip(app, args):
-    if not app.mpv.playlist:
+    if app.mpv.is_empty:
         return
 
     app.mpv.skip(int(args[1]))
     app.cursor = app.mpv.current
 
 def quit(app, args):
-    app.quit()
+    app.exit()
 
 def open(app, args):
     if len(args) < 2:
@@ -65,7 +65,7 @@ def set_rnu(app, args):
 def disable_rnu(app, args):
     app.config.set_relativenumber(False)
 
-def set_theme(app, args):
+def set_colorscheme(app, args):
     if len(args) < 2:
         return
 
@@ -77,18 +77,18 @@ COMMANDS = {
     ":n": next,
     ":pv": prev,
     ":sk": skip,
-    ":open": open,
+    ":e": open,
     ":add": add_dir,
     ":addsong": add_song,
     ":rnu": set_rnu,
     ":relativenumber": set_rnu,
     ":nornu": disable_rnu,
     ":norelativenumber": disable_rnu,
-    ":colorscheme": set_theme,
+    ":colorscheme": set_colorscheme,
     ":q": quit
 }
 
-def handle_key(app, key):
+def handle(app, key):
     if isinstance(key, str) and key == "\r":
         args = shlex.split(app.command)
         cmd = args[0]
@@ -118,6 +118,6 @@ def handle_key(app, key):
         else:
             app.buffer_prev()
             app.command = app.command_buffer[app.buffer_index]
-    else:
+    elif isinstance(key, str):
         app.command += key
 

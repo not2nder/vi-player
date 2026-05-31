@@ -1,14 +1,12 @@
+from dataclasses import dataclass
 import shlex
 
+@dataclass
 class Token:
-    def __init__(self, texto, tipo, comeco, fim):
-        self.texto = texto
-        self.tipo = tipo
-        self.comeco = comeco
-        self.fim = fim
-
-    def __repr__(self):
-        return f"Token({self.tipo}, '{self.texto}')"
+    text: str
+    token_type: str
+    start: int
+    end: int
 
 def tokenize(text: str):
     cursor = 0

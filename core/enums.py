@@ -16,3 +16,4 @@ class PlaybackState(Enum):
     WAITING = "AGUARDANDO"
     PLAYING = "TOCANDO"
     PAUSE = "PAUSA"
+

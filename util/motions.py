@@ -1,4 +1,30 @@
+from dataclasses import dataclass
 from core.enums import Mode, Key
+
+@dataclass
+class Motion:
+    count: int
+    action: str
+
+def parse(motion: str):
+    if not motion:
+        return
+
+    cursor = 0
+    indice = 0
+    count = 1
+    action = ""
+    
+    if motion[0].isdigit():
+        while cursor < len(motion) and motion[cursor].isdigit():
+            cursor+=1
+        indice = cursor
+
+        count = int(motion[:indice])
+
+    action = motion[indice:]
+
+    return Motion(count, action)
 
 def handle(app, key):
     use_arrows = app.config.player["usearrows"]
@@ -6,24 +32,7 @@ def handle(app, key):
     if isinstance(key, str) and key.isdigit():
         app.motion += key
         return
-
-    elif (key == 'j' or key == 'k') and app.motion:
-        steps = int(app.motion)
-        
-        if key == 'j':
-            move_down(app, steps)
-        elif key == 'k':
-            move_up(app, steps)
-
-        app.motion = ""
-        return
-
-    elif key == 'j' or (use_arrows and key == Key.DOWN):
-        move_down(app)
-
-    elif key == 'k' or (use_arrows and key == Key.UP):
-        move_up(app)
-
+    
     elif key == 'g':
         if app.motion:
             goto_start(app)
@@ -31,47 +40,75 @@ def handle(app, key):
             app.motion += key
             return
 
-    elif key == 'G':
-        goto_end(app)
-
-    elif key == '%' and app.motion:
-        percent = int(app.motion)/100
-        app.cursor = int(app.mpv.count * percent)
-        app.motion = ""
-   
-    elif key == 'q':
-        app.exit()
-    
-    elif key == ":":
-        enter_command(app)
-        return
-
     app.motion = ""
 
-def move_down(app, steps=1):
-    if not app.mpv.playlist:
+def move_down(app, motion):
+    if app.mpv.is_empty:
         return
 
-    app.cursor = (app.cursor+steps) % app.mpv.count
+    app.cursor = (app.cursor+motion.count) % app.mpv.count
 
-def move_up(app, steps=1):
-    if not app.mpv.playlist:
+def move_up(app, motion):
+    if app.mpv.is_empty:
         return
     
-    app.cursor = (app.cursor-steps) % app.mpv.count
+    app.cursor = (app.cursor-motion.count) % app.mpv.count
 
-def goto_start(app):
-    if not app.mpv.playlist:
+def goto_start(app, motion):
+    if app.mpv.is_empty:
         return
 
     app.cursor = 0
 
-def goto_end(app):
-    if not app.mpv.playlist:
+def goto(app, motion):
+    if app.mpv.is_empty:
+        return
+
+    percent = motion.count/100
+    app.cursor = int(app.mpv.count * percent)
+
+def goto_end(app, motion):
+    if app.mpv.is_empty:
         return
 
     app.cursor = app.mpv.count-1
 
-def enter_command(app):
+def enter_command(app, motion):
     app.mode = Mode.COMMAND
     app.command += ":"
+
+def exit_player(app, motion):
+    app.exit()
+
+MOTIONS = {
+    "j": move_down,
+    "k": move_up,
+    "gg": goto_start,
+    "G": goto_end,
+    "%": goto,
+    ":": enter_command,
+    "q": exit_player 
+}
+
+def is_complete(motion: str):
+    if not motion:
+        return 
+    
+    if motion.isdigit() or parse(motion).action not in MOTIONS:
+        return False
+    else:
+        return True
+
+def handle_key(app, key):
+    
+    if isinstance(key, str):
+        app.motion += key
+    
+    if is_complete(app.motion):
+        obj = parse(app.motion)
+        move = MOTIONS.get(obj.action)
+        
+        if move:
+            move(app, obj)
+
+        app.motion = ""
