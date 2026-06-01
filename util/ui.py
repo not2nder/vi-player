@@ -1,6 +1,7 @@
 from util.pretty import *
 from util import lexer
 from core.theme import get_theme 
+from core.enums import Mode
 
 TOP_MARGIN = 2
 WARNING_Y= 1
@@ -138,16 +139,11 @@ def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
 
 def draw_statusbar(screen: object, app: object):
     theme = get_theme()
-    right = ""
 
-    if app.mpv.playlist:
-        right = paint(
-            padding(bold(f"{app.cursor+1}/{app.mpv.count}")),
-            theme.secondary_fg,
-            theme.secondary_bg)
+    right = padding(f"{app.cursor+1}/{app.mpv.count}") if app.mpv.playlist else ""
 
     song = app.mpv.get_current_song()
-    text = app.mode.value+f" | {song.get_name() if song else 'Sem Música'}"
+    text = app.mode.value
     
     left = paint(padding(bold(text)), theme.status_fg, theme.status_bg) 
 
@@ -178,9 +174,13 @@ def highlight(text: str):
         result += TOKEN_STYLES[token.token_type](token.text)
     return result
 
-def draw_commandline(screen: object, command: str):
+def draw_commandline(screen, command, motion, mode):
     theme = get_theme()
-    text = highlight(command)
+    if mode == Mode.COMMAND:
+        text = highlight(command)
+    elif mode == Mode.NORMAL:
+        text = motion.rjust(screen.width-2)
+    
     line = paint(fill(text, width=screen.width), theme.fg, theme.bg) + RESET
     
     screen.draw(screen.height, line)

@@ -26,49 +26,33 @@ def parse(motion: str):
 
     return Motion(count, action)
 
-def handle(app, key):
-    use_arrows = app.config.player["usearrows"]
-
-    if isinstance(key, str) and key.isdigit():
-        app.motion += key
-        return
-    
-    elif key == 'g':
-        if app.motion:
-            goto_start(app)
-        else:
-            app.motion += key
-            return
-
-    app.motion = ""
-
 def move_down(app, motion):
-    if app.mpv.is_empty:
+    if app.mpv.isempty:
         return
 
     app.cursor = (app.cursor+motion.count) % app.mpv.count
 
 def move_up(app, motion):
-    if app.mpv.is_empty:
+    if app.mpv.isempty:
         return
     
     app.cursor = (app.cursor-motion.count) % app.mpv.count
 
 def goto_start(app, motion):
-    if app.mpv.is_empty:
+    if app.mpv.isempty:
         return
 
     app.cursor = 0
 
 def goto(app, motion):
-    if app.mpv.is_empty:
+    if app.mpv.isempty:
         return
 
     percent = motion.count/100
     app.cursor = int(app.mpv.count * percent)
 
 def goto_end(app, motion):
-    if app.mpv.is_empty:
+    if app.mpv.isempty:
         return
 
     app.cursor = app.mpv.count-1
@@ -90,25 +74,37 @@ MOTIONS = {
     "q": exit_player 
 }
 
-def is_complete(motion: str):
+def iscomplete(motion: object):
     if not motion:
         return 
     
-    if motion.isdigit() or parse(motion).action not in MOTIONS:
+    if str(motion).isdigit():
         return False
     else:
         return True
+
+def isvalid(motion: str):
+    if not motion:
+        return
+
+    return any(i.startswith(motion) for i in MOTIONS)
 
 def handle_key(app, key):
     
     if isinstance(key, str):
         app.motion += key
+    else:
+        return
+
+    obj = parse(app.motion)
     
-    if is_complete(app.motion):
-        obj = parse(app.motion)
+    if not isvalid(obj.action):
+        app.motion = ""
+        return
+
+    if iscomplete(obj):
         move = MOTIONS.get(obj.action)
-        
         if move:
             move(app, obj)
+            app.motion = ""
 
-        app.motion = ""

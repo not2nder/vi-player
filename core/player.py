@@ -22,7 +22,7 @@ class Player:
         return len(self.playlist)
 
     @property
-    def is_empty(self):
+    def isempty(self):
         if self.playlist:
             return False 
         else:

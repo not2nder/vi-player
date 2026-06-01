@@ -68,7 +68,7 @@ class App:
         ui.draw_background(self.screen)
         ui.draw_statusbar(self.screen, self)
         
-        if self.mpv.is_empty:
+        if self.mpv.isempty:
             ui.draw_home(self.screen, self.config)
         else:
             ui.draw_songs(
@@ -79,7 +79,7 @@ class App:
             )
 
         ui.draw_warning(self.screen, self.mpv.state)
-        ui.draw_commandline(self.screen, self.command)
+        ui.draw_commandline(self.screen, self.command, self.motion, self.mode)
 
         self.screen.render()
         self.dirty = False 
