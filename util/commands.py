@@ -4,27 +4,27 @@ import core.config as config
 from core.enums import Mode, Key
 
 def play(app, args):
-    if app.mpv.is_empty:
+    if app.mpv.isempty:
         return
 
     app.mpv.current = app.cursor
     app.mpv.play()
 
 def pause(app, args):
-    if app.mpv.is_empty:
+    if app.mpv.isempty:
         return
 
     app.mpv.pause()
 
 def next(app, args):
-    if app.mpv.is_empty:
+    if app.mpv.isempty:
         return
 
     app.mpv.next()
     app.cursor = app.mpv.current
 
 def prev(app, args):
-    if app.mpv.is_empty:
+    if app.mpv.isempty:
         return
 
     app.mpv.prev()
@@ -32,7 +32,7 @@ def prev(app, args):
         
 
 def skip(app, args):
-    if app.mpv.is_empty:
+    if app.mpv.isempty:
         return
 
     app.mpv.skip(int(args[1]))
