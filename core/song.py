@@ -13,8 +13,8 @@ class Song:
     title: Optional[str] = None
     artist: Optional[str] = None
     album: Optional[str] = None
-
-    duration: Optional[int] = None
+    
+    meta_loaded: bool = False
 
     def __post_init__(self):
         self.path = Path(self.path)
@@ -23,17 +23,21 @@ class Song:
             self.title = self.path.stem
 
     def load_metadata(self):
-        try:
-            audio = EasyID3(self.path)
+        if not self.meta_loaded:
+            try:
+                audio = EasyID3(self.path)
 
-            self.title = audio.get("title", [self.title])[0]
-            self.artist = audio.get("artist", ["Unknown"])[0]
-            self.album = audio.get("album", ["Unknown"])[0]
-
-        except Exception:
-            self.artist = "Desconhecido"
-            self.album = "Desconhecido"
-
+                self.title = audio.get("title", [self.title])[0]
+                self.artist = audio.get("artist", ["Unknown"])[0]
+                self.album = audio.get("album", ["Unknown"])[0]
+                
+            except Exception:
+                self.artist = "Desconhecido"
+                self.album = "Desconhecido"
+            
+            finally:
+                self.meta_loaded = True
+        
         return self
 
     def get_name(self) -> str:
