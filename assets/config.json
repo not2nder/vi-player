@@ -5,5 +5,11 @@
   "player": {
     "relativenumber": true,
     "usearrows": false
+  },
+  "statusline": {
+    "left": ["mode", "state"],
+    "right": ["theme", "position"],
+
+    "separator": "|"
   }
 }
