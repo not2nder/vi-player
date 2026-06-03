@@ -13,6 +13,8 @@ class Config:
         self.player["relativenumber"] = self.player.get("relativenumber", True)
         self.player["usearrows"] = self.player.get("usearrows", False)
 
+        self.statusline = data.get("statusline", {})
+
     def set_theme(self, name):
         self.general["theme"] = name
 

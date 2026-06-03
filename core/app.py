@@ -6,6 +6,7 @@ import util.commands as commands
 
 from util.screen import Screen
 from util import ui
+from ui import statusline
 
 from util.keyboard import getch 
 
@@ -66,7 +67,7 @@ class App:
 
     def draw(self):
         ui.draw_background(self.screen)
-        ui.draw_statusbar(self.screen, self)
+        statusline.draw(self.screen, self)
         
         if self.mpv.isempty:
             ui.draw_home(self.screen, self.config)

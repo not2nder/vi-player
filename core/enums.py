@@ -11,6 +11,7 @@ class Key(Enum):
     RIGHT = auto()
     ESC_SEQ = auto()
     DEL = auto()
+    ENTER = auto()
 
 class PlaybackState(Enum):
     WAITING = "AGUARDANDO"

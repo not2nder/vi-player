@@ -10,9 +10,12 @@ class Theme:
 
         self.secondary_bg = colors.get("secondary_bg", self.bg)
         self.secondary_fg = colors.get("secondary_fg", self.fg)
-        
+         
         self.status_bg = colors.get("statusline_bg", self.secondary_bg)
         self.status_fg = colors.get("statusline_fg", self.secondary_fg)
+        
+        self.mode_bg = colors.get("mode_bg", self.secondary_bg)
+        self.mode_fg = colors.get("mode_fg", self.secondary_fg)
 
         self.iline_bg = colors.get("indicator_line_bg", self.secondary_bg)
         self.iline_fg = colors.get("indicator_line_fg", self.secondary_fg)

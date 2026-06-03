@@ -67,6 +67,21 @@ def justify(*args, width: int) -> str:
 
     return result
 
+def build_statusline(left: list, right: list, width: int):
+    result = ""
+
+    texts = left+right
+    total_length = sum(length(i) for i in texts)
+
+    gap = width-total_length-1
+    space = ' '*gap
+
+    result += " ".join(left)
+    result += space
+    result += ' '.join(right)
+
+    return result
+
 def truncate(text: str, max_width: int):
     if length(text) <= max_width:
         return text

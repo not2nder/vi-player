@@ -139,15 +139,17 @@ def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
 
 def draw_statusbar(screen: object, app: object):
     theme = get_theme()
+    mode = app.mode.value
+    musica = app.mpv.playing_song.get_name()
 
-    right = padding(f"{app.cursor+1}/{app.mpv.count}") if app.mpv.playlist else ""
+    left = [
+        mode,
+        musica
+    ]
+    right = ["6/7"]
 
-    song = app.mpv.get_current_song()
-    text = app.mode.value
-    
-    left = paint(padding(bold(text)), theme.status_fg, theme.status_bg) 
-
-    line = justify(left, right, width=screen.width)
+    line = build_statusline(left, right, width=screen.width)
+        
     screen.draw(screen.height-1, line)
 
 def draw_warning(screen: object, state: str):
