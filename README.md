@@ -136,16 +136,19 @@ Acessado pressionando `:`.
 Responsável por executar comandos.
 
 
-| Comando               | Função                       |
-| --------------------- | ---------------------------- |
-| `:p`                  | Reproduzir música atual      |
-| `:pp`                 | Pause/Resume                 |
-| `:n`                  | Próxima música               |
-| `:pv`                 | Música anterior              |
-| `:sk <n>`             | Pular para música específica |
-| `:colorscheme <tema>` | Trocar tema da sessão        |
-| `:q`                  | Sair                         |
-
+| Comando               | Função                            |
+| --------------------- | --------------------------------- |
+| `:p`                  | Reproduzir música atual           |
+| `:pp`                 | Pause/Resume                      |
+| `:n`                  | Próxima música                    |
+| `:pv`                 | Música anterior                   |
+| `:sk <n>`             | Pular para música específica      |
+| `:colorscheme <tema>` | Trocar tema da sessão             |
+| `:open <diretório>`   | Abrir um diretório de músicas     |
+| `:add <diretório>`    | Adicionar um diretório à playlist |
+| `:add <tema>`         | Mudar tema                        |
+| `:rnu`                | Alternar números relativos        |
+| `:q`                  | Sair                              |
 ---
 
 # Temas
