@@ -87,7 +87,11 @@ def isvalid(motion: str):
     if not motion:
         return
 
-    return any(i.startswith(motion) for i in MOTIONS)
+    if motion.isdigit():
+        return True
+
+    action = parse(motion).action
+    return any(i.startswith(action) for i in MOTIONS)
 
 def handle_key(app, key):
     
@@ -96,12 +100,11 @@ def handle_key(app, key):
     else:
         return
 
-    obj = parse(app.motion)
-    
-
-    if not isvalid(obj.action) and not app.motion.isdigit():
+    if not isvalid(app.motion):
         app.motion = ""
         return
+
+    obj = parse(app.motion)
 
     if iscomplete(obj):
         move = MOTIONS.get(obj.action)
