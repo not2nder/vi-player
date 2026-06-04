@@ -117,7 +117,7 @@ def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
             display_number = str(real_index+1).ljust(digits)
 
         index = padding(display_number)
-        duration = padding(song.get_time())
+        duration = padding(song.time)
 
         freespace = screen.width - length(index) - length(duration)
 
@@ -140,7 +140,7 @@ def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
 def draw_statusbar(screen: object, app: object):
     theme = get_theme()
     mode = app.mode.value
-    musica = app.mpv.playing_song.get_name()
+    musica = app.mpv.playing_song.name
 
     left = [
         mode,

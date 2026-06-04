@@ -22,6 +22,18 @@ class Song:
         if self.title is None:
             self.title = self.path.stem
 
+    @property
+    def name(self):
+        self.load_metadata()
+        return self.title
+
+    @property
+    def time(self):
+        duration = File(self.path).info.length
+        mins = int(duration//60)
+        secs = int(duration%60)
+        return f"{mins}:{str(secs).rjust(2,'0')}"
+
     def load_metadata(self):
         if not self.meta_loaded:
             try:
@@ -39,17 +51,3 @@ class Song:
                 self.meta_loaded = True
         
         return self
-
-    def get_name(self) -> str:
-        if self.artist:
-            return f"{self.artist} - {self.title}"
-        else:
-            return self.title
-
-    def get_time(self):
-        duration = File(self.path).info.length
-        mins = int(duration//60)
-        secs = int(duration%60)
-
-        return f"{mins}:{str(secs).rjust(2,'0')}"
-
