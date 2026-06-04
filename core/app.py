@@ -6,7 +6,9 @@ import util.commands as commands
 
 from util.screen import Screen
 from util import ui
+
 from ui import statusline
+from ui import commandline
 
 from util.keyboard import getch 
 
@@ -80,7 +82,7 @@ class App:
             )
 
         ui.draw_warning(self.screen, self.mpv.state)
-        ui.draw_commandline(self.screen, self.command, self.motion, self.mode)
+        commandline.draw(self.screen, self.command, self.motion, self.mode)
 
         self.screen.render()
         self.dirty = False 

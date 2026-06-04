@@ -11,7 +11,6 @@ def draw(screen, app):
         "state": build_state,
         "theme": build_theme,
         "position": build_position,
-        "percent": build_percent
     }
     
     left = [
@@ -41,6 +40,7 @@ def build_statusline(left: list, right: list, separator: str, width: int):
     right_text = separator.join(right)
 
     gap = width-length(left_text)-length(right_text)
+    gap = max(0, gap)
     space = ' '*gap
 
     result = f"{left_text}{space}{right_text}"
@@ -52,7 +52,7 @@ def build_mode(app):
     return app.mode.value
 
 def build_song(app):
-    return app.mpv.get_current_song().get_name() if app.mpv.playing_song else "Sem Música"
+    return app.mpv.get_current_song().name if app.mpv.playing_song else "Sem Música"
 
 def build_state(app):
     return app.mpv.state.value
@@ -62,9 +62,4 @@ def build_theme(app):
 
 def build_position(app):
     return f"{app.cursor+1}/{app.mpv.count}"
-
-def build_percent(app):
-    percentual = (app.cursor/app.mpv.count)*100
-
-    return f"{percentual}%"
 

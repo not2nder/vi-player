@@ -163,27 +163,3 @@ def draw_warning(screen: object, state: str):
 
     screen.draw(screen.height-2, line)
 
-def highlight(text: str): 
-    TOKEN_STYLES = {
-        "COMMAND": lambda x: x,
-        "PATH": lambda x: underline(x),
-        "SPACE": lambda x: x,
-        "DIGIT": lambda x: bold(x),
-        "TEXT": lambda x: x
-    }
-    result = ""
-    for token in lexer.tokenize(text):
-        result += TOKEN_STYLES[token.token_type](token.text)
-    return result
-
-def draw_commandline(screen, command, motion, mode):
-    theme = get_theme()
-    if mode == Mode.COMMAND:
-        text = highlight(command)
-    elif mode == Mode.NORMAL:
-        text = motion.rjust(screen.width-2)
-    
-    line = paint(fill(text, width=screen.width), theme.fg, theme.bg) + RESET
-    
-    screen.draw(screen.height, line)
-
