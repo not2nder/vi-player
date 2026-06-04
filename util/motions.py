@@ -98,7 +98,8 @@ def handle_key(app, key):
 
     obj = parse(app.motion)
     
-    if not isvalid(obj.action):
+
+    if not isvalid(obj.action) and not app.motion.isdigit():
         app.motion = ""
         return
 
