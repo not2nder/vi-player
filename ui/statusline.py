@@ -1,4 +1,4 @@
-from util.pretty import length, paint
+from util.pretty import length, paint, padding
 from core.theme import get_theme
 
 def draw(screen, app):
@@ -34,6 +34,8 @@ def build_statusline(left: list, right: list, separator: str, width: int):
     theme = get_theme()
 
     result = ""
+    left = [padding(t) for t in left]
+    right = [padding(t) for t in right]
 
     left_text = separator.join(left)
     right_text = separator.join(right)
