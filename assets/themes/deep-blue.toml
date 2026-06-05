@@ -19,6 +19,3 @@ indicator_line_fg = "#FFFFFF"
 
 indicator_num_bg = "#161A22"
 indicator_num_fg = "#68A4E0"
-
-warning_bg = "#D9577B"
-warning_fg = "#FFFFFF"
