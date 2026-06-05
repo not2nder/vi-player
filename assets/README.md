@@ -16,10 +16,7 @@ A estrutura esperada atualmente é:
 └── themes/
     ├── deep-blue.toml
     ├── linen-light.toml
-    ├── ocean.toml
-    ├── retro.toml
-    ├── slate.toml
-    └── warm.toml
+    └── ... 
 ```
 
 ---
@@ -43,7 +40,7 @@ cp -r assets/* ~/.config/vi-player/
 
 # config.json
 
-O arquivo principal de configuração do player é:
+O arquivo principal de configuração do player é o:
 
 ```text
 ~/.config/vi-player/config.json
@@ -59,6 +56,12 @@ Exemplo:
 
   "player": {
     "relativenumbers": true
+  },
+
+  "statusline": {
+      "left": ["mode", "state"],
+      "right": ["theme", "position"],
+      "separator": "|"
   }
 }
 ```
@@ -77,11 +80,33 @@ Exemplo:
 
 ## Player
 
-| Campo             | Função                                    |
-| ----------------- | ----------------------------------------- |
-| `relativenumbers` | Ativa números relativos inspirados no Vim |
+| Campo             | Função                                             |
+| ----------------- | -------------------------------------------------- |
+| `relativenumbers` | Ativa números relativos inspirados no Vim          |
+| `usearrows`       | Ativa alterna entre o uso das setas para navegação |
 
 ---
+
+## Statusline
+
+Na última atualização do player, foi implementada a função de customização (ainda parcial) da statusline. podendo ser definidos os widgets da esquerda e direita e o separador dos textos.
+
+```json
+"statusline": {
+    "left": ["mode", "state"],
+    "right": ["theme", "position"],
+
+    "separator": "|"
+}
+```
+
+| Módulo   | DESCRIÇÃO                             |
+|----------|---------------------------------------|
+| mode     | Modo atual do player (NORMAL/COMANDO) |
+| song     | Música atual tocando                  |
+| state    | Estado do player                      |
+| theme    | Tema configurado em config.json       |
+| position | Posição do cursor na lista de músicas |
 
 # Temas
 
@@ -134,9 +159,6 @@ indicator_line_fg = "#F4F7F8"
 indicator_num_bg = "#20282B"
 indicator_num_fg = "#5FA8B8"
 
-# Barra de avisos
-warning_bg = "#D65D8F"
-warning_fg = "#FDFDFD"
 ```
 
 ---
