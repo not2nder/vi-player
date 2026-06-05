@@ -29,6 +29,8 @@ class Playlist:
         for file in Path(path).expanduser().glob("*.mp3"):
             self.add(Song(file))
 
+        return sum(1 for file in Path(path).expanduser().glob("*mp3"))
+
     def remove(self, song: Song):
         self.songs.remove(song)
 

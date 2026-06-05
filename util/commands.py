@@ -43,6 +43,7 @@ def quit(app, args):
 
 def open(app, args):
     if len(args) < 2:
+        app.message = error("E32: Nenhum nome de diretório")
         return
     
     app.mpv.playlist.load_directory(args[1])
@@ -50,10 +51,11 @@ def open(app, args):
 
 def add_dir(app, args):
     if len(args) < 2:
+        app.message = error("E32: Nenhum nome de diretório")
         return
 
-    app.mpv.playlist.add_dir(args[1])
-    app.message = f"Playlist atualizada!"
+    count = app.mpv.playlist.add_dir(args[1])
+    app.message = f'{count} Música(s) adicionada(s)'
 
 def add_song(app, args):
     if len(args) < 2:
