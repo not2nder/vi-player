@@ -1,7 +1,8 @@
 import shlex
-from core.theme import set_theme
+from core.theme import set_theme, get_theme
 import core.config as config
 from core.enums import Mode, Key
+from util.pretty import error
 
 def play(app, args):
     if app.mpv.isempty:
@@ -29,7 +30,6 @@ def prev(app, args):
 
     app.mpv.prev()
     app.cursor = app.mpv.current
-        
 
 def skip(app, args):
     if app.mpv.isempty:
@@ -70,9 +70,13 @@ def disable_rnu(app, args):
 
 def set_colorscheme(app, args):
     if len(args) < 2:
+        app.message = app.config.general['theme']
         return
 
-    set_theme(args[1])
+    try:
+        set_theme(args[1])
+    except FileNotFoundError:
+        app.message = error(f"E185: Esquema de cores '{args[1]}' não encontrado")
 
 COMMANDS = {
     ":p": play,
@@ -100,6 +104,8 @@ def handle(app, key):
         
         if command:
             command(app, args)
+        else:
+            app.message = error(f"E492: Não é um comando do player: {app.command}")
 
         app.command = ""
         app.mode = Mode.NORMAL

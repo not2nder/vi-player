@@ -39,6 +39,9 @@ def underline(text: str):
 def dim(text: str):
     return f"\x1b[2m{text}\x1b[22m"
 
+def error(text: str) -> str:
+    return f"\x1b[38;2;255;0;0m{text}"
+
 def justify(*args, width: int) -> str:
     if not args:
         return ""
@@ -64,21 +67,6 @@ def justify(*args, width: int) -> str:
         result += ' '*(base + (1 if i< extra else 0))
 
     result += texts[-1]
-
-    return result
-
-def build_statusline(left: list, right: list, width: int):
-    result = ""
-
-    texts = left+right
-    total_length = sum(length(i) for i in texts)
-
-    gap = width-total_length-1
-    space = ' '*gap
-
-    result += " ".join(left)
-    result += space
-    result += ' '.join(right)
 
     return result
 

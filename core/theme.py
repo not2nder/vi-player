@@ -4,7 +4,7 @@ import tomllib
 CURRENT_THEME = None
 
 class Theme:
-    def __init__(self, colors):
+    def __init__(self, colors): 
         self.bg = colors["bg"]
         self.fg = colors["fg"]
 
