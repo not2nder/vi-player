@@ -105,7 +105,7 @@ def handle(app, key):
         if command:
             command(app, args)
         else:
-            app.message = error(f"E492: Não é um comando do player: {app.command}")
+            app.message = error(f"E492: Não é um comando do player: {cmd.strip(':')}")
 
         app.command = ""
         app.mode = Mode.NORMAL
