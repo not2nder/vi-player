@@ -27,6 +27,7 @@ class App:
 
         self.command = ""
         self.motion = ""
+        self.message = ""
         self.command_buffer = []
 
         self.cursor = 0
@@ -81,8 +82,7 @@ class App:
                 self.config.player["relativenumber"]
             )
 
-        ui.draw_warning(self.screen, self.mpv.state)
-        commandline.draw(self.screen, self.command, self.motion, self.mode)
+        commandline.draw(self.screen, self.command, self.motion, self.message, self.mode)
 
         self.screen.render()
         self.dirty = False 

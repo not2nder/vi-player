@@ -1,18 +1,18 @@
-from util.pretty import paint, fill, underline, bold, RESET
+from util.pretty import paint, fill, underline, bold, justify, RESET
 from core.theme import get_theme
 from core.enums import Mode
 from util import lexer
 
-def draw(screen, command, motion, mode):
+def draw(screen, command, motion, message, mode):
     theme = get_theme()
 
     if mode == Mode.COMMAND:
         text = command
-
+        text = highlight(text)
+    
     elif mode == Mode.NORMAL:
-        text = motion.rjust(screen.width-2)
+        text = justify(message, motion, width=screen.width-1)
 
-    text = highlight(text)
     line = paint(fill(text, width=screen.width), theme.fg, theme.bg) + RESET
     
     screen.draw(screen.height, line)

@@ -4,7 +4,6 @@ from core.theme import get_theme
 from core.enums import Mode
 
 TOP_MARGIN = 2
-WARNING_Y= 1
 STATUS_Y = 1
 COMMAND_Y = 1
 
@@ -95,7 +94,6 @@ def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
     visible_lines = (
         screen.height
         -TOP_MARGIN
-        -WARNING_Y
         -STATUS_Y
         -COMMAND_Y
     )
@@ -136,30 +134,4 @@ def draw_songs(screen: object, songs: list, cursor: int, relative: bool):
             text = bold("~ ")
             line = paint(fill(text, width=screen.width), theme.index_fg, theme.bg)
             screen.draw(TOP_MARGIN+i, line)
-
-def draw_statusbar(screen: object, app: object):
-    theme = get_theme()
-    mode = app.mode.value
-    musica = app.mpv.playing_song.name
-
-    left = [
-        mode,
-        musica
-    ]
-    right = ["6/7"]
-
-    line = build_statusline(left, right, width=screen.width)
-        
-    screen.draw(screen.height-1, line)
-
-def draw_warning(screen: object, state: str):
-    if state is None:
-        return
-
-    theme = get_theme()
-    line = paint(padding(bold(state.value)), theme.warning_fg, theme.warning_bg)
-    tail = paint('', theme.fg, theme.bg)
-    line = fill(line+tail, screen.width)
-
-    screen.draw(screen.height-2, line)
 

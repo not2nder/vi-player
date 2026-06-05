@@ -60,6 +60,7 @@ def goto_end(app, motion):
 def enter_command(app, motion):
     app.mode = Mode.COMMAND
     app.command += ":"
+    app.message = ""
 
 def exit_player(app, motion):
     app.exit()

@@ -28,9 +28,6 @@ class Theme:
         self.inum_bg = colors.get("indicaor_num_bg", self.bg)
         self.inum_fg = colors.get("indicator_num_fg", self.fg)
 
-        self.warning_bg = colors.get("warning_bg", self.secondary_bg)
-        self.warning_fg = colors.get("warning_fg", self.secondary_fg)
-
 def load_theme(name):
     theme_file = Path.home()/".config"/"vi-player"/"themes"/f"{name}.toml"
     

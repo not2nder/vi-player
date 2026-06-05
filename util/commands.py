@@ -46,18 +46,21 @@ def open(app, args):
         return
     
     app.mpv.playlist.load_directory(args[1])
+    app.message = f"Mostrando músicas de: {args[1]}"
 
 def add_dir(app, args):
     if len(args) < 2:
         return
 
     app.mpv.playlist.add_dir(args[1])
+    app.message = f"Playlist atualizada!"
 
 def add_song(app, args):
     if len(args) < 2:
         return
 
     app.mpv.playlist.add(Song(args[1]))
+    app.message = "Música adicionada!"
 
 def set_rnu(app, args):
     app.config.set_relativenumber()
