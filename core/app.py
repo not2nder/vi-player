@@ -9,6 +9,7 @@ from util import ui
 
 from ui import statusline
 from ui import commandline
+from ui import homescreen
 
 from util.keyboard import getch 
 
@@ -73,7 +74,7 @@ class App:
         statusline.draw(self.screen, self)
         
         if self.mpv.isempty:
-            ui.draw_home(self.screen, self.config)
+            homescreen.draw(self.screen, self)
         else:
             ui.draw_songs(
                 self.screen,

@@ -40,7 +40,7 @@ def dim(text: str):
     return f"\x1b[2m{text}\x1b[22m"
 
 def error(text: str) -> str:
-    return f"\x1b[38;2;255;0;0m{text}"
+    return f"\x1b[031m{text}"
 
 def justify(*args, width: int) -> str:
     if not args:
