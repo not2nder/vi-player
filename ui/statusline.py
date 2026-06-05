@@ -58,7 +58,7 @@ def build_state(app):
     return app.mpv.state.value
 
 def build_theme(app):
-    return app.config.general["theme"]
+    return get_theme().name
 
 def build_position(app):
     return f"{app.cursor+1}/{app.mpv.count}"

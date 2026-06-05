@@ -4,7 +4,9 @@ import tomllib
 CURRENT_THEME = None
 
 class Theme:
-    def __init__(self, colors): 
+    def __init__(self, name, colors): 
+        self.name = name
+
         self.bg = colors["bg"]
         self.fg = colors["fg"]
 
@@ -34,7 +36,7 @@ def load_theme(name):
     with open(theme_file, "rb") as f:
         theme = tomllib.load(f)
 
-    return Theme(theme["colors"])
+    return Theme(name, theme["colors"])
 
 def set_theme(name):
     global CURRENT_THEME

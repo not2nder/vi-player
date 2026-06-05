@@ -70,7 +70,7 @@ def disable_rnu(app, args):
 
 def set_colorscheme(app, args):
     if len(args) < 2:
-        app.message = app.config.general['theme']
+        app.message = get_theme().name 
         return
 
     try:
