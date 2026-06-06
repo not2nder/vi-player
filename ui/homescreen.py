@@ -6,7 +6,7 @@ def draw(screen, app):
     theme = get_theme()
     accent = theme.secondary_bg
     
-    logo = ["VI-PLAYER"] if screen.width <= len(art.logo[1]) else art.logo
+    logo = ["VI-PLAYER", "v0.1.0"] if screen.width <= len(art.logo[1])-2 else art.logo
 
     descricao = [
         "Um player de músicas inspirado no Vim",

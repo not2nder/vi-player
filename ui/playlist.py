@@ -3,10 +3,12 @@ from util.pretty import *
 from core.theme import get_theme
 
 def draw(screen, app):
+    theme = get_theme()
+
     visible_lines = screen.height - 3
 
     scroll = max(0, app.cursor-visible_lines+2)
-    max_scroll = max(0, visible_lines)
+    max_scroll = max(0, app.mpv.count-visible_lines)
     scroll = min(scroll, max_scroll)
     
     visible_songs = app.mpv.playlist[scroll:scroll+visible_lines]
@@ -31,9 +33,14 @@ def draw(screen, app):
             title,
             duration,
             screen.width,
-            index == app.cursor
+            index == app.cursor,
+            theme
         )
 
+        screen.draw(i+1, line)
+
+    for i in range(len(visible_songs), visible_lines):
+        line = build_empty_line(screen.width, theme)
         screen.draw(i+1, line)
 
 def build_index(index, cursor, digits, rnu):
@@ -55,9 +62,8 @@ def build_time(song):
 def get_digits(count):
     return max(2, len(str(count)))
 
-def build_line(index, title, duration, width, current):
-    theme = get_theme()
-
+def build_line(index, title, duration, width, selected, theme):
+    
     freespace = width-length(index)
 
     text = justify(
@@ -66,7 +72,7 @@ def build_line(index, title, duration, width, current):
         width=freespace
     )
 
-    if current:
+    if selected:
         index = paint(index,theme.inum_fg, theme.inum_bg)
         text = paint(text, theme.iline_fg, theme.iline_bg)
 
@@ -75,4 +81,7 @@ def build_line(index, title, duration, width, current):
         text = paint(text, theme.fg, theme.bg)
 
     return index+text + RESET
+
+def build_empty_line(width, theme):
+    return paint(fill(bold("~ "), width), theme.index_fg, theme.bg)
 
