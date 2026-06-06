@@ -7,9 +7,7 @@ import util.commands as commands
 from util.screen import Screen
 from util import ui
 
-from ui import statusline
-from ui import commandline
-from ui import homescreen
+from ui import statusline, commandline, homescreen, playlist
 
 from util.keyboard import getch 
 
@@ -76,12 +74,7 @@ class App:
         if self.mpv.isempty:
             homescreen.draw(self.screen, self)
         else:
-            ui.draw_songs(
-                self.screen,
-                self.mpv.playlist,
-                self.cursor,
-                self.config.player["relativenumber"]
-            )
+            playlist.draw(self.screen, self)
 
         commandline.draw(self.screen, self.command, self.motion, self.message, self.mode)
 
