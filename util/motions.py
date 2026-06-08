@@ -48,7 +48,7 @@ def goto(app, motion):
     if app.mpv.isempty:
         return
 
-    percent = motion.count/100
+    percent = min(motion.count,99)/100
     app.cursor = int(app.mpv.count * percent)
 
 def goto_end(app, motion):
