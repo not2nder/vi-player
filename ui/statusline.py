@@ -8,6 +8,8 @@ def draw(screen, app):
     WIDGETS = {
         "mode": build_mode,
         "song": build_song,
+        "album": build_album,
+        "artist": build_artist,
         "state": build_state,
         "theme": build_theme,
         "position": build_position,
@@ -33,8 +35,8 @@ def build_statusline(left: list, right: list, separator: str, width: int):
     theme = get_theme()
 
     result = ""
-    left = [padding(bold(t)) for t in left]
-    right = [padding(bold(t)) for t in right]
+    left = [padding(bold(t)) for t in left if t]
+    right = [padding(bold(t)) for t in right if t]
 
     left_text = separator.join(left)
     right_text = separator.join(right)
@@ -63,3 +65,10 @@ def build_theme(app):
 def build_position(app):
     return f"{app.cursor+1}/{app.mpv.count}"
 
+def build_album(app):
+    album = app.mpv.get_current_song().release if app.mpv.playing_song else ""
+    return album
+
+def build_artist(app):
+    artist = app.mpv.get_current_song().composer if app.mpv.playing_song else ""
+    return artist
