@@ -83,5 +83,6 @@ def build_line(index, title, duration, width, selected, theme):
     return index+text + RESET
 
 def build_empty_line(width, theme):
-    return paint(fill(bold("~ "), width), theme.index_fg, theme.bg) if theme.index_fg else blue("~ ")
+    fillchar = fill("~ ", width)
+    return paint(fillchar, theme.index_fg, theme.bg) if theme.index_fg else blue(fillchar)
 
