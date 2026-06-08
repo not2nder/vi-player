@@ -11,7 +11,7 @@ def getch():
         if ch == '\x1b':
             ch += sys.stdin.read(2)
             ch = parse_bytes(ch)
-        elif ch == "\x7f":
+        elif ch in ("\x7f", "\x08"):
             ch = Key.DEL
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
