@@ -13,6 +13,7 @@ def draw(screen, app):
         "state": build_state,
         "theme": build_theme,
         "position": build_position,
+        "percent": build_percent,
     }
     
     left = [
@@ -64,6 +65,18 @@ def build_theme(app):
 
 def build_position(app):
     return f"{app.cursor+1}/{app.mpv.count}"
+
+def build_percent(app):
+    percent = (app.cursor/(app.mpv.count-1))*100
+
+    if percent > 99:
+        text = "Fim"
+    elif percent < 1:
+        text = "Início"
+    else:
+        text = f"{percent:.0f}%"
+
+    return text
 
 def build_album(app):
     album = app.mpv.get_current_song().release if app.mpv.playing_song else ""
