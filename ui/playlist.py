@@ -73,15 +73,15 @@ def build_line(index, title, duration, width, selected, theme):
     )
 
     if selected:
-        index = paint(index,theme.inum_fg, theme.inum_bg) if theme.inum_bg else reverse(index)
-        text = paint(text, theme.iline_fg, theme.iline_bg) if theme.bg else reverse(text)
+        index = paint(index,theme.inum_fg, theme.inum_bg) if theme.inum_bg else blue(bold(index))
+        text = paint(text, theme.iline_fg, theme.iline_bg) if theme.iline_bg else text
 
     else:
-        index = paint(index,theme.index_fg, theme.index_bg)
-        text = paint(text, theme.fg, theme.bg)
+        index = paint(index,theme.index_fg, theme.index_bg) if theme.index_fg else yellow(index) 
+        text = paint(text, theme.fg, theme.bg) if theme.bg else text
 
     return index+text + RESET
 
 def build_empty_line(width, theme):
-    return paint(fill(bold("~ "), width), theme.index_fg, theme.bg)
+    return paint(fill(bold("~ "), width), theme.index_fg, theme.bg) if theme.index_fg else blue("~ ")
 

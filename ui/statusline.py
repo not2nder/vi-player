@@ -33,8 +33,8 @@ def build_statusline(left: list, right: list, separator: str, width: int):
     theme = get_theme()
 
     result = ""
-    left = [padding(t) for t in left]
-    right = [padding(t) for t in right]
+    left = [padding(bold(t)) for t in left]
+    right = [padding(bold(t)) for t in right]
 
     left_text = separator.join(left)
     right_text = separator.join(right)

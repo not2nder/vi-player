@@ -39,6 +39,15 @@ def underline(text: str):
 def dim(text: str):
     return f"\x1b[2m{text}\x1b[22m"
 
+def red(text: str) -> str:
+    return f"\x1b[31m{text}\x1b[39m"
+
+def yellow(text: str) -> str:
+    return f"\x1b[33m{text}\x1b[39m"
+
+def blue(text: str) -> str:
+    return f"\x1b[34m{text}\x1b[39m"
+
 def error(text: str) -> str:
     return f"\x1b[031m{text}"
 

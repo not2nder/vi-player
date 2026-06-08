@@ -7,8 +7,8 @@ class Theme:
     def __init__(self, name, colors): 
         self.name = name
 
-        self.bg = colors["bg"]
-        self.fg = colors["fg"]
+        self.bg = colors.get("bg", "")
+        self.fg = colors.get("fg", "")
 
         self.secondary_bg = colors.get("secondary_bg", self.bg)
         self.secondary_fg = colors.get("secondary_fg", self.fg)
@@ -33,10 +33,13 @@ class Theme:
 def load_theme(name):
     theme_file = Path.home()/".config"/"vi-player"/"themes"/f"{name}.toml"
     
-    with open(theme_file, "rb") as f:
-        theme = tomllib.load(f)
+    try:
+        with open(theme_file, "rb") as f:
+            theme = tomllib.load(f)
+    except FileNotFoundError:
+        theme = {}
 
-    return Theme(name, theme["colors"])
+    return Theme(name, theme.get("colors", {}))
 
 def set_theme(name):
     global CURRENT_THEME
