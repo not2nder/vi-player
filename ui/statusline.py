@@ -1,4 +1,4 @@
-from util.pretty import length, paint, padding
+from util.pretty import *
 from core.theme import get_theme
 
 def draw(screen, app):
@@ -44,7 +44,7 @@ def build_statusline(left: list, right: list, separator: str, width: int):
     space = ' '*gap
 
     result = f"{left_text}{space}{right_text}"
-    result = paint(result, theme.status_fg, theme.status_bg)
+    result = paint(result, theme.status_fg, theme.status_bg) if theme.bg else reverse(result)
 
     return result
 

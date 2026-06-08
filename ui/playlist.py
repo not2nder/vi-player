@@ -73,8 +73,8 @@ def build_line(index, title, duration, width, selected, theme):
     )
 
     if selected:
-        index = paint(index,theme.inum_fg, theme.inum_bg)
-        text = paint(text, theme.iline_fg, theme.iline_bg)
+        index = paint(index,theme.inum_fg, theme.inum_bg) if theme.inum_bg else reverse(index)
+        text = paint(text, theme.iline_fg, theme.iline_bg) if theme.bg else reverse(text)
 
     else:
         index = paint(index,theme.index_fg, theme.index_bg)

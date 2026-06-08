@@ -93,6 +93,9 @@ def reverse(text: str) -> str:
     return f"\x1b[7m{text}\x1b[0m"
 
 def hxtoansi(color: str, bg: bool = True) -> str:
+    if not color:
+        return ""
+
     hex_color = color.lstrip("#")
     r, g, b = [int(hex_color[i:i+2], 16) for i in (0,2,4)]
     return f"\x1b[{48 if bg else 38};2;{r};{g};{b}m"

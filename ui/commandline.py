@@ -1,4 +1,4 @@
-from util.pretty import paint, fill, underline, bold, justify, RESET
+from util.pretty import *
 from core.theme import get_theme
 from core.enums import Mode
 from util import lexer
@@ -13,7 +13,7 @@ def draw(screen, command, motion, message, mode):
     elif mode == Mode.NORMAL:
         text = justify(message, motion, width=screen.width-1)
 
-    line = paint(fill(text, width=screen.width), theme.fg, theme.bg) + RESET
+    line = paint(reverse(fill(text, width=screen.width), theme.fg, theme.bg)) + RESET
     
     screen.draw(screen.height, line)
 
