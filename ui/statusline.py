@@ -55,7 +55,7 @@ def build_mode(app):
     return app.mode.value
 
 def build_song(app):
-    return app.mpv.get_current_song().name if app.mpv.playing_song else "Sem Música"
+    return app.mpv.get_current_song().title if app.mpv.playing_song else "Sem Música"
 
 def build_state(app):
     return app.mpv.state.value
@@ -79,9 +79,9 @@ def build_percent(app):
     return text
 
 def build_album(app):
-    album = app.mpv.get_current_song().release if app.mpv.playing_song else ""
+    album = app.mpv.get_current_song().album if app.mpv.playing_song else ""
     return album
 
 def build_artist(app):
-    artist = app.mpv.get_current_song().composer if app.mpv.playing_song else ""
+    artist = app.mpv.get_current_song().artist if app.mpv.playing_song else ""
     return artist

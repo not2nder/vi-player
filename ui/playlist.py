@@ -54,7 +54,7 @@ def build_index(index, cursor, digits, rnu):
         return padding(str(index+1).ljust(digits))
 
 def build_title(song, freespace):
-    return truncate(song.name, freespace)
+    return truncate(song.title, freespace)
 
 def build_time(song):
     return padding(song.time)

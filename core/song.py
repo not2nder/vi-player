@@ -10,32 +10,32 @@ from mutagen import File
 class Song:
     path: Path
 
-    title: Optional[str] = None
-    artist: Optional[str] = None
-    album: Optional[str] = None
-    
+    _title: Optional[str] = None
+    _artist: Optional[str] = None
+    _album: Optional[str] = None
+
     meta_loaded: bool = False
 
     def __post_init__(self):
         self.path = Path(self.path)
 
         if self.title is None:
-            self.title = self.path.stem
+            self._title = self.path.stem
    
     @property
-    def name(self):
+    def title(self):
         self.load_metadata()
-        return self.title
+        return self._title
 
     @property
-    def release(self):
+    def artist(self):
         self.load_metadata()
-        return self.album
+        return self._artist
 
     @property
-    def composer(self):
+    def album(self):
         self.load_metadata()
-        return self.artist
+        return self._album
 
     @property
     def time(self):
@@ -49,13 +49,13 @@ class Song:
             try:
                 audio = EasyID3(self.path)
 
-                self.title = audio.get("title", [self.title])[0]
-                self.artist = audio.get("artist", [""])[0]
-                self.album = audio.get("album", [""])[0]
+                self._title = audio.get("title", [self.title])[0]
+                self._artist = audio.get("artist", [""])[0]
+                self._album = audio.get("album", [""])[0]
                 
             except Exception:
-                self.artist = ""
-                self.album = ""
+                self._artist = ""
+                self._album = ""
             
             finally:
                 self.meta_loaded = True
