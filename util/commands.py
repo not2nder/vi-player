@@ -43,7 +43,7 @@ def quit(app, args):
 
 def open(app, args):
     if len(args) < 2:
-        app.message = error("E32: Nenhum nome de diretório")
+        app.message = error("C002: Nenhum nome de diretório")
         return
     
     app.mpv.playlist.load_directory(args[1])
@@ -51,12 +51,15 @@ def open(app, args):
 
 def add_dir(app, args):
     if len(args) < 2:
-        app.message = error("E32: Nenhum nome de diretório")
+        app.message = error("C002: Nenhum nome de diretório")
         return
 
     count = app.mpv.playlist.add_dir(args[1])
-    app.message = f'{count} Música(s) adicionada(s)'
 
+    if count:
+        app.message = f'{count} Música(s) adicionada(s)'
+    else:
+        app.message = error('C003: Diretório vazio ou inexistente')
 def add_song(app, args):
     if len(args) < 2:
         return
@@ -78,7 +81,7 @@ def set_colorscheme(app, args):
     try:
         set_theme(args[1])
     except FileNotFoundError:
-        app.message = error(f"E185: Esquema de cores '{args[1]}' não encontrado")
+        app.message = error(f"T001: Esquema de cores '{args[1]}' não encontrado")
 
 COMMANDS = {
     ":p": play,
@@ -107,7 +110,7 @@ def handle(app, key):
         if command:
             command(app, args)
         else:
-            app.message = error(f"E492: Não é um comando do player: {cmd.strip(':')}")
+            app.message = error(f"C001: Não é um comando do player: {cmd.strip(':')}")
 
         app.command = ""
         app.mode = Mode.NORMAL
