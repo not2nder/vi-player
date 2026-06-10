@@ -109,6 +109,7 @@ def handle(app, key):
         
         if command:
             command(app, args)
+            app.buffer_add(app.command)
         else:
             app.message = error(f"C001: Não é um comando do player: {cmd.strip(':')}")
 
