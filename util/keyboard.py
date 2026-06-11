@@ -1,6 +1,17 @@
 import sys, tty, termios
 from core.enums import Key
 
+ANSI_CODES = {
+    '\x7f': Key.DEL,
+    '\x08': Key.DEL,
+    '\r': Key.ENTER,
+    ' ': Key.SPACE,
+    '\x1b[A': Key.UP,
+    '\x1b[B': Key.DOWN,
+    '\x1b[C': Key.RIGHT,
+    '\x1b[D': Key.LEFT
+}
+
 def getch():
     fd = sys.stdin.fileno()
     old = termios.tcgetattr(fd)
@@ -10,17 +21,15 @@ def getch():
         ch = sys.stdin.read(1)
         if ch == '\x1b':
             ch += sys.stdin.read(2)
-            ch = parse_bytes(ch)
-        elif ch in ("\x7f", "\x08"):
-            ch = Key.DEL
+
     finally:
+        ch = parse_key(ch)
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
+    
     return ch
 
-def parse_bytes(char: str):
-    if char == '\x1b[A':  return Key.UP
-    elif char == '\x1b[B': return Key.DOWN
-    elif char == '\x1b[C': return Key.RIGHT
-    elif char == '\x1b[D': return Key.LEFT
-
-    else: return Key.ESC_SEQ 
+def parse_key(char: str):
+    if char in ANSI_CODES:
+        return ANSI_CODES[char]
+    else:
+        return char

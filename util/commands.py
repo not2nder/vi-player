@@ -101,7 +101,7 @@ COMMANDS = {
 }
 
 def handle(app, key):
-    if isinstance(key, str) and key == "\r":
+    if key == Key.ENTER:
         args = shlex.split(app.command)
         cmd = args[0]
 
@@ -133,6 +133,7 @@ def handle(app, key):
         else:
             app.buffer_prev()
             app.command = app.command_buffer[app.buffer_index]
+    
     elif isinstance(key, str):
         app.command += key
 

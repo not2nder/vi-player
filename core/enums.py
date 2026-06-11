@@ -9,9 +9,10 @@ class Key(Enum):
     DOWN = auto()
     LEFT = auto()
     RIGHT = auto()
-    ESC_SEQ = auto()
     DEL = auto()
     ENTER = auto()
+    SPACE = auto()
+    ESC_SEQ = auto()
 
 class PlaybackState(Enum):
     WAITING = "AGUARDANDO"

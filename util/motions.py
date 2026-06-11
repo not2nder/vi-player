@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from core.enums import Mode, Key
+from core.enums import Mode, Key 
 
 @dataclass
 class Motion:
@@ -57,6 +57,10 @@ def goto_end(app, motion):
 
     app.cursor = app.mpv.count-1
 
+def play(app):
+    app.mpv.current = app.cursor
+    app.mpv.play()
+
 def enter_command(app, motion):
     app.mode = Mode.COMMAND
     app.command += ":"
@@ -72,7 +76,7 @@ MOTIONS = {
     "G": goto_end,
     "%": goto,
     ":": enter_command,
-    "q": exit_player 
+    "q": exit_player,
 }
 
 def iscomplete(motion: object):
@@ -98,6 +102,8 @@ def handle_key(app, key):
     
     if isinstance(key, str):
         app.motion += key
+    elif key == Key.ENTER:
+        play(app)
     else:
         return
 
