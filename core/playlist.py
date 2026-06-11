@@ -37,4 +37,3 @@ class Playlist:
     def clear(self):
         self.songs.clear()
 
-
