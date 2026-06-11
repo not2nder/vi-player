@@ -2,7 +2,6 @@ import sys
 import re
 import os
 from wcwidth import wcswidth
-cols, lines = os.get_terminal_size()
 
 RESET = "\x1b[0m"
 
@@ -109,16 +108,3 @@ def hxtoansi(color: str, bg: bool = True) -> str:
     r, g, b = [int(hex_color[i:i+2], 16) for i in (0,2,4)]
     return f"\x1b[{48 if bg else 38};2;{r};{g};{b}m"
 
-def printf(text: str, pos: str, screen: object, offset: int = 0):
-    line = 1
-
-    if pos == "mid":
-        line = (screen.height//2)
-
-    elif pos == "end":
-        line = screen.height
-    
-    return (
-        f"\x1b[{line+offset};1H"
-        f"{text}"
-    )
