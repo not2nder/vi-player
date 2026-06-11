@@ -5,7 +5,6 @@ ANSI_CODES = {
     '\x7f': Key.DEL,
     '\x08': Key.DEL,
     '\r': Key.ENTER,
-    ' ': Key.SPACE,
     '\x1b[A': Key.UP,
     '\x1b[B': Key.DOWN,
     '\x1b[C': Key.RIGHT,
@@ -19,6 +18,7 @@ def getch():
     try:
         tty.setraw(fd)
         ch = sys.stdin.read(1)
+
         if ch == '\x1b':
             ch += sys.stdin.read(2)
 

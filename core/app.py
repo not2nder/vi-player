@@ -3,6 +3,7 @@ import signal
 from core.player import Player
 import util.motions as motions
 import util.commands as commands
+import util.playermode as player
 
 from util.screen import Screen
 from util import ui
@@ -64,6 +65,8 @@ class App:
             motions.handle_key(self, key)
         elif self.mode == Mode.COMMAND:
             commands.handle(self, key)
+        elif self.mode == Mode.PLAYER:
+            player.handle(self, key)
 
         self.dirty = True
 
@@ -76,7 +79,13 @@ class App:
         else:
             playlist.draw(self.screen, self)
 
-        commandline.draw(self.screen, self.command, self.motion, self.message, self.mode)
+        commandline.draw(
+            self.screen,
+            self.command,
+            self.motion,
+            self.message, 
+            self.mode
+        )
 
         self.screen.render()
         self.dirty = False 

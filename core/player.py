@@ -37,10 +37,13 @@ class Player:
         self.state = PlaybackState.PLAYING
 
     def pause(self):
+        if self.state == PlaybackState.WAITING:
+            return
+
         self.player.pause = not self.player.pause
 
         if self.player.pause:
-                self.state = PlaybackState.PAUSE
+            self.state = PlaybackState.PAUSE
         else:
             self.state = PlaybackState.PLAYING
     
@@ -60,6 +63,18 @@ class Player:
 
         self.current = index-1
         self.play()
+
+    def jump(self, seconds):
+        if not self.state == PlaybackState.PLAYING:
+            return 
+
+        self.player.seek(seconds, reference="relative")
+
+    def seek_start(self):
+        if not self.state == PlaybackState.PLAYING:
+            return
+
+        self.player.seek(0, reference="absolute")
 
     def get_current_song(self):
         if self.playing_song is None:

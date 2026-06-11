@@ -66,6 +66,9 @@ def enter_command(app, motion):
     app.command += ":"
     app.message = ""
 
+def enter_playermode(app, motion):
+    app.mode = Mode.PLAYER
+
 def exit_player(app, motion):
     app.exit()
 
@@ -100,10 +103,12 @@ def isvalid(motion: str):
 
 def handle_key(app, key):
     
-    if isinstance(key, str):
+    if isinstance(key, str) and not key == " ":
         app.motion += key
     elif key == Key.ENTER:
         play(app)
+    elif key == " ":
+        app.mode = Mode.PLAYER
     else:
         return
 

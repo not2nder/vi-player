@@ -12,6 +12,8 @@ def draw(screen, command, motion, message, mode):
     
     elif mode == Mode.NORMAL:
         text = justify(message, motion, width=screen.width-1)
+    else:
+        text = ""
 
     line = paint(fill(text, width=screen.width), theme.fg, theme.bg) + RESET
     
