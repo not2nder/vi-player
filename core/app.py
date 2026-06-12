@@ -3,7 +3,6 @@ import signal
 from core.player import Player
 import util.motions as motions
 import util.commands as commands
-import util.playermode as player
 
 from util.screen import Screen
 from util import ui
@@ -61,12 +60,11 @@ class App:
         self.draw()
 
     def handle_key(self, key):
-        if self.mode == Mode.NORMAL:
-            motions.handle_key(self, key)
-        elif self.mode == Mode.COMMAND:
-            commands.handle(self, key)
-        elif self.mode == Mode.PLAYER:
-            player.handle(self, key)
+        match self.mode:
+            case Mode.NORMAL:
+                motions.handle_key(self, key)
+            case Mode.COMMAND:
+                commands.handle(self, key)
 
         self.dirty = True
 

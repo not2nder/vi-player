@@ -18,10 +18,8 @@ def getch():
     try:
         tty.setraw(fd)
         ch = sys.stdin.read(1)
-
         if ch == '\x1b':
             ch += sys.stdin.read(2)
-
     finally:
         ch = parse_key(ch)
         termios.tcsetattr(fd, termios.TCSADRAIN, old)

@@ -61,13 +61,19 @@ def play(app):
     app.mpv.current = app.cursor
     app.mpv.play()
 
+def seek_forward(app, motion):
+    app.mpv.jump(10)
+
+def seek_back(app, motion):
+    app.mpv.jump(-10)
+
+def seek_home(app, motion):
+    app.mpv.seek_start()
+
 def enter_command(app, motion):
     app.mode = Mode.COMMAND
     app.command += ":"
     app.message = ""
-
-def enter_playermode(app, motion):
-    app.mode = Mode.PLAYER
 
 def exit_player(app, motion):
     app.exit()
@@ -78,8 +84,11 @@ MOTIONS = {
     "gg": goto_start,
     "G": goto_end,
     "%": goto,
+    "l": seek_forward,
+    "h": seek_back,
+    "0": seek_home,
     ":": enter_command,
-    "q": exit_player,
+    "q": exit_player
 }
 
 def iscomplete(motion: object):
@@ -107,8 +116,6 @@ def handle_key(app, key):
         app.motion += key
     elif key == Key.ENTER:
         play(app)
-    elif key == " ":
-        app.mode = Mode.PLAYER
     else:
         return
 
