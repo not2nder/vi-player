@@ -31,11 +31,15 @@ class Theme:
                     "bg": None
                 },
                 "CursorLine": {
-                    "fg": None,
+                   "fg": "blue",
                     "bg": None
                 },
                 "LineNr": {
                     "fg": "yellow",
+                    "bg": None
+                },
+                "CursorLineNr": {
+                    "fg": "blue",
                     "bg": None
                 },
                 "StatusLine": {
@@ -43,7 +47,7 @@ class Theme:
                     "bg": None
                 },
                 "Muted": {
-                    "fg": "blue",
+                    "fg": None,
                     "bg": None
                 }
             },
@@ -62,10 +66,10 @@ class Theme:
         return value
 
     def style(self, name):
-        return self.highlights.get(
-            name,
-            self.highlights["Normal"]
-        )
+        if name in self.highlights:
+            return self.highlights[name]
+
+        return self.highlights["Normal"]
 
 def load_theme(name):
     theme_file = Path.home()/".config"/"vi-player"/"themes"/f"{name}.toml"

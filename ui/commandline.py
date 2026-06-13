@@ -17,7 +17,7 @@ def draw(screen, command, motion, message, mode):
 
     line = paint(
         fill(text, width=screen.width),
-        theme.style("normal")
+        theme.style("Normal")
     ) + RESET
     
     screen.draw(screen.height, line)

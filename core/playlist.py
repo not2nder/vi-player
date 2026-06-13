@@ -26,10 +26,19 @@ class Playlist:
         self.add_dir(path)
     
     def add_dir(self, path):
-        for file in Path(path).expanduser().glob("*.mp3"):
+        path = Path(path).expanduser()
+
+        if not path.exists():
+            return None
+
+        if not path.is_dir():
+            return None
+
+        files = list(path.glob("*.mp3"))
+        for file in files:
             self.add(Song(file))
 
-        return sum(1 for file in Path(path).expanduser().glob("*mp3"))
+        return len(files)
 
     def remove(self, song: Song):
         self.songs.remove(song)

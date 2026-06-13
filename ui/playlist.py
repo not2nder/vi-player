@@ -80,7 +80,7 @@ def build_line(index, title, duration, width, selected, theme):
         text = paint(text, theme.style("CursorLine"))
 
     else:
-        index = paint(index,theme.style("Muted")) 
+        index = paint(index,theme.style("LineNr")) 
         text = paint(text, theme.style("Normal"))
 
     return index+text + RESET
