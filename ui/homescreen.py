@@ -4,7 +4,6 @@ import ui.ascii as art
 
 def draw(screen, app):
     theme = get_theme()
-    accent = theme.secondary_bg
     
     logo = ["VI-PLAYER", "v0.1.0"] if screen.width <= len(art.logo[1])-2 else art.logo
 
@@ -18,13 +17,9 @@ def draw(screen, app):
         (f"digite  :q<Enter>", "para sair"),
     ]
 
-    footer = [
-        f"Tema atual: {app.config.general['theme']}"
-    ]
-
     WIDTH = 40
 
-    total_lines = len(logo)+len(descricao)+len(commands)+len(footer)
+    total_lines = len(logo)+len(descricao)+len(commands)
 
     start_y = (screen.height-total_lines)//2
     start_y = build_text(screen, logo, start_y, WIDTH)
@@ -33,13 +28,16 @@ def draw(screen, app):
     start_y = build_hr(screen, start_y, WIDTH)
     start_y = build_table(screen, commands, start_y, WIDTH)
     start_y = build_hr(screen, start_y, WIDTH)
-    start_y = build_text(screen, [f'tema: {get_theme().name}'], start_y, WIDTH)
 
 def build_text(screen, lines, start, max_width):
     theme = get_theme()
+    style = theme.style("normal")
 
     for line in lines:
-        text = paint(center(line, width=screen.width), theme.fg, theme.bg)
+        text = paint(
+            center(line, width=screen.width),
+            style
+        )
         screen.draw(start, text)
         start += 1
 
@@ -50,7 +48,10 @@ def build_table(screen, lines, start, max_width):
 
     for cmd, desc in lines:
         row = cmd + desc.rjust(max_width-length(cmd))
-        text = paint(center(row, width=screen.width), theme.fg, theme.bg)
+        text = paint(
+            center(row, width=screen.width),
+            theme.style("normal")
+        )
 
         screen.draw(start, text)
         start += 1
@@ -61,5 +62,10 @@ def build_hr(screen, start, max_width):
     theme = get_theme()
     
     hr = "─"*max_width 
-    screen.draw(start, paint(center(hr, width=screen.width), theme.fg, theme.bg)) 
+    screen.draw(
+        start,
+        paint(center(hr, width=screen.width),
+            theme.style("muted")
+        )
+    )
     return start+1

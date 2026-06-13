@@ -23,9 +23,7 @@ Estrutura esperada:
 ~/.config/vi-player/
 ├── config.json
 └── themes/
-    ├── deep-blue.toml
-    ├── soft.toml
-    └── warm.toml
+    ├── default.toml
     └── ...
 ```
 
@@ -42,7 +40,7 @@ Exemplo:
 ```json
 {
   "general": {
-    "theme": "ocean"
+    "theme": "default"
   },
 
   "player": {
@@ -62,7 +60,7 @@ Define o tema carregado durante a inicialização.
 ```json
 {
   "general": {
-    "theme": "ocean"
+    "theme": "default"
   }
 }
 ```
@@ -71,23 +69,22 @@ O tema informado deve ser um dos presentes na pasta `~/.config/vi-player/themes`
 
 Ao iniciar o player, será aplicado o esquema de cores definido no arquivo de configuração.
 
-<div style="displaye: flex; flex-direction: column, align-items:center">
-<div style="text-align: center">
+<div align="center">
     <img src="assets/images/default (dark).png">
     <p>(Tema padrão)</p>
 </div>
 
-<div style="text-align: center">
+<div align="center">
     <img src="assets/images/deep-blue.png">
     <p>(deep-blue)</p>
 </div>
 
-<div style="text-align: center">
+<div align="center">
     <img src="assets/images/retro.png">
     <p>(retro)</p>
 </div>
 
-<div style="text-align: center">
+<div align="center">
     <img src="assets/images/soft.png">
     <p>(soft)</p>
 </div>

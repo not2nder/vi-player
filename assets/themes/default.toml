@@ -1,0 +1,50 @@
+[meta]
+name = "default"
+author = "not2nder"
+
+[palette]
+
+background = "#111111"
+foreground = "#eeeeee"
+accent = "#dbc3fe"
+muted = "#7d7f7c"
+
+# Cor padrão
+[highlight.Normal]
+
+fg = "foreground"
+bg = "background"
+
+# Linha selecionada
+[highlight.CursorLine]
+
+fg = "background"
+bg = "accent"
+
+# Número da linha
+[highlight.lineNr]
+
+fg = "muted"
+bg = "background"
+
+# Número da linha em destaque
+[highlight.CursorLineNr]
+
+fg = "accent"
+bg = "background"
+
+# Textos menos importantes
+[highlight.Muted]
+
+fg = "muted"
+bg = "background"
+
+# statusline
+[highlight.StatusLine]
+
+fg = "background"
+bg = "accent"
+
+# Caracteres
+[fillchars]
+eob = "~"

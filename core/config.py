@@ -7,7 +7,7 @@ CONFIG_FILE = Path.home()/".config"/"vi-player"/"config.json"
 class Config:
     def __init__(self, data):
         self.general = data.get("general", {})
-        self.general["theme"] = self.general.get("theme", "default")
+        self.general["theme"] = self.general.get("theme", None)
         
         self.player = data.get("player", {})
         self.player["relativenumber"] = self.player.get("relativenumber", True)
@@ -30,7 +30,8 @@ class Config:
     def to_dict(self):
         return {
             "general": self.general,
-            "player": self.player
+            "player": self.player,
+            "statusline": self.statusline
         }
 
 def load_config():

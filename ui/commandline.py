@@ -15,7 +15,10 @@ def draw(screen, command, motion, message, mode):
     else:
         text = ""
 
-    line = paint(fill(text, width=screen.width), theme.fg, theme.bg) + RESET
+    line = paint(
+        fill(text, width=screen.width),
+        theme.style("normal")
+    ) + RESET
     
     screen.draw(screen.height, line)
 

@@ -47,7 +47,10 @@ def build_statusline(left: list, right: list, separator: str, width: int):
     space = ' '*gap
 
     result = f"{left_text}{space}{right_text}"
-    result = paint(result, theme.status_fg, theme.status_bg) if theme.bg else reverse(result)
+    result = paint(
+        result,
+        theme.style("StatusLine")
+    )
 
     return result
 
@@ -61,7 +64,7 @@ def build_state(app):
     return app.mpv.state.value
 
 def build_theme(app):
-    return get_theme().name
+    return get_theme().meta["name"]
 
 def build_position(app):
     return f"{app.cursor+1}/{app.mpv.count}"
@@ -76,7 +79,7 @@ def build_percent(app):
     else:
         text = f"{percent:.0f}%"
 
-    return text
+    return text.rjust(6)
 
 def build_album(app):
     album = app.mpv.get_current_song().album if app.mpv.playing_song else ""

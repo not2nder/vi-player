@@ -76,7 +76,7 @@ def disable_rnu(app, args):
 
 def set_colorscheme(app, args):
     if len(args) < 2:
-        app.message = get_theme().name 
+        app.message = f"tema: '{get_theme().meta['name']}' de {get_theme().meta['author']}"
         return
 
     try:

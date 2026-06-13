@@ -73,16 +73,24 @@ def build_line(index, title, duration, width, selected, theme):
     )
 
     if selected:
-        index = paint(index,theme.inum_fg, theme.inum_bg) if theme.inum_bg else blue(bold(index))
-        text = paint(text, theme.iline_fg, theme.iline_bg) if theme.iline_bg else text
+        index = paint(
+            index,
+            theme.style("CursorLineNr")
+        )
+        text = paint(text, theme.style("CursorLine"))
 
     else:
-        index = paint(index,theme.index_fg, theme.index_bg) if theme.index_fg else yellow(index) 
-        text = paint(text, theme.fg, theme.bg) if theme.bg else text
+        index = paint(index,theme.style("Muted")) 
+        text = paint(text, theme.style("Normal"))
 
     return index+text + RESET
 
 def build_empty_line(width, theme):
-    fillchar = fill("~ ", width)
-    return paint(fillchar, theme.index_fg, theme.bg) if theme.index_fg else blue(fillchar)
+    char = theme.fillchars.get(
+        "eob",
+        "~"
+    )
+    fillchar = fill(char, width)
+
+    return paint(fillchar, theme.style("Muted"))
 

@@ -7,6 +7,17 @@ RESET = "\x1b[0m"
 
 ANSI_ESCAPE = re.compile(r'\x1b\[[0-9;?]*[ -/]*[@-~]')
 
+ANSI_COLORS = {
+    "black": 30,
+    "red": 31,
+    "green": 32,
+    "yellow": 33,
+    "blue": 34,
+    "magenta": 35,
+    "cyan": 36,
+    "white": 37,
+}
+
 def length(text):
     return wcswidth(ANSI_ESCAPE.sub('', text))
 
@@ -17,16 +28,32 @@ def fill(text: str, width: int) -> str:
 
     return text + pad
 
-def paint(text: str, fg_color: str, bg_color: str):
-    return bg(bg_color) + fg(fg_color) + text
+def paint(text: str, style):
+    return (
+        fg(style.get("fg", ""))
+        +bg(style.get("bg", ""))
+        +text
+    )
 
 def padding(text: str, value: int = 1) -> str:
     return f"{' '*value}{text}{' '*value}"
 
 def bg(color: str):
+    if not color:
+        return ""
+
+    if color in ANSI_COLORS:
+        return f"\x1b[{ANSI_COLORS[color]}m"
+
     return hxtoansi(color)
 
 def fg(color: str):
+    if not color:
+        return ""
+
+    if color in ANSI_COLORS:
+        return f"\x1b[{ANSI_COLORS[color]}m"
+
     return hxtoansi(color, False)
 
 def bold(text: str):

@@ -22,7 +22,9 @@ def hide_cursor():
 
 def draw_background(screen: object):
     theme = get_theme()
-    line = bg(theme.bg)+(" "*screen.width)+RESET
+    normal = theme.style("Normal")
+
+    line = bg(normal["bg"]) + (" "*screen.width) + RESET
 
     for y in range(screen.height):
         screen.draw(y+1,line)

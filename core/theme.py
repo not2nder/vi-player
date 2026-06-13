@@ -4,31 +4,68 @@ import tomllib
 CURRENT_THEME = None
 
 class Theme:
-    def __init__(self, name, colors): 
-        self.name = name
+    def __init__(self, data): 
+        self.meta = data.get("meta", {})
+        self.palette = data.get("palette", {})
+        self.fillchars = data.get("fillchars", {})
 
-        self.bg = colors.get("bg", "")
-        self.fg = colors.get("fg", "")
+        self.highlights = {}
 
-        self.secondary_bg = colors.get("secondary_bg", self.bg)
-        self.secondary_fg = colors.get("secondary_fg", self.fg)
-         
-        self.status_bg = colors.get("statusline_bg", self.secondary_bg)
-        self.status_fg = colors.get("statusline_fg", self.secondary_fg)
-        
-        self.mode_bg = colors.get("mode_bg", self.secondary_bg)
-        self.mode_fg = colors.get("mode_fg", self.secondary_fg)
+        for name, style in data.get("highlight", {}).items():
+            self.highlights[name] = {
+                "fg": self.resolve(style.get("fg")),
+                "bg": self.resolve(style.get("bg"))
+        }
 
-        self.iline_bg = colors.get("indicator_line_bg", self.secondary_bg)
-        self.iline_fg = colors.get("indicator_line_fg", self.secondary_fg)
+    @classmethod
+    def builtin(cls):
+        return cls({
+            "meta": {
+                "name": "builtin",
+                "author": "native"
+            },
+            "palette": {},
+            "highlight": {
+                "Normal": {
+                    "fg": None,
+                    "bg": None
+                },
+                "CursorLine": {
+                    "fg": None,
+                    "bg": None
+                },
+                "LineNr": {
+                    "fg": "yellow",
+                    "bg": None
+                },
+                "StatusLine": {
+                    "fg": None,
+                    "bg": None
+                },
+                "Muted": {
+                    "fg": "blue",
+                    "bg": None
+                }
+            },
+            "fillchars": {
+                "eob": "~"    
+            }
+        })
 
-        self.index_bg = colors.get("index_bg", self.bg)
-        self.index_fg = colors.get("index_fg", self.fg)
+    def resolve(self, value):
+        if value is None:
+            return None
 
-        self.time_fg = colors.get("time_fg", self.bg)
+        if value in self.palette:
+            return self.palette[value]
 
-        self.inum_bg = colors.get("indicaor_num_bg", self.bg)
-        self.inum_fg = colors.get("indicator_num_fg", self.fg)
+        return value
+
+    def style(self, name):
+        return self.highlights.get(
+            name,
+            self.highlights["Normal"]
+        )
 
 def load_theme(name):
     theme_file = Path.home()/".config"/"vi-player"/"themes"/f"{name}.toml"
@@ -36,10 +73,15 @@ def load_theme(name):
     with open(theme_file, "rb") as f:
         theme = tomllib.load(f)
 
-    return Theme(name, theme.get("colors", {}))
+    return Theme(theme)
 
 def set_theme(name):
     global CURRENT_THEME
+    
+    if name is None or not name:
+        CURRENT_THEME = Theme.builtin()
+        return
+
     CURRENT_THEME = load_theme(name)
 
 def get_theme():
