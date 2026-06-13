@@ -1,11 +1,11 @@
 from util.pretty import *
 from core.theme import get_theme
-import ui.ascii as art
+from ui import ascii as art
 
 def draw(screen, app):
     theme = get_theme()
     
-    logo = ["VI-PLAYER", "v0.1.0"] if screen.width <= len(art.logo[1])-2 else art.logo
+    logo = art.logo.splitlines()
 
     descricao = [
         "Um player de músicas inspirado no Vim",
@@ -31,7 +31,7 @@ def draw(screen, app):
 
 def build_text(screen, lines, start, max_width):
     theme = get_theme()
-    style = theme.style("normal")
+    style = theme.style("Normal")
 
     for line in lines:
         text = paint(
@@ -50,7 +50,7 @@ def build_table(screen, lines, start, max_width):
         row = cmd + desc.rjust(max_width-length(cmd))
         text = paint(
             center(row, width=screen.width),
-            theme.style("normal")
+            theme.style("Normal")
         )
 
         screen.draw(start, text)
@@ -65,7 +65,7 @@ def build_hr(screen, start, max_width):
     screen.draw(
         start,
         paint(center(hr, width=screen.width),
-            theme.style("muted")
+            theme.style("Muted")
         )
     )
     return start+1
