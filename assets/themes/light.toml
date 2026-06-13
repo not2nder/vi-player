@@ -1,39 +1,45 @@
 [meta]
-name="retro"
+name="light"
 author="unknown"
 
 
 [palette]
-background="#001B00"
-foreground="#33FF66"
-accent="#0F3D0F"
-muted="#1FAF4A"
-warning="#FF4444"
+background="#F5F5F5"
+foreground="#2A2A2A"
+accent="#4A90E2"
+muted="#7A7A7A"
+warning="#D64550"
 
 
 [highlight.Normal]
 fg="foreground"
 bg="background"
 
+
 [highlight.CursorLine]
 fg="background"
-bg="foreground"
+bg="accent"
+
 
 [highlight.LineNr]
 fg="muted"
 bg="background"
 
+
 [highlight.CursorLineNr]
-fg="foreground"
+fg="accent"
 bg="background"
 
+
 [highlight.StatusLine]
-fg="foreground"
+fg="background"
 bg="accent"
+
 
 [highlight.Muted]
 fg="muted"
 bg="background"
+
 
 [highlight.Warning]
 fg="warning"

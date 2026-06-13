@@ -1,14 +1,14 @@
 [meta]
-name="retro"
+name="tokyo-night"
 author="unknown"
 
 
 [palette]
-background="#001B00"
-foreground="#33FF66"
-accent="#0F3D0F"
-muted="#1FAF4A"
-warning="#FF4444"
+background="#1A1B26"
+foreground="#C0CAF5"
+accent="#7AA2F7"
+muted="#565F89"
+warning="#F7768E"
 
 
 [highlight.Normal]
@@ -17,14 +17,14 @@ bg="background"
 
 [highlight.CursorLine]
 fg="background"
-bg="foreground"
+bg="accent"
 
 [highlight.LineNr]
 fg="muted"
 bg="background"
 
 [highlight.CursorLineNr]
-fg="foreground"
+fg="accent"
 bg="background"
 
 [highlight.StatusLine]

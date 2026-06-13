@@ -1,22 +1,44 @@
-[colors]
+[meta]
+name="soft"
+author="unknown"
 
-bg = "#F2EFE8"
-fg = "#3A3A3A"
 
-secondary_bg = "#7CA6B8"
-secondary_fg = "#FAFAF8"
+[palette]
+background="#F2EFE8"
+foreground="#3A3A3A"
+accent="#7CA6B8"
+muted="#8A857C"
+warning="#C76A7A"
 
-statusline_bg = "#5B8799"
-statusline_fg = "#FAFAF8"
 
-index_bg = "#F2EFE8"
-index_fg = "#8A857C"
+[highlight.Normal]
+fg="foreground"
+bg="background"
 
-time_fg = "#8A857C"
+[highlight.CursorLine]
+fg="background"
+bg="accent"
 
-indicator_line_bg = "#7CA6B8"
-indicator_line_fg = "#FFFFFF"
+[highlight.LineNr]
+fg="muted"
+bg="background"
 
-indicator_num_bg = "#F2EFE8"
-indicator_num_fg = "#5B8799"
+[highlight.CursorLineNr]
+fg="accent"
+bg="background"
 
+[highlight.StatusLine]
+fg="background"
+bg="accent"
+
+[highlight.Muted]
+fg="muted"
+bg="background"
+
+[highlight.Warning]
+fg="warning"
+bg="background"
+
+
+[fillchars]
+eob="~"

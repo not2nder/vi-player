@@ -1,62 +1,50 @@
 [meta]
-
-name = "deep-blue"
+name = "gruvbox"
 author = "unknown"
 
 
 [palette]
-
-background = "#161A22"
-foreground = "#DCE2EC"
-
-accent = "#68A4E0"
-muted = "#6F7B91"
-
-warning = "#D9577B"
+background = "#282828"
+foreground = "#EBDBB2"
+accent = "#D79921"
+muted = "#928374"
+warning = "#CC241D"
 
 
 [highlight.Normal]
-
 fg = "foreground"
 bg = "background"
 
 
 [highlight.CursorLine]
-
-fg = "foreground"
+fg = "background"
 bg = "accent"
 
 
 [highlight.LineNr]
-
 fg = "muted"
 bg = "background"
 
 
 [highlight.CursorLineNr]
-
 fg = "accent"
 bg = "background"
 
 
 [highlight.StatusLine]
-
 fg = "foreground"
-bg = "background"
-
-
-[highlight.Warning]
-
-fg = "background"
-bg = "warning"
+bg = "accent"
 
 
 [highlight.Muted]
-
 fg = "muted"
 bg = "background"
 
 
-[fillchars]
+[highlight.Warning]
+fg = "warning"
+bg = "background"
 
-eob = "~"
+
+[fillchars]
+eob="~"

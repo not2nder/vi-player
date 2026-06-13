@@ -1,43 +1,49 @@
 [meta]
-name="retro"
+name="nvim"
 author="unknown"
 
 
 [palette]
-background="#001B00"
-foreground="#33FF66"
-accent="#0F3D0F"
-muted="#1FAF4A"
-warning="#FF4444"
+background="#14161B"
+foreground="#D8DAE2"
+accent="#A0D9A9"
+muted="#4D5056"
+warning="#67BED9"
 
 
 [highlight.Normal]
 fg="foreground"
 bg="background"
 
+
 [highlight.CursorLine]
 fg="background"
-bg="foreground"
+bg="accent"
+
 
 [highlight.LineNr]
 fg="muted"
 bg="background"
 
+
 [highlight.CursorLineNr]
-fg="foreground"
+fg="accent"
 bg="background"
+
 
 [highlight.StatusLine]
 fg="foreground"
-bg="accent"
+bg="background"
+
 
 [highlight.Muted]
 fg="muted"
 bg="background"
 
+
 [highlight.Warning]
-fg="warning"
-bg="background"
+fg="background"
+bg="warning"
 
 
 [fillchars]

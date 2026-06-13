@@ -1,62 +1,50 @@
 [meta]
-
-name = "deep-blue"
+name = "eternal grey"
 author = "unknown"
 
 
 [palette]
-
-background = "#161A22"
-foreground = "#DCE2EC"
-
-accent = "#68A4E0"
-muted = "#6F7B91"
-
-warning = "#D9577B"
+background = "#232427"
+foreground = "#D8D8D4"
+accent = "#707C8A"
+muted = "#7B838C"
+warning = "#B85C5C"
 
 
 [highlight.Normal]
-
 fg = "foreground"
 bg = "background"
 
 
 [highlight.CursorLine]
-
-fg = "foreground"
+fg = "background"
 bg = "accent"
 
 
 [highlight.LineNr]
-
 fg = "muted"
 bg = "background"
 
 
 [highlight.CursorLineNr]
-
 fg = "accent"
 bg = "background"
 
 
 [highlight.StatusLine]
-
 fg = "foreground"
-bg = "background"
-
-
-[highlight.Warning]
-
-fg = "background"
-bg = "warning"
+bg = "accent"
 
 
 [highlight.Muted]
-
 fg = "muted"
 bg = "background"
 
 
-[fillchars]
+[highlight.Warning]
+fg = "warning"
+bg = "background"
 
+
+[fillchars]
 eob = "~"

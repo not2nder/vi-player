@@ -1,62 +1,43 @@
 [meta]
-
-name = "deep-blue"
+name = "linen"
 author = "unknown"
 
-
 [palette]
-
-background = "#161A22"
-foreground = "#DCE2EC"
-
-accent = "#68A4E0"
-muted = "#6F7B91"
-
-warning = "#D9577B"
+background = "#ECE6DA"
+foreground = "#38342F"
+accent = "#8C9A8E"
+muted = "#8B847A"
+warning = "#C56B5C"
 
 
 [highlight.Normal]
-
 fg = "foreground"
 bg = "background"
 
-
 [highlight.CursorLine]
-
-fg = "foreground"
+fg = "background"
 bg = "accent"
 
-
 [highlight.LineNr]
-
 fg = "muted"
 bg = "background"
 
-
 [highlight.CursorLineNr]
-
 fg = "accent"
 bg = "background"
 
-
 [highlight.StatusLine]
-
 fg = "foreground"
-bg = "background"
-
-
-[highlight.Warning]
-
-fg = "background"
-bg = "warning"
-
+bg = "accent"
 
 [highlight.Muted]
-
 fg = "muted"
+bg = "background"
+
+[highlight.Warning]
+fg = "warning"
 bg = "background"
 
 
 [fillchars]
-
 eob = "~"

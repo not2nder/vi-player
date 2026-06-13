@@ -1,14 +1,14 @@
 [meta]
-name="retro"
+name="miku"
 author="unknown"
 
 
 [palette]
-background="#001B00"
-foreground="#33FF66"
-accent="#0F3D0F"
-muted="#1FAF4A"
-warning="#FF4444"
+background="#232829"
+foreground="#DCD7D6"
+accent="#7BC6D5"
+muted="#7D8899"
+warning="#DE2583"
 
 
 [highlight.Normal]
@@ -17,18 +17,18 @@ bg="background"
 
 [highlight.CursorLine]
 fg="background"
-bg="foreground"
+bg="accent"
 
 [highlight.LineNr]
 fg="muted"
 bg="background"
 
 [highlight.CursorLineNr]
-fg="foreground"
+fg="accent"
 bg="background"
 
 [highlight.StatusLine]
-fg="foreground"
+fg="background"
 bg="accent"
 
 [highlight.Muted]

@@ -1,14 +1,14 @@
 [meta]
-name="retro"
+name="moss"
 author="unknown"
 
 
 [palette]
-background="#001B00"
-foreground="#33FF66"
-accent="#0F3D0F"
-muted="#1FAF4A"
-warning="#FF4444"
+background="#20241F"
+foreground="#D9DED3"
+accent="#728C69"
+muted="#7E8778"
+warning="#C46A5A"
 
 
 [highlight.Normal]
@@ -17,14 +17,14 @@ bg="background"
 
 [highlight.CursorLine]
 fg="background"
-bg="foreground"
+bg="accent"
 
 [highlight.LineNr]
 fg="muted"
 bg="background"
 
 [highlight.CursorLineNr]
-fg="foreground"
+fg="accent"
 bg="background"
 
 [highlight.StatusLine]
