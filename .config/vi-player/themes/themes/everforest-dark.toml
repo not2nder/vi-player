@@ -1,0 +1,58 @@
+[meta]
+name = "everforest-dark"
+author = "sainnhe"
+
+
+[palette]
+background = "#2D353B"
+foreground = "#D3C6AA"
+
+accent = "#A7C080"
+surface = "#343F44"
+
+green = "#A7C080"
+blue = "#7FBBB3"
+yellow = "#DBBC7F"
+
+muted = "#859289"
+warning = "#E69875"
+error = "#E67E80"
+
+
+[highlight.Normal]
+fg = "foreground"
+bg = "background"
+
+
+[highlight.CursorLine]
+fg = "foreground"
+bg = "surface"
+
+
+[highlight.LineNr]
+fg = "muted"
+bg = "background"
+
+
+[highlight.CursorLineNr]
+fg = "green"
+bg = "background"
+
+
+[highlight.StatusLine]
+fg = "background"
+bg = "accent"
+
+
+[highlight.Muted]
+fg = "muted"
+bg = "background"
+
+
+[highlight.Warning]
+fg = "warning"
+bg = "background"
+
+
+[fillchars]
+eob = "~"

@@ -1,49 +1,50 @@
 [meta]
-name = "ember"
-author = "unknown"
+name = "nvim"
+author = "Vi-Player"
 
 [palette]
-background = "#241F1C"
-foreground = "#E2D8CC"
-accent = "#A67B5B"
-muted = "#8E8175"
-warning = "#B85A4F"
+background = "#14161B"
+foreground = "#D8DAE2"
 
+accent = "#A0D9A9"
+surface = "#20242B"
+
+green = "#A0D9A9"
+blue = "#67BED9"
+cyan = "#7DCFFF"
+
+muted = "#4D5056"
+warning = "#67BED9"
+error = "#E06C75"
 
 [highlight.Normal]
 fg = "foreground"
 bg = "background"
 
-
 [highlight.CursorLine]
-fg = "background"
-bg = "accent"
-
+fg = "foreground"
+bg = "surface"
 
 [highlight.LineNr]
 fg = "muted"
 bg = "background"
 
-
 [highlight.CursorLineNr]
 fg = "accent"
 bg = "background"
 
-
 [highlight.StatusLine]
 fg = "foreground"
-bg = "accent"
-
+bg = "surface"
 
 [highlight.Muted]
 fg = "muted"
 bg = "background"
 
-
 [highlight.Warning]
-fg = "warning"
-bg = "background"
-
+fg = "background"
+bg = "warning"
 
 [fillchars]
 eob = "~"
+

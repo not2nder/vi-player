@@ -1,45 +1,45 @@
 [meta]
-name = "eternal grey"
-author = "unknown"
-
+name = "rose-pine"
+author = "rose-pine"
 
 [palette]
-background = "#232427"
-foreground = "#D8D8D4"
-accent = "#707C8A"
-muted = "#7B838C"
-warning = "#B85C5C"
+background = "#191724"
+foreground = "#E0DEF4"
+
+accent = "#C4A7E7"
+surface = "#26233A"
+
+rose = "#EBBCBA"
+foam = "#9CCFD8"
+pine = "#31748F"
+
+muted = "#6E6A86"
+warning = "#F6C177"
 
 
 [highlight.Normal]
 fg = "foreground"
 bg = "background"
 
-
 [highlight.CursorLine]
-fg = "background"
-bg = "accent"
-
+fg = "foreground"
+bg = "surface"
 
 [highlight.LineNr]
 fg = "muted"
 bg = "background"
 
-
 [highlight.CursorLineNr]
-fg = "accent"
+fg = "foam"
 bg = "background"
-
 
 [highlight.StatusLine]
-fg = "foreground"
+fg = "background"
 bg = "accent"
 
-
 [highlight.Muted]
-fg = "muted"
+fg = "pine"
 bg = "background"
-
 
 [highlight.Warning]
 fg = "warning"
@@ -48,3 +48,4 @@ bg = "background"
 
 [fillchars]
 eob = "~"
+

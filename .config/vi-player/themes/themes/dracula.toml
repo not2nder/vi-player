@@ -1,62 +1,49 @@
 [meta]
-
-name = "deep-blue"
-author = "unknown"
-
+name = "dracula"
+author = "dracula"
 
 [palette]
+background = "#282A36"
+foreground = "#F8F8F2"
 
-background = "#161A22"
-foreground = "#DCE2EC"
+accent = "#BD93F9"
+surface = "#44475A"
 
-accent = "#68A4E0"
-muted = "#6F7B91"
+purple = "#BD93F9"
+cyan = "#8BE9FD"
+green = "#50FA7B"
 
-warning = "#D9577B"
-
+muted = "#6272A4"
+warning = "#FFB86C"
+error = "#FF5555"
 
 [highlight.Normal]
-
 fg = "foreground"
 bg = "background"
-
 
 [highlight.CursorLine]
-
 fg = "foreground"
-bg = "accent"
-
+bg = "surface"
 
 [highlight.LineNr]
-
 fg = "muted"
 bg = "background"
-
 
 [highlight.CursorLineNr]
-
-fg = "accent"
+fg = "cyan"
 bg = "background"
-
 
 [highlight.StatusLine]
-
-fg = "foreground"
-bg = "background"
-
-
-[highlight.Warning]
-
 fg = "background"
-bg = "warning"
-
+bg = "purple"
 
 [highlight.Muted]
-
 fg = "muted"
 bg = "background"
 
+[highlight.Warning]
+fg = "warning"
+bg = "background"
 
 [fillchars]
-
 eob = "~"

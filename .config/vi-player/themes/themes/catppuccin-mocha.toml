@@ -1,35 +1,41 @@
 [meta]
-name = "midnight"
-author = "unknown"
-
+name = "catppuccin-mocha"
+author = "catppuccin"
 
 [palette]
-background = "#181825"
-foreground = "#D9E0EE"
-accent = "#C792EA"
-muted = "#6E6C7E"
-warning = "#F38BA8"
+background = "#1E1E2E"
+foreground = "#CDD6F4"
+accent = "#CBA6F7"
 
+surface = "#313244"
+
+blue = "#89B4FA"
+green = "#A6E3A1"
+yellow = "#F9E2AF"
+
+muted = "#6C7086"
+warning = "#FAB387"
+error = "#F38BA8"
 
 [highlight.Normal]
 fg = "foreground"
 bg = "background"
 
 [highlight.CursorLine]
-fg = "background"
-bg = "accent"
+fg = "foreground"
+bg = "surface"
 
 [highlight.LineNr]
-fg = "muted"
+fg = "green"
 bg = "background"
 
 [highlight.CursorLineNr]
 fg = "accent"
-bg = "background"
+bg = "surface"
 
 [highlight.StatusLine]
 fg = "background"
-bg = "accent"
+bg = "blue"
 
 [highlight.Muted]
 fg = "muted"
@@ -39,6 +45,5 @@ bg = "background"
 fg = "warning"
 bg = "background"
 
-
 [fillchars]
-eob="~"
+eob = "~"

@@ -1,0 +1,49 @@
+[meta]
+name = "gruvbox-dark"
+author = "morhetz"
+
+[palette]
+background = "#282828"
+foreground = "#EBDBB2"
+
+accent = "#FABD2F"
+surface = "#3C3836"
+
+orange = "#FE8019"
+green = "#B8BB26"
+blue = "#83A598"
+
+muted = "#928374"
+warning = "#FB4934"
+
+
+[highlight.Normal]
+fg = "foreground"
+bg = "background"
+
+[highlight.CursorLine]
+fg = "foreground"
+bg = "surface"
+
+[highlight.LineNr]
+fg = "blue"
+bg = "background"
+
+[highlight.CursorLineNr]
+fg = "accent"
+bg = "background"
+
+[highlight.StatusLine]
+fg = "background"
+bg = "accent"
+
+[highlight.Muted]
+fg = "muted"
+bg = "background"
+
+[highlight.Warning]
+fg = "warning"
+bg = "background"
+
+[fillchars]
+eob = "~"

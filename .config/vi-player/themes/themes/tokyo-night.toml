@@ -1,13 +1,21 @@
 [meta]
-name = "linen"
-author = "unknown"
+name = "tokyo-night"
+author = "folke"
 
 [palette]
-background = "#ECE6DA"
-foreground = "#38342F"
-accent = "#8C9A8E"
-muted = "#8B847A"
-warning = "#C56B5C"
+background = "#1A1B26"
+foreground = "#C0CAF5"
+
+accent = "#7AA2F7"
+surface = "#24283B"
+
+blue = "#7DCFFF"
+green = "#9ECE6A"
+purple = "#BB9AF7"
+
+muted = "#565F89"
+warning = "#E0AF68"
+error = "#F7768E"
 
 
 [highlight.Normal]
@@ -15,19 +23,19 @@ fg = "foreground"
 bg = "background"
 
 [highlight.CursorLine]
-fg = "background"
-bg = "accent"
+fg = "foreground"
+bg = "surface"
 
 [highlight.LineNr]
 fg = "muted"
 bg = "background"
 
 [highlight.CursorLineNr]
-fg = "accent"
+fg = "blue"
 bg = "background"
 
 [highlight.StatusLine]
-fg = "foreground"
+fg = "background"
 bg = "accent"
 
 [highlight.Muted]
