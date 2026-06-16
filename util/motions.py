@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from core.enums import Mode, Key 
 
-@dataclass
+@dataclass(slots=True)
 class Motion:
     count: int
     action: str
@@ -75,6 +75,27 @@ def enter_command(app, motion):
     app.command += ":"
     app.message = ""
 
+def cut(app,motion):
+    app.mpv.playlist.clear_register()
+
+    for _ in range(app.cursor, app.cursor+motion.count):
+        app.mpv.playlist.cut(app.cursor)
+
+    if app.cursor >= app.mpv.count:
+        app.cursor = app.mpv.count-1
+
+def cut_to_end(app,motion):
+    app.mpv.playlist.clear_register()
+
+    for _ in range(app.cursor, app.mpv.count):
+        app.mpv.playlist.cut(app.cursor)
+
+    if app.cursor >= app.mpv.count:
+        app.cursor = app.mpv.count-1
+
+def paste(app,motion):
+    app.mpv.playlist.paste(app.cursor)
+
 def exit_player(app, motion):
     app.exit()
 
@@ -87,6 +108,9 @@ MOTIONS = {
     "l": seek_forward,
     "h": seek_back,
     "0": seek_home,
+    "dd": cut,
+    "dG": cut_to_end,
+    "p": paste,
     ":": enter_command,
     "q": exit_player
 }

@@ -5,6 +5,7 @@ from core.song import Song
 class Playlist:
     def __init__(self):
         self.songs = []
+        self.register = []
 
     def __len__(self):
         return len(self.songs)
@@ -17,6 +18,22 @@ class Playlist:
 
     def __bool__(self):
         return bool(self.songs)
+    
+    def cut(self, index):
+        if index > len(self.songs):
+            return
+
+        deleted = self.songs.pop(index)
+        self.register.append(deleted)
+
+    def paste(self, index):
+        for i in range(len(self.register)):
+            self.songs.insert(index+i+1, self.register[i])
+
+        self.clear_register()
+
+    def clear_register(self):
+        self.register.clear()
 
     def add(self, song: Song):
         self.songs.append(song)
