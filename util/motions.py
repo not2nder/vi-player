@@ -136,7 +136,7 @@ def isvalid(motion: str):
 
 def handle_key(app, key):
     
-    if isinstance(key, str) and not key == " ":
+    if isinstance(key, str): 
         app.motion += key
     elif key == Key.ENTER:
         play(app)

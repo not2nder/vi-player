@@ -25,8 +25,13 @@ class App:
         self.mode = Mode.NORMAL
 
         self.command = ""
+        
         self.motion = ""
+        self.operator = ""
+        self.count = ""
+
         self.message = ""
+        
         self.command_buffer = []
 
         self.cursor = 0
