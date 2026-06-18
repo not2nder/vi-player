@@ -3,6 +3,7 @@ import signal
 from core.player import Player
 import util.motions as motions
 import util.commands as commands
+from util.motions import NormalCommand
 
 from util.screen import Screen
 from util import ui
@@ -24,12 +25,10 @@ class App:
 
         self.mode = Mode.NORMAL
 
+        self.input = ""
+        self.pending = NormalCommand()
         self.command = ""
         
-        self.motion = ""
-        self.operator = ""
-        self.count = ""
-
         self.message = ""
         
         self.command_buffer = []
@@ -85,7 +84,7 @@ class App:
         commandline.draw(
             self.screen,
             self.command,
-            self.motion,
+            self.input,
             self.message, 
             self.mode
         )
