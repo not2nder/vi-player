@@ -28,14 +28,18 @@ Os movimentos básicos são:
 Alguns movimentos aceitam um contador numérico antes da tecla. Eles modificam a posição final do cursor. Por exemplo:
 
 ```text
-3j
+2j
 ```
 
 Move o cursor 3 itens abaixo.
 
 ```text
-3k
+2k
 ```
+
+<div align="center">
+    <img src="assets/gifs/j and k.gif">
+</div>
 
 Move o cursor 3 itens acima.
 
@@ -135,9 +139,17 @@ A principal diferença nessa abordagem é que: o contador do operador expande o 
 
 O comando `d2j` primeiro calcula o movimento `2j` e remove o intervalo entre o cursor e o destino. Já o `2dj` mantém o movimento `j` e aplica o alcance da operação duas vezes.
 
+<div align="center">
+    <img src="assets/gifs/cut.gif">
+</div>
+
 Em ambos os casos o operador é executado como uma única ação sobre o resultado final, não como vários comandos separados. Embora tenham resultados parecidos, os dois comandos sõ interpretados de forma distinta.
 
 Ambos os operadores `y` e `d` armazenam o conteúdo selecionado no registrador da playlist, que funciona como uma área de transferência. Para colar o conteúdo, basta apertar `p` que representa a ação de colar.
+
+<div align="center">
+    <img src="assets/gifs/copypaste.gif">
+</div>
 
 # Ações
 

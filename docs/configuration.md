@@ -107,17 +107,9 @@ Ativa ou desativa números relativos na playlist (Estilo Vim).
 
 Quando ativado, a linha atual representa o índice absoluto da lista, enquanto os outros índices representam a distância relativa até o índice atual.
 
-Exemplo:
-
-```text
- 3 -> Está a 3 índices atrás do índice atual
- 2
- 1
-10 -> Índice atual
- 1
- 2
- 3 -> Está 3 índices à frente do atual
-```
+<div align="center">
+    <img src="assets/gifs/relativenumber.gif">
+</div>
 
 Isso facilita o uso de motions. Por exemplo:
 
@@ -132,17 +124,6 @@ Avança 3 índices baseado no índice atual.
 ```
 
 Volta 3 índices com base no índice atual.
-
-Com essa opção desativada, eles ficariam assim:
-
-```text
- 7
- 8
- 9
-10 -> Índice atual
-11
-12
-```
 
 ## Statusline
 

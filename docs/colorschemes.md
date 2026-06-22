@@ -3,7 +3,7 @@
 O vi-player possui suporte a esquemas de cores personalizados por meio de arquivos `.toml`, permitindo personalização completa da interface do player.
 
 <div align="center">
-    <img src="assets/images/colorschemes.gif">
+    <img src="assets/gifs/colorschemes.gif">
 </div>
 
 ## Organização dos temas
@@ -31,6 +31,10 @@ Para mudar um tema durante a execução do player, basta executar o comando:
 ```
 
 sendo `TEMA` o nome do seu esquema de cores, sem a extensão `.toml`.
+
+<div align="center">
+    <img src="assets/gifs/set colorscheme.gif">
+</div>
 
 ## Estrutura de um tema
 
