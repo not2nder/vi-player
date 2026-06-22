@@ -84,6 +84,8 @@ O player utiliza dois modos principais:
 | `G`   | Final da lista        |
 | `:`   | Abrir modo de comando |
 
+Informações mais detalhadas sobre navegação estão disponíveis em [docs/motions](/docs/motions.md).
+
 ### Reprodução
 
 | Comando | Ação                          |

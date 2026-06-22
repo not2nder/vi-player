@@ -71,24 +71,25 @@ Ao iniciar o player, será aplicado o esquema de cores definido no arquivo de co
 
 <div align="center">
     <img src="assets/images/default.png">
-    <p>(Tema padrão)</p>
+    <p>Tema padrão</p>
+</div>
+
+<div align="center">
+    <img src="assets/images/everforest.png">
+    <p>everforest-dark</p>
 </div>
 
 <div align="center">
     <img src="assets/images/catppuccin.png">
-    <p>(catppuccin-mocha)</p>
-</div>
-
-<div align="center">
-    <img src="assets/images/rose-pine.png">
-    <p>(rose-pine)</p>
+    <p>catppuccin-mocha</p>
 </div>
 
 <div align="center">
     <img src="assets/images/tokyo-night.png">
-    <p>(tokyo-night)</p>
+    <p>tokyo-night</p>
 </div>
-</div>
+
+Alguns esquemas de cores podem variar, dependendo das configurações de cor padrão do seu terminal. Para mais informações sobre o tema, leia [docs/colorschemes](/docs/colorschemes.md).
 
 # Configurações do Player
 
