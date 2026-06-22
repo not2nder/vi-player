@@ -130,7 +130,7 @@ def current(app, motion):
 
     return app.cursor + motion.count -1
 
-def goto(app, motion):
+def start(app, motion):
     if app.mpv.isempty:
         return
     return motion.count-1
@@ -138,6 +138,9 @@ def goto(app, motion):
 def end(app, motion):
     if app.mpv.isempty:
         return
+    if motion.count > 1:
+        return motion.count-1
+
     return app.mpv.count-1
 
 def percent(app, motion):
@@ -300,7 +303,7 @@ def handle_key(app, key):
 MOTIONS = {
     "j": down,
     "k": up,
-    "gg": goto,
+    "gg": start,
     "G": end,
     "%": percent,
     "_": current
