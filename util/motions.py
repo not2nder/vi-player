@@ -10,29 +10,24 @@ class CommandType(Enum):
     INVALID = auto()
     INCOMPLETE = auto()
 
-class Operator(Enum):
-    NONE = auto()
+class OperatorType(Enum):
     DELETE = auto()
     YANK = auto()
+    NONE = auto()
 
-@dataclass
-class OperatorArgument:
-    operator: str | None = None
-
+@dataclass(slots=True)
+class PendingOperator:
+    operator: OperatorType = OperatorType.NONE
     count: int = 1
-    motion: Motion | None = None
-
-    start: int = 0
-    end: int = 0
-
-    @property
-    def active(self):
-        return self.operator != Operator.NONE
 
     def clear(self):
-        self.operator = None
-        self.motion = None
+        self.operator = OperatorType.NONE
         self.count = 1
+
+@dataclass(slots=True)
+class Operator:
+    count: int = 1
+    action: OperatorType = OperatorType.NONE
 
 @dataclass(slots=True)
 class Motion:
@@ -40,28 +35,31 @@ class Motion:
     action: str = ""
 
 @dataclass(slots=True)
-class Parsed:
-    count: int
-    key: str
-
-@dataclass(slots=True)
 class Command:
     command_type: CommandType
+    value: object
+
+@dataclass(slots=True)
+class Action:
     key: str
-    count: int = 1
 
 class InputBuffer:
     def __init__(self):
         self.value = ""
+        self.display = ""
 
-    def feed(self, key):
+    def feed(self, key, pending=False):
         self.value += key
-        return parse(self.value)
+        self.display += key
+        return parse(self.value, pending)
 
     def clear(self):
         self.value = ""
 
-def parse(value):
+    def clear_display(self):
+        self.display = ""
+
+def parse(value, pending=False):
     if not value:
         return None
 
@@ -76,17 +74,44 @@ def parse(value):
 
     key = value[cursor:]
     
-    if key in MOTIONS:
-        return Command(CommandType.MOTION, key, count)
+    if pending:
+        if key in MOTIONS:
+            return Command(
+                CommandType.MOTION,
+                Motion(count, key)
+            )
+
+        if key == "":
+            return Command(
+                CommandType.INCOMPLETE,
+                key
+            )
+    
+    if key in OPERATORS:
+        return Command(
+            CommandType.OPERATOR,
+            Operator(count, OPERATORS[key])
+        )
 
     if key in ACTIONS:
-        return Command(CommandType.ACTION, key, count)
+        return Command(
+            CommandType.ACTION,
+            Action(key)
+        )
     
-    if isprefix(key) or key == "":
-        return Command(CommandType.INCOMPLETE, key, count)
+    if key in MOTIONS:
+        return Command(
+            CommandType.MOTION,
+            Motion(count, key)
+        )
 
-    return Command(CommandType.INVALID, key, count)
+    
+    if key == "" or isprefix(key):
+        return Command(CommandType.INCOMPLETE, key)
 
+    return Command(CommandType.INVALID, key)
+
+# MOVIMENTOS
 def down(app, motion):
     if app.mpv.isempty:
         return
@@ -99,26 +124,29 @@ def up(app, motion):
     
     return (app.cursor-motion.count) % app.mpv.count
 
-def goto(app, motion):
+def current(app, motion):
     if app.mpv.isempty:
         return
 
+    return app.cursor + motion.count -1
+
+def goto(app, motion):
+    if app.mpv.isempty:
+        return
     return motion.count-1
 
 def end(app, motion):
     if app.mpv.isempty:
         return
-
     return app.mpv.count-1
 
 def percent(app, motion):
     if app.mpv.isempty:
         return
+    pct = min(motion.count,99)/100
+    return int(app.mpv.count * pct)
 
-    percent = min(motion.count,99)/100
-    return int(app.mpv.count * percent)
-
-
+# ACTIONS
 def play(app):
     app.mpv.current = app.cursor
     app.mpv.play()
@@ -137,72 +165,91 @@ def enter_command(app):
     app.command += ":"
     app.message = ""
 
-def cut(app, start, end):
-    app.mpv.playlist.clear_register()
-    #TO DO
-
-def paste(app, motion):
-    app.mpv.playlist.paste(app.cursor)
-
 def exit_player(app):
     app.exit()
 
-MOTIONS = {
-    "j": down,
-    "k": up,
+def cut(app, index):
+    if app.mpv.isempty:
+        return 
 
-    "gg": goto,
+    app.mpv.playlist.cut(index)
+
+def yank(app, index):
+    if app.mpv.isempty:
+        return
+
+    app.mpv.playlist.copy(index)
+
+def paste(app):
+    app.mpv.playlist.paste(app.cursor)
+    return
+
+# EXECUÇÃO
+def do_operator(app, start, end):
+    if start > end:
+        start, end = end, start
+
+    counter = 0
     
-    "G": end,
-    "%": percent
-}
+    operator = app.pending.operator
+    match operator:
+        case OperatorType.DELETE:
+            index = start
+            
+            while index <= end:
+                cut(app, index)
+                end -= 1
+                counter += 1
 
-OPERATORS = {
-    "d": Operator.DELETE,
-    "p": Operator.YANK
-}
+            app.message = f"{counter} linha(s) a menos"
 
-ACTIONS = {
-    "l": seek_forward,
-    "h": seek_back,
-    ":": enter_command,
-    "q": exit_player,
-}
+        case OperatorType.YANK:
+            index = start
 
-def isprefix(value):
-    if not value:
-        return False
+            while index <= end:
+                yank(app, index)
+                end -=1
+                counter +=1
 
-    if value.isdigit():
-        return True
+            app.message = f"{counter} linha(s) copiada(s)"
 
-    return any(
-        key.startswith(value)
-        for key in MOTIONS
-    )
+    app.pending.clear()
+    app.input.clear()
+    app.input.clear_display()
 
-def nv_motion(app, command):
-    motion = Motion(
-        action = command.key,
-        count  = command.count
-    ) 
-
+def nv_motion(app, motion):
     func = MOTIONS.get(motion.action)
-
-    if func is None:
+    if not func:
         return
 
     target = func(app, motion)
+    if target is None:
+        return
 
-    if target is not None:
-        app.cursor = max(
-            0,
-            min(target, app.mpv.count-1)
-        )
+    if app.pending.operator != OperatorType.NONE:
+        motion.count *= app.pending.count
+        target = func(app, motion)
+
+        start = app.cursor
+        end   = target
+
+        do_operator(app, start, end)
+
+        app.cursor = min(start, app.mpv.count-1)
+        return
+
+    app.cursor = max(0, min(target, app.mpv.count-1))
+    app.input.clear_display()
+
+def nv_operator(app, operator):
+    app.pending.operator = operator.action
+    app.pending.count = operator.count
+    app.input.clear()
 
 def nv_action(app, command):
     ACTIONS[command.key](app)
     app.input.clear()
+    app.input.clear_display()
 
 def nv_dispatch(app, command):
     if command is None:
@@ -210,17 +257,30 @@ def nv_dispatch(app, command):
 
     match command.command_type:
         case CommandType.ACTION:
-            nv_action(app, command)
+            nv_action(app, command.value)
 
         case CommandType.MOTION:
-            nv_motion(app, command)
+            nv_motion(app, command.value)
             app.input.clear()
+
+        case CommandType.OPERATOR:
+            if app.pending.operator == command.value.action:
+                motion = Motion(
+                    count = 1,
+                    action="_"
+                )
+                nv_motion(app, motion)
+                return 
+
+            nv_operator(app, command.value)
 
         case CommandType.INCOMPLETE:
             return
 
         case CommandType.INVALID:
             app.input.clear()
+            app.input.clear_display()
+            app.pending.clear()
 
 def handle_key(app, key):   
     if key == Key.ENTER:
@@ -230,7 +290,42 @@ def handle_key(app, key):
     if not isinstance(key, str): 
         return
 
-    command = app.input.feed(key)
+    command = app.input.feed(key, app.pending.operator != OperatorType.NONE)
+    if not command:
+        return
 
-    if command:
-        nv_dispatch(app, command)
+    nv_dispatch(app, command)
+
+# MAPPING
+MOTIONS = {
+    "j": down,
+    "k": up,
+    "gg": goto,
+    "G": end,
+    "%": percent,
+    "_": current
+}
+
+OPERATORS = {
+    "d": OperatorType.DELETE,
+    "y": OperatorType.YANK
+}
+
+ACTIONS = {
+    "l": seek_forward,
+    "h": seek_back,
+    "0": seek_home,
+    ":": enter_command,
+    "q": exit_player,
+    "p": paste,
+}
+
+def isprefix(value):
+    if not value:
+        return False
+
+    if value.isdigit():
+        return True
+
+    return any(key.startswith(value) for key in MOTIONS)
+

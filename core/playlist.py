@@ -20,11 +20,18 @@ class Playlist:
         return bool(self.songs)
     
     def cut(self, index):
-        if index > len(self.songs):
+        if index < 0 or index >= len(self.songs):
             return
 
         deleted = self.songs.pop(index)
         self.register.append(deleted)
+
+    def copy(self, index):
+        if index < 0 or index >= len(self.songs):
+            return
+
+        self.register.clear()
+        self.register.append(self.songs[index])
 
     def paste(self, index):
         for i in range(len(self.register)):
