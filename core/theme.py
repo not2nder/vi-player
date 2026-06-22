@@ -31,8 +31,8 @@ class Theme:
                     "bg": None
                 },
                 "CursorLine": {
-                   "fg": "blue",
-                    "bg": None
+                   "fg": None,
+                   "bg": None
                 },
                 "LineNr": {
                     "fg": "yellow",
@@ -47,7 +47,7 @@ class Theme:
                     "bg": None
                 },
                 "Muted": {
-                    "fg": None,
+                    "fg": "blue",
                     "bg": None
                 }
             },
