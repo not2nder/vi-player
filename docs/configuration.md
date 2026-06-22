@@ -70,23 +70,23 @@ O tema informado deve ser um dos presentes na pasta `~/.config/vi-player/themes`
 Ao iniciar o player, será aplicado o esquema de cores definido no arquivo de configuração.
 
 <div align="center">
-    <img src="assets/images/default (dark).png">
+    <img src="assets/images/default.png">
     <p>(Tema padrão)</p>
 </div>
 
 <div align="center">
-    <img src="assets/images/deep-blue.png">
-    <p>(deep-blue)</p>
+    <img src="assets/images/catppuccin.png">
+    <p>(catppuccin-mocha)</p>
 </div>
 
 <div align="center">
-    <img src="assets/images/retro.png">
-    <p>(retro)</p>
+    <img src="assets/images/rose-pine.png">
+    <p>(rose-pine)</p>
 </div>
 
 <div align="center">
-    <img src="assets/images/soft.png">
-    <p>(soft)</p>
+    <img src="assets/images/tokyo-night.png">
+    <p>(tokyo-night)</p>
 </div>
 </div>
 

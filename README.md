@@ -7,11 +7,10 @@ Um player de música para terminal focado em velocidade, simplicidade e controle
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.11+-blue?logo=python" />
   <img src="https://img.shields.io/badge/License-GPLv3-green" />
-  <img src="https://img.shields.io/badge/Status-Em%20Desenvolvimento-orange" />
 </p>
 
 <div align="center">
-  <img src="docs/assets/images/default (dark).png" alt="Vi-Player">
+  <img src="docs/assets/images/default.png" alt="Vi-Player">
 </div>
 
 ## Sobre
