@@ -70,7 +70,10 @@ def build_position(app):
     return f"{app.cursor+1}/{app.mpv.count}"
 
 def build_percent(app):
-    percent = (app.cursor/(app.mpv.count-1))*100
+    if app.mpv.count <=1:
+        percent = 0
+    else:
+        percent = (app.cursor / (app.mpv.count - 1)) * 100
 
     if percent > 99:
         text = "Fim"
