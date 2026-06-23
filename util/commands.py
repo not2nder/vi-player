@@ -132,7 +132,12 @@ def handle(app, key):
 
         app.command = ""
         app.mode = Mode.NORMAL
-    
+
+    elif key == Key.ESC:
+        app.command = ""
+        app.mode = Mode.NORMAL
+        return
+
     elif key == Key.DEL:
         if app.command != ":":
             app.command = app.command[:-1]
