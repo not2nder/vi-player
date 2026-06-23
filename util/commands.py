@@ -16,7 +16,7 @@ def warning(text):
     theme = get_theme()
 
     return paint(
-        text,
+        str(text),
         theme.style("Warning")
     )
 
@@ -97,8 +97,8 @@ def set_colorscheme(app, args):
 
     try:
         set_theme(args[1])
-    except FileNotFoundError:
-        app.message = warning(f"Esquema de cores '{args[1]}' não encontrado")
+    except Exception as e:
+        app.message = warning(e)
 
 COMMANDS = {
     ":p": play,

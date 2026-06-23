@@ -13,7 +13,7 @@ from ui import statusline, commandline, homescreen, playlist
 from util.keyboard import getch 
 
 from core.config import load_config, get_config
-from core.theme import set_theme
+from core.theme import Theme, set_theme
 
 from core.enums import Mode
 
