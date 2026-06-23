@@ -116,13 +116,13 @@ def down(app, motion):
     if app.mpv.isempty:
         return
 
-    return (app.cursor+motion.count) % app.mpv.count
+    return min(app.mpv.count, app.cursor+motion.count)
 
 def up(app, motion):
     if app.mpv.isempty:
         return
     
-    return (app.cursor-motion.count) % app.mpv.count
+    return max(0, app.cursor-motion.count)
 
 def current(app, motion):
     if app.mpv.isempty:
@@ -133,6 +133,7 @@ def current(app, motion):
 def start(app, motion):
     if app.mpv.isempty:
         return
+    
     return motion.count-1
 
 def end(app, motion):
@@ -185,7 +186,6 @@ def yank(app, index):
 
 def paste(app):
     app.mpv.playlist.paste(app.cursor)
-    return
 
 # EXECUÇÃO
 def do_operator(app, start, end):
@@ -211,7 +211,7 @@ def do_operator(app, start, end):
 
             while index <= end:
                 yank(app, index)
-                end -=1
+                end -= 1
                 counter +=1
 
             app.message = f"{counter} linha(s) copiada(s)"
@@ -227,6 +227,8 @@ def nv_motion(app, motion):
 
     target = func(app, motion)
     if target is None:
+        app.input.clear()
+        app.input.clear_display()
         return
 
     if app.pending.operator != OperatorType.NONE:
@@ -237,8 +239,11 @@ def nv_motion(app, motion):
         end   = target
 
         do_operator(app, start, end)
-
-        app.cursor = min(start, app.mpv.count-1)
+        
+        if app.cursor > end:
+            app.cursor = min(end, app.mpv.count-1)
+        else:
+            app.cursor = min(start, app.mpv.count-1)
         return
 
     app.cursor = max(0, min(target, app.mpv.count-1))
@@ -288,6 +293,12 @@ def nv_dispatch(app, command):
 def handle_key(app, key):   
     if key == Key.ENTER:
         play(app)
+        return
+
+    if key == Key.ESC:
+        app.pending.clear()
+        app.input.clear()
+        app.input.clear_display()
         return
 
     if not isinstance(key, str): 

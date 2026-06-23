@@ -2,7 +2,23 @@ import shlex
 from core.theme import set_theme, get_theme
 import core.config as config
 from core.enums import Mode, Key
-from util.pretty import error
+from util.pretty import paint 
+
+def error(text):
+    theme = get_theme()
+
+    return paint(
+        text,
+        theme.style("Error")
+    )
+
+def warning(text):
+    theme = get_theme()
+
+    return paint(
+        text,
+        theme.style("Warning")
+    )
 
 def play(app, args):
     if app.mpv.isempty:
@@ -43,7 +59,7 @@ def quit(app, args):
 
 def open(app, args):
     if len(args) < 2:
-        app.message = error("Nenhum nome de diretório")
+        app.message = warning("Nenhum nome de diretório")
         return
     
     app.mpv.playlist.load_directory(args[1])
@@ -51,7 +67,7 @@ def open(app, args):
 
 def add_dir(app, args):
     if len(args) < 2:
-        app.message = error("Nenhum nome de diretório")
+        app.message = warning("Nenhum nome de diretório")
         return
 
     count = app.mpv.playlist.add_dir(args[1])
@@ -59,7 +75,7 @@ def add_dir(app, args):
     if count:
         app.message = f'{count} Música(s) adicionada(s)'
     else:
-        app.message = error('Diretório vazio ou inexistente')
+        app.message = warning('Diretório vazio ou inexistente')
 
 def add_song(app, args):
     if len(args) < 2:
@@ -82,7 +98,7 @@ def set_colorscheme(app, args):
     try:
         set_theme(args[1])
     except FileNotFoundError:
-        app.message = error(f"Esquema de cores '{args[1]}' não encontrado")
+        app.message = warning(f"Esquema de cores '{args[1]}' não encontrado")
 
 COMMANDS = {
     ":p": play,
@@ -112,7 +128,7 @@ def handle(app, key):
             command(app, args)
             app.buffer_add(app.command)
         else:
-            app.message = error(f"Não é um comando do player: {cmd.strip(':')}")
+            app.message = warning(f"Não é um comando do player: {cmd.strip(':')}")
 
         app.command = ""
         app.mode = Mode.NORMAL

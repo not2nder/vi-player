@@ -5,6 +5,7 @@ ANSI_CODES = {
     '\x7f': Key.DEL,
     '\x08': Key.DEL,
     '\r': Key.ENTER,
+    '\x1b': Key.ESC,
     '\x1b[A': Key.UP,
     '\x1b[B': Key.DOWN,
     '\x1b[C': Key.RIGHT,
@@ -19,12 +20,14 @@ def getch():
         tty.setraw(fd)
         ch = sys.stdin.read(1)
         if ch == '\x1b':
-            ch += sys.stdin.read(2)
+            import select
+
+            if select.select([sys.stdin], [], [], 0.01)[0]:
+                ch += sys.stdin.read(2)
     finally:
-        ch = parse_key(ch)
         termios.tcsetattr(fd, termios.TCSADRAIN, old)
     
-    return ch
+    return parse_key(ch)
 
 def parse_key(char: str):
     if char in ANSI_CODES:

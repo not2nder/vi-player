@@ -67,6 +67,9 @@ def build_theme(app):
     return get_theme().meta["name"]
 
 def build_position(app):
+    if app.mpv.isempty:
+        return "Vazio"
+
     return f"{app.cursor+1}/{app.mpv.count}"
 
 def build_percent(app):

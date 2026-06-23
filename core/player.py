@@ -32,6 +32,9 @@ class Player:
         if not self.playlist:
             return
 
+        if self.state == PlaybackState.PAUSE:
+            self.state = PlaybackState.PLAYING
+
         self.playing_song = self.playlist[self.current]
         self.player.play(str(self.playing_song.path))
         self.state = PlaybackState.PLAYING
