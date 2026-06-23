@@ -42,7 +42,10 @@ class App:
         load_config()
         self.config = get_config()
 
-        set_theme(self.config.general["theme"])
+        try:
+            set_theme(self.config.general["theme"])
+        except Exception as e:
+            self.message = e
 
     def run(self):
         ui.initscreen(self.screen)

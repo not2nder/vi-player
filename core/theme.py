@@ -81,12 +81,16 @@ def load_theme(name):
 
 def set_theme(name):
     global CURRENT_THEME
-    
+
     if name is None or not name:
         CURRENT_THEME = Theme.builtin()
         return
 
-    CURRENT_THEME = load_theme(name)
+    try:
+        CURRENT_THEME = load_theme(name)
+    except FileNotFoundError:
+        CURRENT_THEME = Theme.builtin()
+        raise Exception(f"Esquema de cores '{name}' não encontrado")
 
 def get_theme():
     return CURRENT_THEME
