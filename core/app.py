@@ -10,7 +10,7 @@ from util import ui
 
 from ui import statusline, commandline, homescreen, playlist
 
-from util.keyboard import getch 
+from util.keyboard import getch, enter_raw_mode, restore_terminal
 
 from core.config import load_config, get_config
 from core.theme import Theme, set_theme
@@ -49,17 +49,22 @@ class App:
 
     def run(self):
         ui.initscreen(self.screen)
-        
         signal.signal(signal.SIGWINCH, self.handle_resize)
 
+        fd, old = enter_raw_mode()
         try:
             while self.running:
                 if self.dirty:
                     self.draw()
 
-                key = getch()
+                key = getch(fd)
+
+                if key is None:
+                    continue
+
                 self.handle_key(key)
         finally:
+            restore_terminal(fd, old)
             ui.exitscreen()
 
     def handle_resize(self, signum, frame):
