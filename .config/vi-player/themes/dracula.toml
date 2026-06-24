@@ -21,6 +21,10 @@ error = "#FF5555"
 fg = "foreground"
 bg = "background"
 
+[highlight.CursorBlock]
+fg = "background"
+bg = "cyan"
+
 [highlight.CursorLine]
 fg = "foreground"
 bg = "surface"

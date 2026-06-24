@@ -2,7 +2,6 @@
 name = "nord"
 author = "arcticicestudio"
 
-
 [palette]
 background = "#2E3440"
 foreground = "#D8DEE9"
@@ -18,41 +17,37 @@ muted = "#4C566A"
 warning = "#D08770"
 error = "#BF616A"
 
-
 [highlight.Normal]
 fg = "foreground"
 bg = "background"
 
+[highlight.CursorBlock]
+fg = "background"
+bg = "cyan"
 
 [highlight.CursorLine]
 fg = "foreground"
 bg = "surface"
 
-
 [highlight.LineNr]
 fg = "green"
 bg = "background"
-
 
 [highlight.CursorLineNr]
 fg = "cyan"
 bg = "background"
 
-
 [highlight.StatusLine]
 fg = "background"
 bg = "accent"
-
 
 [highlight.Muted]
 fg = "muted"
 bg = "background"
 
-
 [highlight.Warning]
 fg = "warning"
 bg = "background"
-
 
 [fillchars]
 eob = "~"

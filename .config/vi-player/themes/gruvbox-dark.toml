@@ -21,6 +21,10 @@ warning = "#FB4934"
 fg = "foreground"
 bg = "background"
 
+[highlight.CursorBlock]
+fg = "background"
+bg = "blue"
+
 [highlight.CursorLine]
 fg = "foreground"
 bg = "surface"

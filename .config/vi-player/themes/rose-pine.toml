@@ -21,6 +21,10 @@ warning = "#F6C177"
 fg = "foreground"
 bg = "background"
 
+[highlight.CursorBlock]
+fg = "background"
+bg = "foam"
+
 [highlight.CursorLine]
 fg = "foreground"
 bg = "surface"

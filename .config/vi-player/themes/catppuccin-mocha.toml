@@ -17,6 +17,10 @@ muted = "#6C7086"
 warning = "#FAB387"
 error = "#F38BA8"
 
+[highlight.CursorBlock]
+fg = "background"
+bg = "blue"
+
 [highlight.Normal]
 fg = "foreground"
 bg = "background"

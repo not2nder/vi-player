@@ -2,7 +2,6 @@
 name = "gruvbox"
 author = "unknown"
 
-
 [palette]
 background = "#282828"
 foreground = "#EBDBB2"
@@ -10,41 +9,37 @@ accent = "#D79921"
 muted = "#928374"
 warning = "#CC241D"
 
-
 [highlight.Normal]
 fg = "foreground"
 bg = "background"
 
+[highlight.CursorBlock]
+fg = "background"
+bg = "foreground"
 
 [highlight.CursorLine]
 fg = "background"
 bg = "accent"
 
-
 [highlight.LineNr]
 fg = "muted"
 bg = "background"
-
 
 [highlight.CursorLineNr]
 fg = "accent"
 bg = "background"
 
-
 [highlight.StatusLine]
 fg = "foreground"
 bg = "accent"
-
 
 [highlight.Muted]
 fg = "muted"
 bg = "background"
 
-
 [highlight.Warning]
 fg = "warning"
 bg = "background"
-
 
 [fillchars]
 eob="~"

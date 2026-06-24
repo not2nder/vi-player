@@ -2,7 +2,6 @@
 name = "solarized-dark"
 author = "Ethan Schoonover"
 
-
 [palette]
 background = "#002B36"
 foreground = "#839496"
@@ -18,41 +17,37 @@ muted = "#586E75"
 warning = "#CB4B16"
 error = "#DC322F"
 
-
 [highlight.Normal]
 fg = "foreground"
 bg = "background"
 
+[highlight.CursorBlock]
+fg = "background"
+bg = "blue"
 
 [highlight.CursorLine]
 fg = "foreground"
 bg = "surface"
 
-
 [highlight.LineNr]
 fg = "muted"
 bg = "background"
-
 
 [highlight.CursorLineNr]
 fg = "green"
 bg = "background"
 
-
 [highlight.StatusLine]
 fg = "background"
 bg = "accent"
-
 
 [highlight.Muted]
 fg = "muted"
 bg = "background"
 
-
 [highlight.Warning]
 fg = "warning"
 bg = "background"
-
 
 [fillchars]
 eob = "~"
