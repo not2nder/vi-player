@@ -126,7 +126,7 @@ def handle(app, key):
         
         if command:
             command(app, args)
-            app.buffer_add(app.command)
+            app.buffer_add(app.command.value())
         else:
             app.message = warning(f"Não é um comando do player: {cmd.strip(':')}")
 
