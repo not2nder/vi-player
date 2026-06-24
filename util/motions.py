@@ -166,7 +166,7 @@ def seek_home(app):
 
 def enter_command(app):
     app.mode = Mode.COMMAND
-    app.command += ":"
+    app.command.text = ":"
     app.message = ""
 
 def exit_player(app):

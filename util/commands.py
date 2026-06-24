@@ -119,7 +119,7 @@ COMMANDS = {
 
 def handle(app, key):
     if key == Key.ENTER:
-        args = shlex.split(app.command)
+        args = shlex.split(app.command.value())
         cmd = args[0]
 
         command = COMMANDS.get(cmd)
@@ -130,32 +130,39 @@ def handle(app, key):
         else:
             app.message = warning(f"Não é um comando do player: {cmd.strip(':')}")
 
-        app.command = ""
+        app.command.clear()
         app.mode = Mode.NORMAL
 
     elif key == Key.ESC:
-        app.command = ""
+        app.command.clear()
         app.mode = Mode.NORMAL
         return
 
     elif key == Key.DEL:
-        if app.command != ":":
-            app.command = app.command[:-1]
+        if app.command.value() != ":":
+            app.command.backspace()
         else:
-            app.command = ""
+            app.command.clear()
             app.mode = Mode.NORMAL 
 
     elif key == Key.UP and len(app.command_buffer) > 0:
-        app.command = app.command_buffer[app.buffer_index]
+        app.command.text = app.command_buffer[app.buffer_index]
         app.buffer_next()
+        app.command.cursor = len(app.command.text)
 
     elif key == Key.DOWN and len(app.command_buffer) > 0:
         if app.buffer_index == 0:
-            app.command = ":"
+            app.command.text = ":"
         else:
             app.buffer_prev()
-            app.command = app.command_buffer[app.buffer_index]
-    
-    elif isinstance(key, str):
-        app.command += key
+            app.command.text = app.command_buffer[app.buffer_index]
+            app.command.cursor = len(app.command.text)
 
+    elif key == Key.LEFT:
+        app.command.left()
+    
+    elif key == Key.RIGHT:
+        app.command.right()
+
+    elif isinstance(key, str):
+        app.command.feed(key)

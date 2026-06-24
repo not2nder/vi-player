@@ -17,6 +17,35 @@ from core.theme import Theme, set_theme
 
 from core.enums import Mode
 
+class TextInput:
+    def __init__(self):
+        self.text   = ""
+        self.cursor = 1
+
+    def feed(self, key):
+        self.text = self.text[:self.cursor] + key + self.text[self.cursor:]
+        self.cursor += len(key)
+
+    def backspace(self):
+        if self.cursor > 1:
+            self.text = self.text[:self.cursor-1] + self.text[self.cursor:]
+            self.cursor -= 1
+
+    def left(self):
+        if self.cursor > 1:
+            self.cursor -= 1
+
+    def right(self):
+        if self.cursor < len(self.text):
+            self.cursor += 1
+
+    def clear(self):
+        self.text = ""
+        self.cursor = 1
+
+    def value(self):
+        return self.text
+
 class App:
     def __init__(self):
         self.mpv = Player()
@@ -29,7 +58,7 @@ class App:
         self.input = InputBuffer()
         self.pending = PendingOperator()
 
-        self.command = ""
+        self.command = TextInput()
         
         self.message = ""
         
@@ -58,7 +87,6 @@ class App:
                     self.draw()
 
                 key = getch(fd)
-
                 if key is None:
                     continue
 
