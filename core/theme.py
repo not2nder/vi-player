@@ -14,7 +14,11 @@ class Theme:
         for name, style in data.get("highlight", {}).items():
             self.highlights[name] = {
                 "fg": self.resolve(style.get("fg")),
-                "bg": self.resolve(style.get("bg"))
+                "bg": self.resolve(style.get("bg")),
+                "reverse": self.resolve(style.get("reverse")),
+                "bold": self.resolve(style.get("bold")),
+                "italic": self.resolve(style.get("italic")),
+                "underline": self.resolve(style.get("underline"))
         }
 
     @classmethod
@@ -26,29 +30,24 @@ class Theme:
             },
             "palette": {},
             "highlight": {
-                "Normal": {
-                    "fg": None,
-                    "bg": None
-                },
+                "Normal": {},
                 "CursorLine": {
-                   "fg": None,
-                   "bg": None
+                   "fg": "blue",
+                },
+                "CursorBlock": {
+                    "reverse": True,
                 },
                 "LineNr": {
                     "fg": "yellow",
-                    "bg": None
                 },
                 "CursorLineNr": {
                     "fg": "blue",
-                    "bg": None
                 },
                 "StatusLine": {
-                    "fg": None,
-                    "bg": None
+                    "reverse": True,
                 },
                 "Muted": {
                     "fg": "blue",
-                    "bg": None
                 }
             },
             "fillchars": {

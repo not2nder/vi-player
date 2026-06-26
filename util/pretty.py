@@ -7,7 +7,7 @@ RESET = "\x1b[0m"
 
 ANSI_ESCAPE = re.compile(r'\x1b\[[0-9;?]*[ -/]*[@-~]')
 
-ANSI_COLORS = {
+FG_COLORS = {
     "black": 30,
     "red": 31,
     "green": 32,
@@ -17,6 +17,29 @@ ANSI_COLORS = {
     "cyan": 36,
     "white": 37,
 }
+
+BG_COLORS = {
+    "black": 40,
+    "red": 41,
+    "green": 42,
+    "yellow": 43,
+    "blue": 44,
+    "magenta": 45,
+    "cyan": 46,
+    "white": 47,
+}
+
+BOLD_ON = "\x1b[1m"
+BOLD_OFF = "\x1b[22m"
+
+ITALIC_ON = "\x1b[3m"
+ITALIC_OFF = "\x1b[23m"
+
+UNDERLINE_ON = "\x1b[4m"
+UNDERLINE_OFF = "\x1b[24m"
+
+REVERSE_ON = "\x1b[7m"
+REVERSE_OFF = "\x1b[27m"
 
 def length(text):
     return wcswidth(ANSI_ESCAPE.sub('', text))
@@ -29,10 +52,29 @@ def fill(text: str, width: int) -> str:
     return text + pad
 
 def paint(text: str, style):
+    bold      = BOLD_ON if style.get("bold") else ""
+    italic    = ITALIC_ON if style.get("italic") else ""
+    underline = UNDERLINE_ON if style.get("underline") else ""
+    reverse   = REVERSE_ON if style.get("reverse") else ""
+
+    background = bg(style.get("bg"))
+    foreground = fg(style.get("fg"))
+
+    g_reset = RESET if not(background and foreground) else ""
+
     return (
-        fg(style.get("fg", ""))
-        +bg(style.get("bg", ""))
+        reverse
+        +bold
+        +italic
+        +underline
+        +foreground
+        +background
         +text
+        +REVERSE_OFF
+        +BOLD_OFF
+        +ITALIC_OFF
+        +UNDERLINE_OFF
+        +g_reset
     )
 
 def padding(text: str, value: int = 1) -> str:
@@ -42,8 +84,8 @@ def bg(color: str):
     if not color:
         return ""
 
-    if color in ANSI_COLORS:
-        return f"\x1b[{ANSI_COLORS[color]}m"
+    if color in BG_COLORS: 
+        return f"\x1b[{BG_COLORS[color]}m"
 
     return hxtoansi(color)
 
@@ -51,8 +93,8 @@ def fg(color: str):
     if not color:
         return ""
 
-    if color in ANSI_COLORS:
-        return f"\x1b[{ANSI_COLORS[color]}m"
+    if color in FG_COLORS:
+        return f"\x1b[{FG_COLORS[color]}m"
 
     return hxtoansi(color, False)
 
@@ -61,21 +103,6 @@ def bold(text: str):
 
 def underline(text: str):
     return f"\x1b[4m{text}\x1b[24m"
-
-def dim(text: str):
-    return f"\x1b[2m{text}\x1b[22m"
-
-def red(text: str) -> str:
-    return f"\x1b[31m{text}\x1b[39m"
-
-def yellow(text: str) -> str:
-    return f"\x1b[33m{text}\x1b[39m"
-
-def blue(text: str) -> str:
-    return f"\x1b[34m{text}\x1b[39m"
-
-def error(text: str) -> str:
-    return f"\x1b[031m{text}"
 
 def justify(*args, width: int) -> str:
     if not args:
