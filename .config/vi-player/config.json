@@ -4,7 +4,8 @@
   },
   "player": {
     "relativenumber": true,
-    "usearrows": false
+    "wrap_navigation": false,
+    "playlist_format": "%t %= %a %d",
   },
   "statusline": {
     "left": ["mode", "state"],
@@ -13,3 +14,4 @@
     "separator": "|"
   }
 }
+
