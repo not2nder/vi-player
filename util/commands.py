@@ -57,13 +57,14 @@ def skip(app, args):
 def quit(app, args):
     app.exit()
 
-def open(app, args):
+def open_dir(app, args):
     if len(args) < 2:
         app.message = warning("Nenhum nome de diretório")
         return
     
     app.mpv.playlist.load_directory(args[1])
     app.message = f"Mostrando músicas de: {args[1]}"
+    app.cursor = 0
 
 def add_dir(app, args):
     if len(args) < 2:
@@ -106,7 +107,7 @@ COMMANDS = {
     ":n": next,
     ":pv": prev,
     ":sk": skip,
-    ":e": open,
+    ":e": open_dir,
     ":add": add_dir,
     ":addsong": add_song,
     ":rnu": set_rnu,

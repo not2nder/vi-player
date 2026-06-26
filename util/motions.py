@@ -200,7 +200,6 @@ def do_operator(app, start, end):
 
     match operator:
         case OperatorType.DELETE:
-            index = start
             while index <= end:
                 cut(app, index)
                 end -= 1
