@@ -1,33 +1,49 @@
-import sys, tty, termios
+import os, sys, tty, termios, select
 from core.enums import Key
 
+TIMEOUT = 0.03
+
 ANSI_CODES = {
-    '\x7f': Key.DEL,
-    '\x08': Key.DEL,
-    '\r': Key.ENTER,
-    '\x1b[A': Key.UP,
-    '\x1b[B': Key.DOWN,
-    '\x1b[C': Key.RIGHT,
-    '\x1b[D': Key.LEFT
+    b"\x7f": Key.DEL,
+    b"\x08": Key.DEL,
+    b"\r": Key.ENTER,
+    b"\n": Key.ENTER,
+    b"\x1b": Key.ESC,
+
+    b"\x1b[A": Key.UP,
+    b"\x1b[B": Key.DOWN,
+    b"\x1b[C": Key.RIGHT,
+    b"\x1b[D": Key.LEFT,
 }
 
-def getch():
+def enter_raw_mode():
     fd = sys.stdin.fileno()
     old = termios.tcgetattr(fd)
+    tty.setraw(fd)
+    return fd, old
+
+def restore_terminal(fd, old):
+    termios.tcsetattr(fd, termios.TCSADRAIN, old)
+
+def read_key_sequence(fd):
+    data = os.read(fd, 1)
+
+    if data == b"\x1b":
+        while select.select([fd], [], [], TIMEOUT)[0]:
+            data += os.read(fd, 1)
+
+    return data
+
+def parse_key(data):
+    if data in ANSI_CODES:
+        return ANSI_CODES[data]
 
     try:
-        tty.setraw(fd)
-        ch = sys.stdin.read(1)
-        if ch == '\x1b':
-            ch += sys.stdin.read(2)
-    finally:
-        ch = parse_key(ch)
-        termios.tcsetattr(fd, termios.TCSADRAIN, old)
-    
-    return ch
+        return data.decode("utf-8")
+    except UnicodeDecodeError:
+        return None
 
-def parse_key(char: str):
-    if char in ANSI_CODES:
-        return ANSI_CODES[char]
-    else:
-        return char
+def getch(fd):
+    data = read_key_sequence(fd)
+    return parse_key(data)
+

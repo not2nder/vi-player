@@ -11,17 +11,38 @@ class Config:
         
         self.player = data.get("player", {})
         self.player["relativenumber"] = self.player.get("relativenumber", True)
+        self.player["number"] = self.player.get("number", True)
+        self.player["wrap_navigation"] = self.player.get("wrap_navigation", False)
+        self.player["playlist"] = self.player.get("playlist_format", "%t %= %b %d")
 
         self.statusline = data.get("statusline", {})
 
     def set_theme(self, name):
         self.general["theme"] = name
 
+    def set_number(self, value = None):
+        if value is None:
+            self.player["number"] = not self.player["number"]
+        else:
+            self.player["number"] = value
+    
     def set_relativenumber(self, value = None):
         if value is None:
             self.player["relativenumber"] = not self.player["relativenumber"]
         else:
             self.player["relativenumber"] = value
+
+    def set_wrap(self, value = None):
+        if value is None:
+            self.player["wrap_navigation"] = not self.player["wrap_navigation"]
+        else:
+            self.player["wrap_navigation"] = value
+
+    def set_playlist_fmt(self, value = None):
+        if value is None:
+            return
+
+        self.player["playlist"] = value
 
     def to_dict(self):
         return {

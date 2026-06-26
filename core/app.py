@@ -3,18 +3,50 @@ import signal
 from core.player import Player
 import util.motions as motions
 import util.commands as commands
+from util.motions import InputBuffer, PendingOperator
 
 from util.screen import Screen
 from util import ui
 
 from ui import statusline, commandline, homescreen, playlist
 
-from util.keyboard import getch 
+from util.keyboard import enter_raw_mode, restore_terminal, getch 
 
 from core.config import load_config, get_config
-from core.theme import set_theme
+from core.theme import Theme, set_theme
 
 from core.enums import Mode
+
+from core.plugins import PluginHost
+
+class CommandLine:
+    def __init__(self):
+        self.text = ""
+        self.cursor = 1
+
+    def insert(self, char):
+        self.text = self.text[:self.cursor] + char + self.text[self.cursor:]
+        self.cursor += len(char)
+
+    def backspace(self):
+        if self.cursor > 1:
+            self.text = self.text[:self.cursor-1] + self.text[self.cursor:]
+            self.cursor -= 1
+
+    def left(self):
+        if self.cursor > 1:
+            self.cursor -= 1
+    
+    def right(self):
+        if self.cursor < len(self.text):
+            self.cursor += 1
+
+    def clear(self):
+        self.text = ""
+        self.cursor = 1
+
+    def value(self):
+        return self.text
 
 class App:
     def __init__(self):
@@ -24,34 +56,51 @@ class App:
 
         self.mode = Mode.NORMAL
 
-        self.command = ""
-        self.motion = ""
-        self.message = ""
+        self.cursor = 0
+        self.input = InputBuffer()
+        self.pending = PendingOperator()
+
+        self.commandline = CommandLine()
         self.command_buffer = []
 
-        self.cursor = 0
+        self.operator = None 
+        self.motion   = ""
+        
+        self.message = ""
+
         self.buffer_index = 0
 
         self.running = True
+        self.luahost = PluginHost(self)
+
+        self.luahost.load_plugin("luatheme","lua/luatheme.lua")
 
         load_config()
         self.config = get_config()
 
-        set_theme(self.config.general["theme"])
+        try:
+            set_theme(self.config.general["theme"])
+        except Exception as e:
+            self.message = e
 
     def run(self):
         ui.initscreen(self.screen)
-        
         signal.signal(signal.SIGWINCH, self.handle_resize)
+
+        fd, old = enter_raw_mode()
 
         try:
             while self.running:
                 if self.dirty:
                     self.draw()
 
-                key = getch()
+                key = getch(fd)
+                if key is None:
+                    continue
+
                 self.handle_key(key)
         finally:
+            restore_terminal(fd, old)
             ui.exitscreen()
 
     def handle_resize(self, signum, frame):
@@ -79,7 +128,8 @@ class App:
 
         commandline.draw(
             self.screen,
-            self.command,
+            self.commandline,
+            self.input.display,
             self.motion,
             self.message, 
             self.mode

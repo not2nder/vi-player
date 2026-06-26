@@ -8,7 +8,7 @@ def draw(screen, app):
     logo = art.logo.splitlines()
 
     descricao = [
-        "Um player de músicas inspirado no Vim",
+        "Vi-Player (Lua version)",
         "https://github.com/not2nder"
     ]
     commands = [

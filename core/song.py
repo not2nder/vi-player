@@ -24,6 +24,7 @@ class Song:
 
     @property
     def title(self):
+        self.load_metadata()
         return self._title
 
     @property
@@ -35,6 +36,10 @@ class Song:
     def album(self):
         self.load_metadata()
         return self._album
+
+    @property
+    def filename(self):
+        return self.path.name
 
     @property
     def time(self):
@@ -54,9 +59,9 @@ class Song:
         try:
             audio = EasyID3(self.path)
 
-            self._title = audio.get("title", [self._title])[0]
-            self._artist = audio.get("artist", [""])[0]
-            self._album = audio.get("album", [""])[0]
+            self._title = audio.get("title", [self._title])[0] or self._title
+            self._artist = audio.get("artist", [""])[0] or ""
+            self._album = audio.get("album", [""])[0] or ""
 
         except Exception:
             self._artist = ""

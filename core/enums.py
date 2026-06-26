@@ -12,7 +12,7 @@ class Key(Enum):
     DEL = auto()
     ENTER = auto()
     SPACE = auto()
-    ESC_SEQ = auto()
+    ESC = auto()
 
 class PlaybackState(Enum):
     WAITING = "AGUARDANDO"

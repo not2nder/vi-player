@@ -1,32 +1,61 @@
+from lupa import LuaRuntime
+
 from util.pretty import *
 from core.theme import get_theme
 
+lua = LuaRuntime()
+
+with open("lua/lualine.lua", "r", encoding="utf-8") as file:
+    LUALINE = lua.execute(file.read())
+
+LEFT_SECTIONS = [
+    "lualine_a",
+    "lualine_b",
+    "lualine_c"
+]
+
+RIGHT_SECTIONS = [
+    "lualine_x",
+    "lualine_y",
+    "lualine_z"
+]
+
+def render_sections(names, app):
+    result = []
+
+    for name in names:
+        section = LUALINE["sections"][name]
+        result.extend(
+            get_section_components(section, app)
+        )
+
+    return result
+
+def get_section_components(section, app):
+    components = []
+
+    for _, table in section.items():
+        components.append(render_component(table, app))
+
+    return components
+
+def render_component(component, app):
+    name = component["name"]
+
+    value = WIDGETS[name](app)
+    fmt = component["fmt"]
+
+    if fmt:
+        value = fmt(value)
+
+    return value
+
 def draw(screen, app):
     statusline = app.config.statusline
-    separator = statusline.get("separator", "-")
-
-    WIDGETS = {
-        "mode": build_mode,
-        "song": build_song,
-        "album": build_album,
-        "artist": build_artist,
-        "state": build_state,
-        "theme": build_theme,
-        "position": build_position,
-        "percent": build_percent,
-    }
-    
-    left = [
-        WIDGETS[item](app)
-        for item in statusline.get("left", [])
-        if item in WIDGETS
-    ]
- 
-    right = [
-        WIDGETS[item](app)
-        for item in statusline.get("right", [])
-        if item in WIDGETS
-    ]
+    separator = "|"
+   
+    left = render_sections(LEFT_SECTIONS, app)
+    right = render_sections(RIGHT_SECTIONS, app)
 
     line = build_statusline(left, right, separator, screen.width)
 
@@ -88,3 +117,15 @@ def build_album(app):
 def build_artist(app):
     artist = app.mpv.get_current_song().artist if app.mpv.playing_song else ""
     return artist
+
+WIDGETS = {
+    "mode": build_mode,
+    "song": build_song,
+    "album": build_album,
+    "artist": build_artist,
+    "state": build_state,
+    "theme": build_theme,
+    "position": build_position,
+    "percent": build_percent,
+}
+ 

@@ -5,6 +5,7 @@ from core.song import Song
 class Playlist:
     def __init__(self):
         self.songs = []
+        self.register= []
 
     def __len__(self):
         return len(self.songs)
@@ -20,6 +21,26 @@ class Playlist:
 
     def add(self, song: Song):
         self.songs.append(song)
+
+    def cut(self, index):
+        if index < 0 or index >= len(self.songs):
+            return
+
+        deleted = self.songs.pop(index)
+        self.register.append(deleted)
+
+    def copy(self, index, count = 1):
+        if index < 0 or index >= len(self.songs):
+            return
+
+        self.register.append(self.songs[index])
+
+    def paste(self, index):
+        for i in range(len(self.register)):
+            self.songs.insert(index+i+1, self.register[i])
+
+    def clear_register(self):
+        self.register.clear()
 
     def load_directory(self, path):
         self.clear()
