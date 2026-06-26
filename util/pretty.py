@@ -29,10 +29,23 @@ def fill(text: str, width: int) -> str:
     return text + pad
 
 def paint(text: str, style):
+    bold       = "\x1b[1m" if style.get("bold") else ""
+    underline  = "\x1b[4m" if style.get("underline") else ""
+    italic     = "\x1b[3m" if style.get("italic") else ""
+    reverse    = "\x1b[7m" if style.get("reverse") else ""
+    
     return (
-        fg(style.get("fg", ""))
+        reverse
+        +bold
+        +italic
+        +underline
+        +fg(style.get("fg", ""))
         +bg(style.get("bg", ""))
         +text
+        +"\x1b[27m"
+        +"\x1b[22m"
+        +"\x1b[23m"
+        +"\x1b[24m"
     )
 
 def padding(text: str, value: int = 1) -> str:
