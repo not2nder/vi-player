@@ -23,7 +23,7 @@ fg = "foreground"
 bg = "background"
 
 [highlight.CursorBlock]
-fg = "backround"
+fg = "background"
 bg = "blue"
 
 [highlight.CursorLine]
