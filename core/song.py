@@ -24,6 +24,7 @@ class Song:
 
     @property
     def title(self):
+        self.load_metadata()
         return self._title
 
     @property

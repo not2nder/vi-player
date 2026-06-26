@@ -193,12 +193,14 @@ def do_operator(app, start, end):
         start, end = end, start
 
     counter = 0
+    index = start
     
     operator = app.pending.operator
+    app.mpv.playlist.clear_register()
+
     match operator:
         case OperatorType.DELETE:
             index = start
-            
             while index <= end:
                 cut(app, index)
                 end -= 1
@@ -207,12 +209,12 @@ def do_operator(app, start, end):
             app.message = f"{counter} linha(s) a menos"
 
         case OperatorType.YANK:
-            index = start
-
             while index <= end:
+                index = start
                 yank(app, index)
                 end -= 1
-                counter +=1
+                counter += 1
+                start += 1
 
             app.message = f"{counter} linha(s) copiada(s)"
 

@@ -23,7 +23,6 @@ class Playlist:
         if index < 0 or index >= len(self.songs):
             return
 
-        self.register.clear()
         deleted = self.songs.pop(index)
         self.register.append(deleted)
 
@@ -31,7 +30,6 @@ class Playlist:
         if index < 0 or index >= len(self.songs):
             return
 
-        self.register.clear()
         self.register.append(self.songs[index])
 
     def paste(self, index):
