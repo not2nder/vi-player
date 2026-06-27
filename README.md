@@ -10,7 +10,8 @@ Um player de música para terminal focado em velocidade, simplicidade e controle
 </p>
 
 <div align="center">
-  <img src="docs/assets/images/default.png" alt="Vi-Player">
+  <img src="docs/assets/images/home.png" alt="Tela incial" width="49%">
+  <img src="docs/assets/images/player.png" alt="Player" width="49%">
 </div>
 
 ## Sobre
