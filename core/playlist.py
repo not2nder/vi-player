@@ -36,6 +36,8 @@ class Playlist:
         for i in range(len(self.register)):
             self.songs.insert(index+i+1, self.register[i])
 
+        return len(self.register)
+
     def clear_register(self):
         self.register.clear()
 

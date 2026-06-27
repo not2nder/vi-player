@@ -185,7 +185,8 @@ def yank(app, index):
     app.mpv.playlist.copy(index)
 
 def paste(app):
-    app.mpv.playlist.paste(app.cursor)
+    count = app.mpv.playlist.paste(app.cursor)
+    app.cursor = app.cursor + count
 
 # EXECUÇÃO
 def do_operator(app, start, end):
@@ -209,8 +210,7 @@ def do_operator(app, start, end):
 
         case OperatorType.YANK:
             while index <= end:
-                index = start
-                yank(app, index)
+                yank(app, start)
                 end -= 1
                 counter += 1
                 start += 1
