@@ -4,42 +4,16 @@ import core.config as config
 from core.enums import Mode, Key
 from util.pretty import error
 
-def play(app, args):
+def jump(app, args):
     if app.mpv.isempty:
         return
 
-    app.mpv.current = app.cursor
-    app.mpv.play()
-
-def pause(app, args):
-    if app.mpv.isempty:
-        return
-
-    app.mpv.pause()
-
-def next(app, args):
-    if app.mpv.isempty:
-        return
-
-    app.mpv.next()
-    app.cursor = app.mpv.current
-
-def prev(app, args):
-    if app.mpv.isempty:
-        return
-
-    app.mpv.prev()
-    app.cursor = app.mpv.current
-
-def skip(app, args):
-    if app.mpv.isempty:
+    if len(args) < 2:
+        app.message = "Uso: :jump <Índice>"
         return
 
     app.mpv.skip(int(args[1]))
     app.cursor = app.mpv.current
-
-def quit(app, args):
-    app.exit()
 
 def open_dir(app, args):
     if len(args) < 2:
@@ -66,6 +40,14 @@ def add_song(app, args):
 
     app.mpv.playlist.add(Song(args[1]))
     app.message = "Música adicionada!"
+
+def clear_playlist(app, args):
+    if app.mpv.isempty:
+        app.message = "Sem músicas para remover"
+        return 
+
+    app.mpv.playlist.clear()
+    app.message = "Playlist esvaziada com sucesso"
 
 def command_set(app, args):
     if len(args) < 2:
@@ -161,38 +143,19 @@ def luatheme(app, args):
         case _:
             app.message = f"LuaTheme: Opção inválida '{args[1]}'"
 
+def exit_player(app, args):
+    app.exit()
+
 COMMANDS = {
-    ":p": play,
-    ":pp": pause,
-    ":n": next,
-    ":pv": prev,
-    ":sk": skip,
+    ":jump": jump,
     ":e": open_dir,
-    ":set": command_set,
     ":add": add_dir,
-    ":addsong": add_song,
+    ":clear": clear_playlist,
+    ":set": command_set,
     ":colorscheme": set_colorscheme,
     ":lt": luatheme,
-    ":q": quit
+    ":q": exit_player
 }
-
-#with open("lua/autopairs.lua", "r") as f:
-#    autopairs = lua.execute(f.read())
-#    api = ViPlayerAPI(app)
-#    lua.globals()["viplayer"] = api
-
-#def plugin_handler(app, key):
-#    ctx = {
-#        "mode": app.mode.name,
-#        "text": app.commandline.text,
-#        "cursor": app.commandline.cursor
-#    }
-
-#    handled = autopairs.on_key(ctx, key)
-#    app.commandline.text = ctx["text"]
-#    app.commandline.cursor = ctx["cursor"]
-
-#    return handled
 
 def handle(app, key):
     if key == Key.ENTER:
