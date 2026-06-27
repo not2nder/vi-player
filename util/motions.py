@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from core.enums import Mode, Key 
+from core.enums import Mode, Key, PlaybackState
 
 from enum import Enum, auto
 
@@ -162,13 +162,19 @@ def play(app):
     app.mpv.current = app.cursor
     app.mpv.play()
 
-def seek_forward(app, motion):
+def pause(app):
+    if app.mpv.isempty:
+        return
+
+    app.mpv.pause()
+
+def seek_forward(app):
     app.mpv.jump(10)
 
-def seek_back(app, motion):
+def seek_back(app):
     app.mpv.jump(-10)
 
-def seek_home(app, motion):
+def seek_home(app):
     app.mpv.seek_start()
 
 def enter_command(app):
@@ -189,9 +195,39 @@ def yank(app, index):
     app.mpv.playlist.copy(index)
 
 def paste(app):
-    app.mpv.playlist.paste(app.cursor)
+    count = app.mpv.playlist.paste(app.cursor)
+    app.cursor = app.cursor + count 
 
-def exit_player(app, motion):
+def volume_up(app):
+   app.mpv.volumeup()
+
+def volume_down(app):
+    app.mpv.volumedown()
+
+def mute(app):
+    app.mpv.mute()
+
+def next_song(app):
+    if app.mpv.isempty:
+        return
+
+    if app.mpv.state == PlaybackState.WAITING:
+        return
+
+    app.mpv.next()
+    app.cursor = app.mpv.current
+
+def prev_song(app):
+    if app.mpv.isempty:
+        return
+
+    if app.mpv.state == PlaybackState.WAITING:
+        return
+    
+    app.mpv.prev()
+    app.cursor = app.mpv.current
+
+def exit_player(app):
     app.exit()
 
 def do_operator(app, start, end):
@@ -215,11 +251,10 @@ def do_operator(app, start, end):
         
         case OperatorType.YANK:
             while i <= end:
-                i = start
-                yank(app, i)
+                yank(app, start)
                 end -= 1
                 counter += 1
-                start +=1
+                start += 1
 
             app.message = f"{counter} linha(s) copiadas"
 
@@ -315,6 +350,10 @@ ACTIONS = {
     "l": seek_forward,
     "h": seek_back,
     "0": seek_home,
+    " ": pause,
+    "n": next_song,
+    "N": prev_song,
+    "m": mute,
     ":": enter_command
 }
 
@@ -329,6 +368,14 @@ def handle_key(app, key):
         app.input.clear_display()
         return
 
+    if key == Key.UP:
+        volume_up(app)
+        return
+
+    if key == Key.DOWN:
+        volume_down(app)
+        return
+    
     if not isinstance(key, str):
         return
 
