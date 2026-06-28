@@ -4,16 +4,16 @@ from core.enums import Mode, Key
 from enum import Enum, auto
 
 class CommandType(Enum):
-    MOTION = auto()
-    OPERATOR = auto()
-    ACTION = auto()
-    INVALID = auto()
+    MOTION     = auto()
+    OPERATOR   = auto()
+    ACTION     = auto()
+    INVALID    = auto()
     INCOMPLETE = auto()
 
 class OperatorType(Enum):
     DELETE = auto()
-    YANK = auto()
-    NONE = auto()
+    YANK   = auto()
+    NONE   = auto()
 
 @dataclass(slots=True)
 class PendingOperator:
@@ -164,6 +164,15 @@ def seek_back(app):
 def seek_home(app):
     app.mpv.seek_start()
 
+def volume_up(app):
+    app.mpv.volumeup()
+
+def volume_down(app):
+    app.mpv.volumedown()
+
+def mute(app):
+    app.mpv.mute()
+
 def enter_command(app):
     app.mode = Mode.COMMAND
     app.command.text = ":"
@@ -302,6 +311,14 @@ def handle_key(app, key):
         app.input.clear_display()
         return
 
+    if key == Key.UP:
+        volume_up(app)
+        return
+
+    if key == Key.DOWN:
+        volume_down(app)
+        return
+
     if not isinstance(key, str): 
         return
 
@@ -330,6 +347,8 @@ ACTIONS = {
     "l": seek_forward,
     "h": seek_back,
     "0": seek_home,
+    "m": mute,
+
     ":": enter_command,
     "q": exit_player,
     "p": paste,

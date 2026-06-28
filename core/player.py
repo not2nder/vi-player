@@ -14,8 +14,9 @@ class Player:
         self.playing_song: Song = None
         
         self.state = PlaybackState.WAITING
-        
+
         self.player = mpv.MPV(video=False)
+        self.default_volume = self.player.volume
 
     @property
     def count(self):
@@ -38,6 +39,21 @@ class Player:
         self.playing_song = self.playlist[self.current]
         self.player.play(str(self.playing_song.path))
         self.state = PlaybackState.PLAYING
+
+    def volumeup(self):
+        self.default_volume = max(0, self.player.volume+5)
+        self.player.volume = self.default_volume
+
+    def volumedown(self):
+        self.default_volume = max(0, self.player.volume -5)
+        self.player.volume = self.default_volume
+
+    def mute(self):
+        if self.player.volume == 0:
+            self.player.volume = self.default_volume
+            return
+
+        self.player.volume = 0;
 
     def pause(self):
         if self.state == PlaybackState.WAITING:
