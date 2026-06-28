@@ -155,6 +155,12 @@ def play(app):
     app.mpv.current = app.cursor
     app.mpv.play()
 
+def pause(app):
+    if app.mpv.isempty:
+        return
+
+    app.mpv.pause()
+
 def seek_forward(app):
     app.mpv.jump(10)
 
@@ -348,6 +354,7 @@ ACTIONS = {
     "h": seek_back,
     "0": seek_home,
     "m": mute,
+    " ": pause,
 
     ":": enter_command,
     "q": exit_player,

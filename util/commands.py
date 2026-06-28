@@ -20,19 +20,6 @@ def warning(text):
         theme.style("Warning")
     )
 
-def play(app, args):
-    if app.mpv.isempty:
-        return
-
-    app.mpv.current = app.cursor
-    app.mpv.play()
-
-def pause(app, args):
-    if app.mpv.isempty:
-        return
-
-    app.mpv.pause()
-
 def next(app, args):
     if app.mpv.isempty:
         return
@@ -102,8 +89,6 @@ def set_colorscheme(app, args):
         app.message = warning(e)
 
 COMMANDS = {
-    ":p": play,
-    ":pp": pause,
     ":n": next,
     ":pv": prev,
     ":sk": skip,
