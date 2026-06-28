@@ -16,7 +16,8 @@ class Player:
         self.state = PlaybackState.WAITING
 
         self.player = mpv.MPV(video=False)
-        self.default_volume = self.player.volume
+        self.default_volume = 50
+        self.player.volume = self.default_volume
 
     @property
     def count(self):
