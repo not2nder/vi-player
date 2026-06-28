@@ -87,10 +87,16 @@ class Player:
         if not self.state == PlaybackState.PLAYING:
             return 
 
+        if self.player.time_pos is None:
+            return
+
         self.player.seek(seconds, reference="relative")
 
     def seek_start(self):
         if not self.state == PlaybackState.PLAYING:
+            return
+
+        if self.player.time_pos is None:
             return
 
         self.player.seek(0, reference="absolute")
