@@ -1,9 +1,10 @@
 import signal
 
 from vi_player.core.player import Player
-import vi_player.util.motions as motions
-import vi_player.util.commands as commands
-from vi_player.util.motions import InputBuffer, PendingOperator
+
+from vi_player.normal.dispatch import handle_key as normal_handler
+from vi_player.normal.dispatch import InputBuffer, PendingOperator
+from vi_player.command.dispatch import handle_key as command_handler
 
 from vi_player.util.screen import Screen
 from vi_player.util import ui
@@ -13,7 +14,7 @@ from vi_player.ui import statusline, commandline, homescreen, playlist
 from vi_player.util.keyboard import getch, enter_raw_mode, restore_terminal
 
 from vi_player.core.config import load_config, get_config
-from vi_player.core.theme import Theme, set_theme
+from vi_player.core.theme import set_theme
 
 from vi_player.core.enums import Mode
 
@@ -103,9 +104,9 @@ class App:
     def handle_key(self, key):
         match self.mode:
             case Mode.NORMAL:
-                motions.handle_key(self, key)
+                normal_handler(self, key)
             case Mode.COMMAND:
-                commands.handle(self, key)
+                command_handler(self, key)
 
         self.dirty = True
 

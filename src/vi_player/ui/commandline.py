@@ -1,7 +1,6 @@
 from vi_player.util.pretty import *
 from vi_player.core.theme import get_theme
 from vi_player.core.enums import Mode
-from vi_player.util import lexer
 
 def draw(screen, command, motion, message, mode):
     theme = get_theme()

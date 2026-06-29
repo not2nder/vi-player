@@ -1,6 +1,9 @@
-from dataclasses import dataclass
-from vi_player.core.enums import Mode, Key, PlaybackState 
+from vi_player.core.enums import Mode, Key, OperatorType, PlaybackState 
+from vi_player.normal.motions import *
+from vi_player.normal.actions import *
+from vi_player.normal.ops import *
 
+from dataclasses import dataclass
 from enum import Enum, auto
 
 class CommandType(Enum):
@@ -9,11 +12,6 @@ class CommandType(Enum):
     ACTION     = auto()
     INVALID    = auto()
     INCOMPLETE = auto()
-
-class OperatorType(Enum):
-    DELETE = auto()
-    YANK   = auto()
-    NONE   = auto()
 
 @dataclass(slots=True)
 class PendingOperator:
@@ -58,6 +56,11 @@ class InputBuffer:
 
     def clear_display(self):
         self.display = ""
+
+OPERATORS = {
+    "d": OperatorType.DELETE,
+    "y": OperatorType.YANK
+}
 
 def parse(value, pending=False):
     if not value:
@@ -111,119 +114,44 @@ def parse(value, pending=False):
 
     return Command(CommandType.INVALID, key)
 
-# MOVIMENTOS
-def down(app, motion):
-    if app.mpv.isempty:
+def isprefix(value):
+    if not value:
+        return False
+
+    if value.isdigit():
+        return True
+
+    return any(key.startswith(value) for key in MOTIONS)
+
+def nv_motion(app, motion):
+    func = MOTIONS.get(motion.action)
+    if not func:
         return
 
-    return min(app.mpv.count, app.cursor+motion.count)
-
-def up(app, motion):
-    if app.mpv.isempty:
-        return
-    
-    return max(0, app.cursor-motion.count)
-
-def current(app, motion):
-    if app.mpv.isempty:
+    target = func(app, motion)
+    if target is None:
+        app.input.clear()
+        app.input.clear_display()
         return
 
-    return app.cursor + motion.count -1
+    if app.pending.operator != OperatorType.NONE:
+        motion.count *= app.pending.count
+        target = func(app, motion)
 
-def start(app, motion):
-    if app.mpv.isempty:
-        return
-    
-    return motion.count-1
+        start = app.cursor
+        end   = target
 
-def end(app, motion):
-    if app.mpv.isempty:
-        return
-    if motion.count > 1:
-        return motion.count-1
-
-    return app.mpv.count-1
-
-def percent(app, motion):
-    if app.mpv.isempty:
-        return
-    pct = min(motion.count,99)/100
-    return int(app.mpv.count * pct)
-
-# ACTIONS
-def play(app):
-    app.mpv.current = app.cursor
-    app.mpv.play()
-
-def pause(app):
-    if app.mpv.isempty:
+        do_operator(app, start, end)
+        
+        if app.cursor > end:
+            app.cursor = min(end, app.mpv.count-1)
+        else:
+            app.cursor = min(start, app.mpv.count-1)
         return
 
-    app.mpv.pause()
+    app.cursor = max(0, min(target, app.mpv.count-1))
+    app.input.clear_display()
 
-def seek_forward(app):
-    app.mpv.jump(10)
-
-def seek_back(app):
-    app.mpv.jump(-10)
-
-def seek_home(app):
-    app.mpv.seek_start()
-
-def volume_up(app):
-    app.mpv.volumeup()
-
-def volume_down(app):
-    app.mpv.volumedown()
-
-def mute(app):
-    app.mpv.mute()
-
-def next_song(app):
-    if app.mpv.isempty:
-        return
-
-    if app.mpv.state == PlaybackState.WAITING:
-        return
-
-    app.mpv.next()
-    app.cursor = app.mpv.current
-
-def prev_song(app):
-    if app.mpv.isempty:
-        return
-
-    if app.mpv.state == PlaybackState.WAITING:
-        return
-    
-    app.mpv.prev()
-    app.cursor = app.mpv.current
-
-def enter_command(app):
-    app.mode = Mode.COMMAND
-    app.command.text = ":"
-    app.message = ""
-
-def exit_player(app):
-    app.exit()
-
-def cut(app, index):
-    if app.mpv.isempty:
-        return 
-
-    app.mpv.playlist.cut(index)
-
-def yank(app, index):
-    if app.mpv.isempty:
-        return
-
-    app.mpv.playlist.copy(index)
-
-def paste(app):
-    count = app.mpv.playlist.paste(app.cursor)
-    app.cursor = app.cursor + count
-
-# EXECUÇÃO
 def do_operator(app, start, end):
     if start > end:
         start, end = end, start
@@ -326,23 +254,13 @@ def nv_dispatch(app, command):
             app.input.clear_display()
             app.pending.clear()
 
+def key_dispatch(app, key):
+    if key in KEY_ACTIONS:
+        KEY_ACTIONS[key](app)
+
 def handle_key(app, key):   
-    if key == Key.ENTER:
-        play(app)
-        return
-
-    if key == Key.ESC:
-        app.pending.clear()
-        app.input.clear()
-        app.input.clear_display()
-        return
-
-    if key == Key.UP:
-        volume_up(app)
-        return
-
-    if key == Key.DOWN:
-        volume_down(app)
+    if isinstance(key, Key):
+        key_dispatch(app, key)
         return
 
     if not isinstance(key, str): 
@@ -353,44 +271,4 @@ def handle_key(app, key):
         return
 
     nv_dispatch(app, command)
-
-# MAPPING
-MOTIONS = {
-    "j": down,
-    "k": up,
-    "gg": start,
-    "G": end,
-    "%": percent,
-    "_": current
-}
-
-OPERATORS = {
-    "d": OperatorType.DELETE,
-    "y": OperatorType.YANK
-}
-
-ACTIONS = {
-    "l": seek_forward,
-    "h": seek_back,
-    "0": seek_home,
-    "m": mute,
-    " ": pause,
-    "n": next_song,
-    "N": prev_song,
-
-
-    ":": enter_command,
-    "q": exit_player,
-
-    "p": paste,
-}
-
-def isprefix(value):
-    if not value:
-        return False
-
-    if value.isdigit():
-        return True
-
-    return any(key.startswith(value) for key in MOTIONS)
 

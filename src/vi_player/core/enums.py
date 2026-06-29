@@ -20,3 +20,7 @@ class PlaybackState(Enum):
     PLAYING = "TOCANDO"
     PAUSE   = "PAUSA"
 
+class OperatorType(Enum):
+    DELETE = auto()
+    YANK   = auto()
+    NONE   = auto()

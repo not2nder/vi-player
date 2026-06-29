@@ -6,7 +6,6 @@ env/
 
 build/
 dist/
-*.egg-info/
 .eggs/
 pip-wheel-metadata/
 
