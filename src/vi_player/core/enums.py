@@ -2,7 +2,7 @@ from enum import Enum, auto
 
 class Mode(Enum):
     NORMAL  = "NORMAL"
-    COMMAND = "COMANDO"
+    COMMAND = "COMMAND"
 
 class Key(Enum):
     UP = auto()
@@ -16,9 +16,9 @@ class Key(Enum):
     ESC_SEQ = auto()
 
 class PlaybackState(Enum):
-    WAITING = "AGUARDANDO"
-    PLAYING = "TOCANDO"
-    PAUSE   = "PAUSA"
+    WAITING = "WAITING"
+    PLAYING = "PLAYING"
+    PAUSE   = "PAUSE"
 
 class OperatorType(Enum):
     DELETE = auto()

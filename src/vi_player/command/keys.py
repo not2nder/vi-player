@@ -47,7 +47,7 @@ def do_cmd(app):
         command(app, args)
         app.buffer_add(app.command.value())
     else:
-        app.message = f"Não é um comando do player: {cmd.strip(':')}"
+        app.message = f"Invalid command: {cmd.strip(':')}"
 
     app.command.clear()
     app.mode = Mode.NORMAL

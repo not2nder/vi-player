@@ -4,30 +4,43 @@ from vi_player.ui import ascii as art
 
 def draw(screen, app):
     theme = get_theme()
-    
-    logo = art.logo.splitlines()
+    title = ["VI-PLAYER v0.0.1", "","A Vim-like music player for the terminal"]
 
-    descricao = [
-        "Um player de músicas inspirado no Vim",
-        "https://github.com/not2nder"
-    ]
     commands = [
-        (f"digite  :help<Enter>", "para ajuda"),
-        (f"digite  :e<Enter>", "abrir playlist"),
-        (f"digite  :q<Enter>", "para sair"),
+        (f":o <directory>", "Open a playlist"),
+        (f":q", "Quit"),
+    ]
+
+    navigation = [
+        ("j / k", "Move cursor"),
+        ("gg / G", "First / Last song"),
+        ("h / l", "Seek backward / forward"),
+    ]
+
+    message = [
+        "No playlist loaded.",
+        "Open a directory with ':o <directory>'"
     ]
 
     WIDTH = 40
 
-    total_lines = len(logo)+len(descricao)+len(commands)
+    total_lines = (len(title)
+        +len(commands)
+        +len(navigation)
+        +len(message)
+        +4
+    )
 
     start_y = (screen.height-total_lines)//2
-    start_y = build_text(screen, logo, start_y, WIDTH)
-    start_y = build_hr(screen, start_y, WIDTH)
-    start_y = build_text(screen, descricao, start_y, WIDTH)
+
+    start_y = build_text(screen, title, start_y, WIDTH)
     start_y = build_hr(screen, start_y, WIDTH)
     start_y = build_table(screen, commands, start_y, WIDTH)
     start_y = build_hr(screen, start_y, WIDTH)
+    start_y = build_table(screen, navigation, start_y, WIDTH)
+    start_y = build_hr(screen, start_y, WIDTH)
+    start_y = build_text(screen, message, start_y, WIDTH)
+
 
 def build_text(screen, lines, start, max_width):
     theme = get_theme()
@@ -58,14 +71,14 @@ def build_table(screen, lines, start, max_width):
     
     return start
 
-def build_hr(screen, start, max_width):
+def build_hr(screen, start, max_width, char="─"):
     theme = get_theme()
     
-    hr = "─"*max_width 
+    hr = char*max_width 
     screen.draw(
         start,
         paint(center(hr, width=screen.width),
-            theme.style("Muted")
+            theme.style("Normal")
         )
     )
     return start+1

@@ -169,7 +169,7 @@ def do_operator(app, start, end):
                 end -= 1
                 counter += 1
 
-            app.message = f"{counter} linha(s) a menos"
+            app.message = f"{counter} fewer line(s)"
 
         case OperatorType.YANK:
             while index <= end:
@@ -178,7 +178,7 @@ def do_operator(app, start, end):
                 counter += 1
                 start += 1
 
-            app.message = f"{counter} linha(s) copiada(s)"
+            app.message = f"{counter} lins(s) yanked"
 
     app.pending.clear()
     app.input.clear()

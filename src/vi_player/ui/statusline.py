@@ -68,7 +68,7 @@ def build_theme(app):
 
 def build_position(app):
     if app.mpv.isempty:
-        return "Vazio"
+        return "Empty"
 
     return f"{app.cursor+1}/{app.mpv.count}"
 
@@ -79,9 +79,9 @@ def build_percent(app):
         percent = (app.cursor / (app.mpv.count - 1)) * 100
 
     if percent > 99:
-        text = "Fim"
+        text = "Start"
     elif percent < 1:
-        text = "Início"
+        text = "End"
     else:
         text = f"{percent:.0f}%"
 

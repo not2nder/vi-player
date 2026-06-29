@@ -20,7 +20,7 @@ def get_alias(name):
 
 def set_option(app, option, action, value):
     if option not in OPTIONS:
-        app.message = f"opção inválida: {option}"
+        app.message = f"Invalid option: {option}"
         return
 
     if action == "toggle":

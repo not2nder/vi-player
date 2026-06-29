@@ -37,18 +37,3 @@ def draw_cursor(command, theme):
         + paint(after, theme.style("Normal"))
     )
 
-#def highlight(text: str) -> str:
-#    TOKEN_STYLES = {
-#        "PATH": lambda x: underline(x),
-#        "DIGIT": lambda x: bold(x)
-#    }
-#
-#    res = ""
-#
-#    for token in lexer.tokenize(text):
-#        if token.token_type in TOKEN_STYLES:
-#            res += TOKEN_STYLES[token.token_type](token.text)
-#        else:
-#            res += token.text
-#   return res
-

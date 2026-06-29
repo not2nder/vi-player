@@ -90,7 +90,7 @@ def set_theme(name):
     except FileNotFoundError:
         if CURRENT_THEME is None:
             CURRENT_THEME = Theme.builtin()
-        raise Exception(f"Esquema de cores '{name}' não encontrado")
+        raise Exception(f"colorscheme '{name}' was not found.")
 
 def get_theme():
     return CURRENT_THEME

@@ -16,39 +16,32 @@ def exit_player(app, args):
 
 def open_dir(app, args):
     if len(args) < 2:
-        app.message = "Nenhum nome de diretório"
+        app.message = "No directory specified."
         return
     
     app.mpv.playlist.load_directory(args[1])
-    app.message = f"Mostrando músicas de: {args[1]}"
+    app.message = f"Showing songs from: {args[1]}"
     app.cursor = 0
 
 def add_dir(app, args):
     if len(args) < 2:
-        app.message = "Nenhum nome de diretório"
+        app.message = "No directory specified."
         return
 
     count = app.mpv.playlist.add_dir(args[1])
 
     if count:
-        app.message = f'{count} Música(s) adicionada(s)'
+        app.message = f'{count} song(s) loaded.'
     else:
-        app.message = 'Diretório vazio ou inexistente'
-
-def add_song(app, args):
-    if len(args) < 2:
-        return
-
-    app.mpv.playlist.add(Song(args[1]))
-    app.message = "Música adicionada!"
+        app.message = 'Empty or invalid directory.'
 
 def clear_playlist(app, args):
     if app.mpv.isempty:
-        app.message = "Sem músicas para remover"
+        app.message = "No songs to remove."
         return
 
     app.mpv.playlist.clear()
-    app.message = "Playlist esvaziada"
+    app.message = "Playlist cleared."
 
 def set_rnu(app, args):
     app.config.set_relativenumber()
@@ -58,7 +51,7 @@ def disable_rnu(app, args):
 
 def set_colorscheme(app, args):
     if len(args) < 2:
-        app.message = f"tema: '{get_theme().meta['name']}' de {get_theme().meta['author']}"
+        app.message = get_theme().meta['name']
         return
 
     try:
@@ -68,7 +61,7 @@ def set_colorscheme(app, args):
 
 def set_cmd(app, args):
     if len(args) < 2:
-        app.message = "Uso: :set <op>"
+        app.message = ":set <option>"
         return
 
     cmd_set(app, args)
