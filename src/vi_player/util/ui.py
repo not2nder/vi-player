@@ -1,5 +1,5 @@
-from util.pretty import *
-from core.theme import get_theme 
+from vi_player.util.pretty import *
+from vi_player.core.theme import get_theme 
 
 def initscreen(screen: object):
     sys.stdout.write("\x1b[?1049h")

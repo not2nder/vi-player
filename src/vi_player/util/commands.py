@@ -1,8 +1,8 @@
 import shlex
-from core.theme import set_theme, get_theme
-import core.config as config
-from core.enums import Mode, Key
-from util.pretty import paint 
+from vi_player.core.theme import set_theme, get_theme
+import vi_player.core.config as config
+from vi_player.core.enums import Mode, Key
+from vi_player.util.pretty import paint 
 
 def error(text):
     theme = get_theme()

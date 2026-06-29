@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from core.enums import Mode, Key, PlaybackState 
+from vi_player.core.enums import Mode, Key, PlaybackState 
 
 from enum import Enum, auto
 

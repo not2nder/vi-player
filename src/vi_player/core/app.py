@@ -1,21 +1,21 @@
 import signal
 
-from core.player import Player
-import util.motions as motions
-import util.commands as commands
-from util.motions import InputBuffer, PendingOperator
+from vi_player.core.player import Player
+import vi_player.util.motions as motions
+import vi_player.util.commands as commands
+from vi_player.util.motions import InputBuffer, PendingOperator
 
-from util.screen import Screen
-from util import ui
+from vi_player.util.screen import Screen
+from vi_player.util import ui
 
-from ui import statusline, commandline, homescreen, playlist
+from vi_player.ui import statusline, commandline, homescreen, playlist
 
-from util.keyboard import getch, enter_raw_mode, restore_terminal
+from vi_player.util.keyboard import getch, enter_raw_mode, restore_terminal
 
-from core.config import load_config, get_config
-from core.theme import Theme, set_theme
+from vi_player.core.config import load_config, get_config
+from vi_player.core.theme import Theme, set_theme
 
-from core.enums import Mode
+from vi_player.core.enums import Mode
 
 class TextInput:
     def __init__(self):

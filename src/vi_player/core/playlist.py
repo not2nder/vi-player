@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from core.song import Song
+from vi_player.core.song import Song
 
 class Playlist:
     def __init__(self):

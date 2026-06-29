@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from core.song import Song
-from core.playlist import Playlist
-from core.enums import PlaybackState
+from vi_player.core.song import Song
+from vi_player.core.playlist import Playlist
+from vi_player.core.enums import PlaybackState
 
 import mpv
 

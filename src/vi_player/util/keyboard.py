@@ -1,5 +1,5 @@
 import os, sys, tty, termios, select
-from core.enums import Key
+from vi_player.core.enums import Key
 
 ANSI_CODES = {
     b'\x7f': Key.DEL,

@@ -1,5 +1,5 @@
-from util.pretty import *
-from core.theme import get_theme
+from vi_player.util.pretty import *
+from vi_player.core.theme import get_theme
 
 def draw(screen, app):
     statusline = app.config.statusline

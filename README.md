@@ -34,20 +34,14 @@ O Vi-Player é um reprodutor de música para terminal desenvolvido em Python que
 - Sistema de comandos
 - Sistema de temas
 
-## Dependências
+## Instalação
 
-### Obrigatórias
+### Requisitos
+
+Antes de clonar o repositório, tenha certeza que possui as dependências instaladas:
 
 - Python 3.11+
 - MPV
-
-### Bibliotecas Python
-
-```bash
-pip install python-mpv mutagen wcwidth
-```
-
-## Instalação
 
 ### Clonando o repositório
 
@@ -56,13 +50,54 @@ git clone https://github.com/not2nder/vi-player.git
 cd vi-player
 ```
 
-## Primeiros Passos
+### Criando um ambiente virtual
 
-Inicie o player informando um diretório contendo arquivos de áudio:
+Crie um ambiente virtual para isolar as dependências do projeto.
 
 ```bash
-python main.py ~/Musicas
+python -m venv .venv
 ```
+
+Depois, ative o ambiente.
+
+```bash
+source .venv/bin/activate
+```
+
+Com o ambiente ativado, execute:
+
+```bash
+pip install -e .
+```
+
+(A instalação precisa ser realizada apenas uma vez.)
+
+### Executando
+
+Após a instalação, basta iniciar o player com o comando `viplay`.
+
+Para abrir em um diretório específico:
+
+```bash
+viplay ~/Music/Minha_playlist
+```
+
+Também é possível iniciar o pacote diretamente pelo python:
+```bash
+python -m vi_player
+```
+
+Sempre que abrir um novo terminal, ative novamente o ambiente virtual antes de executar o player:
+
+```bash
+source .venv/bin/activate
+viplay
+```
+
+[!NOTE]
+Essa forma de instalação é destinada ao desenvolvimento do projeto. Futuramente, o player poderá ser instalado diretamente por gerenciadores de pacotes e outras ferramentas, eliminando a necessidade de criar um ambiente virtual para utilizá-lo.
+
+## Primeiros passos
 
 Atualmente o Vi-Player suporta arquivos locais no formato `mp3`.
 
