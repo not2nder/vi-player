@@ -1,4 +1,5 @@
 from vi_player.core.theme import get_theme, set_theme
+from vi_player.command.option import cmd_set 
 
 def jump_to(app, args):
     if app.mpv.isempty:
@@ -41,6 +42,14 @@ def add_song(app, args):
     app.mpv.playlist.add(Song(args[1]))
     app.message = "Música adicionada!"
 
+def clear_playlist(app, args):
+    if app.mpv.isempty:
+        app.message = "Sem músicas para remover"
+        return
+
+    app.mpv.playlist.clear()
+    app.message = "Playlist esvaziada"
+
 def set_rnu(app, args):
     app.config.set_relativenumber()
 
@@ -57,14 +66,22 @@ def set_colorscheme(app, args):
     except Exception as e:
         app.message = e
 
-COMMANDS = {
+def set_cmd(app, args):
+    if len(args) < 2:
+        app.message = "Uso: :set <op>"
+        return
+
+    cmd_set(app, args)
+
+EX_COMMANDS = {
     ":jump": jump_to,
+
     ":o": open_dir,
     ":add": add_dir,
-    ":rnu": set_rnu,
-    ":relativenumber": set_rnu,
-    ":nornu": disable_rnu,
-    ":norelativenumber": disable_rnu,
+    ":clear": clear_playlist, 
+
+    ":set": set_cmd,
+
     ":colorscheme": set_colorscheme,
     ":q": exit_player,
 }

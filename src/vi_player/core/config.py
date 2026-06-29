@@ -11,17 +11,18 @@ class Config:
         
         self.player = data.get("player", {})
         self.player["relativenumber"] = self.player.get("relativenumber", True)
+        self.player["number"] = self.player.get("number", True)
 
         self.statusline = data.get("statusline", {})
 
     def set_theme(self, name):
         self.general["theme"] = name
 
-    def set_relativenumber(self, value = None):
-        if value is None:
-            self.player["relativenumber"] = not self.player["relativenumber"]
-        else:
-            self.player["relativenumber"] = value
+    def set(self, name, value):
+        self.player[name] = value
+
+    def get(self, value):
+        return self.player[value]
 
     def to_dict(self):
         return {

@@ -1,7 +1,7 @@
 import shlex
 
 from vi_player.core.enums import Key, Mode
-from vi_player.command.ex import COMMANDS
+from vi_player.command.ex import EX_COMMANDS
 
 def return_to_normal(app):
     app.command.clear()
@@ -41,7 +41,7 @@ def do_cmd(app):
     args = shlex.split(app.command.value())
     cmd = args[0]
 
-    command = COMMANDS.get(cmd)
+    command = EX_COMMANDS.get(cmd)
     
     if command:
         command(app, args)
