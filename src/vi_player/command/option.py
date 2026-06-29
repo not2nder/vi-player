@@ -1,8 +1,13 @@
 import shlex
 
 OPTIONS = {
-    "relativenumber",
-    "number"
+    "relativenumber": {
+        "default": True,
+    },
+
+    "number": {
+        "default": True,
+    }
 }
 
 ALIASES = {
@@ -40,6 +45,10 @@ def parse_value(name):
 
     if name.endswith("!"):
         return get_alias(name[:-1]), "toggle", None
+
+    if name.endswith("&"):
+        name = get_alias(name[:-1])
+        return name, "set", OPTIONS[name]["default"]
 
     return get_alias(name), "set", True
 
