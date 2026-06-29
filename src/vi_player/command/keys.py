@@ -1,4 +1,7 @@
+import shlex
+
 from vi_player.core.enums import Key, Mode
+from vi_player.command.ex import COMMANDS
 
 def return_to_normal(app):
     app.command.clear()
@@ -34,6 +37,21 @@ def cmd_left(app):
 def cmd_right(app):
     app.command.right()
 
+def do_cmd(app):
+    args = shlex.split(app.command.value())
+    cmd = args[0]
+
+    command = COMMANDS.get(cmd)
+    
+    if command:
+        command(app, args)
+        app.buffer_add(app.command.value())
+    else:
+        app.message = f"Não é um comando do player: {cmd.strip(':')}"
+
+    app.command.clear()
+    app.mode = Mode.NORMAL
+
 KEY_EVENTS = {
     Key.ESC: return_to_normal,
 
@@ -43,4 +61,6 @@ KEY_EVENTS = {
     Key.DEL: cmd_backspace,
     Key.LEFT: cmd_left,
     Key.RIGHT: cmd_right,
+    
+    Key.ENTER: do_cmd,
 }
