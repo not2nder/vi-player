@@ -1,166 +1,373 @@
-# Movimentos e Operadores
+# Motions, Operators and Actions
 
-O vi-player utiliza um modelo de interação inspirado em editores modais como o Vim.
+Vi-Player uses a modal command system inspired by Vim.
 
-A ideia central é simples: comandos são compostos por movimento, operação e contexto. Existem 3 camadas que compõem os comandos:
+Instead of assigning a dedicated key to every action, commands are built by combining a small set of reusable components. This makes the interface compact, expressive and easy to learn.
 
-- Movimentos: Navegação pela playlist
-- Operadores: Ações sobre itens
-- Ações: Comandos imediatos do player
+There are three categories of commands:
 
-Essa separação permite que a navegação e manipulação da playlist seja feita diretamente pelo teclado, com comandos curtos, consistentes e previsíveis.
+| Category      | Purpose                              |
+| ------------- | ------------------------------------ |
+| **Motions**   | Move the cursor through the playlist |
+| **Operators** | Perform actions on playlist items    |
+| **Actions**   | Execute immediate player commands    |
 
-# Movimentos
+Most commands are composed by combining these building blocks.
 
-Movimentos são responsáveis exclusivamente pela navegação na playlist. Eles não executam nenhuma ação por si só, apenas alteram a posição do cursor.
-
-Os movimentos básicos são:
-
-| Tecla | Ação               |
-| ----- | ------------------ |
-| `j`   | Próximo item       |
-| `k`   | Item anterior      |
-| `gg`  | Início da playlist |
-| `G`   | Final da playlist  |
-
-## Contadores
-
-Alguns movimentos aceitam um contador numérico antes da tecla. Eles modificam a posição final do cursor. Por exemplo:
+For example:
 
 ```text
-2j
+[count] operator [count] motion
 ```
 
-Move o cursor 3 itens abaixo.
+or simply:
 
 ```text
-2k
+motion
 ```
 
-<div align="center">
-    <img src="assets/gifs/j and k.gif">
-</div>
+or
 
-Move o cursor 3 itens acima.
+```text
+action
+```
+
+---
+
+# Motions
+
+A motion is responsible only for moving the cursor.
+
+Motions **never modify the playlist** or affect playback. Their only purpose is to define a destination.
+
+## Available motions
+
+| Motion | Description                           |
+| ------ | ------------------------------------- |
+| `j`    | Move to the next item                 |
+| `k`    | Move to the previous item             |
+| `gg`   | Jump to the beginning of the playlist |
+| `G`    | Jump to the end of the playlist       |
+
+---
+
+## Motion counts
+
+Most motions accept a numeric count placed before the motion. If no count is provided, the default value is always 1.
+
+So:
+
+```text
+j
+```
+
+Is equivalent to:
+
+```text
+1j
+```
+
+It moves the cursor down one item.
+
+---
+
+```text
+3j
+```
+
+Moves the cursor down three items.
+
+---
+
+```text
+5k
+```
+
+Moves the cursor up five items.
+
+---
 
 ```text
 10gg
 ```
 
-Move o cursor para o item de número 10. Equivalente ao comando `10G`.
+Moves the cursor directly to item **10**.
 
-O padrão sempre é **contador + movimento**. Quando o contador não é especificado, ele assume o valor de 1. Então:
-
-```text
-j = 1j
-k = 1k
-```
-
-# Operadores
-
-Operadores são comandos que atuam sobre itens da playlist. Diferente dos movimentos, operadores executam ações reais sobre itens da playlist. Atualmente, existem apenas 2 operadores, que são:
-
-| Tecla | Ação                     |
-| ----- | ------------------------ |
-| `d`   | Deletar item da playlist |
-| `y`   | Copiar item da playlist  |
-
-Os operadores atuam sobre um alvo, definido por um movimento, então o padrão de uso é: **operador + movimento**
-
-Por exemplo:
+It's also equivalent to:
 
 ```text
-dj = delete + avance 1 item
+10G
 ```
 
-Resultado: 2 linhas deletadas
+---
+
+## Summary
+
+| Command | Result                            |
+| ------- | --------------------------------- |
+| `j`     | Move down one item                |
+| `k`     | Move up one item                  |
+| `5j`    | Move down five items              |
+| `3k`    | Move up three items               |
+| `gg`    | Jump to the beginning of the list |
+| `G`     | Jump to the end of the list       |
+| `10gg`  | Jump to item number 10            |
+| `10G`   | Jump to item number 10            |
+
+---
+
+# Operators
+
+Operators perform actions on playlist items. Unlike motions, operators modify the playlist.
+
+An operator always acts on a **target**, and that target is normally defined by a motion.
+
+The general pattern is:
 
 ```text
-dk = delete + volte 1 item
+operator + motion
 ```
 
-Resultado: 2 dlinhas deletadas
+Currently Vi-Player provides two operators:
 
-Como os operadores funcionam em conjunto com movimentos, eles também interpretam os contadores de movimento.
+| Operator | Description           |
+| -------- | --------------------- |
+| `d`      | Delete playlist items |
+| `y`      | Copy playlist items   |
+
+---
+
+## Operator + Motion
+
+The simplest form combines an operator with a motion.
+
+Example:
 
 ```text
-d2j = delete + avance 2 itens
+dj
 ```
 
-Resultado: 3 linhas deletadas
+It's equivalent to:
 
-Existe um caso específico em que o operador não recebe um motion como argumento, que é quando o usuário digita o mesmo operador duas vezes.
+```text
+delete + move one item down
+```
+
+Result:
+Current item and next item removed.
+
+---
+
+```text
+dk
+```
+
+Deletes current item and previous item
+
+---
+
+```text
+dG
+```
+
+Deletes everything from the current position to the end of the playlist.
+
+---
+
+```text
+d2j
+```
+
+It's equivalent to:
+
+```text
+delete + move two items
+```
+
+Result:
+Current item plus the next two items are deleted.
+
+---
+
+## Operator counts
+
+Operators also accept counts.
+
+Just like motions, if omitted, the default count is 1.
+
+Example:
+
+```text
+2dd
+```
+
+Deletes two consecutive items.
+
+---
+
+```text
+4yy
+```
+
+Yanks (copies) four consecutive items.
+
+---
+
+## Operator repetition
+
+A special case occurs when an operator receives itself as its argument.
 
 ```text
 dd
 ```
 
-Quando um operador recebe ele mesmo como argumento, ele opera sobre o item indicado, então:
+Deletes only the current item.
+
+Likewise:
 
 ```text
-dd = delete o item atual
+yy
 ```
 
-O mesmo se aplica ao operador `y`:
+Copies only the current item.
+
+---
+
+## Combining operator and motion counts
+
+Both operators and motions can receive independent counts.
+
+General syntax:
 
 ```text
-yy = copie o item atual
+[count] operator [count] motion
 ```
 
-## Contadores de Operadores
-
-Assim como os movimentos utilizam contadores para modificar a posição, os operadores também podem receber contadores para modificar operações, por exemplo:
+Examples:
 
 ```text
-2dd = delete 2 itens
+d3j
 ```
 
-Combinando isso com os movimentos apresentados anteriormante, temos um padrão:
+Delete the current item and the next three.
+
+---
 
 ```text
-[contador] operador [contador] movimento
+3dd
 ```
 
-Esse sistema permite o uso de diversas combinações entre comandos. Por exemplo:
+Delete three consecutive items.
+
+---
 
 ```text
-d2j = delete + 2 linhas na frente
+2yy
 ```
 
-Resultado: 3 linhas deletadas
+Copy two consecutive items.
+
+---
 
 ```text
-2dj = delete + mover 2 itens
+2d3j
 ```
 
-Resultado: 3 linhas deletadas.
+Combines both operator and motion counts.
 
-A principal diferença nessa abordagem é que: o contador do operador expande o alcance da operação.
+The motion defines the range, while the operator count expands the operation according to the command grammar.
 
-O comando `d2j` primeiro calcula o movimento `2j` e remove o intervalo entre o cursor e o destino. Já o `2dj` mantém o movimento `j` e aplica o alcance da operação duas vezes.
+---
 
-<div align="center">
-    <img src="assets/gifs/cut.gif">
-</div>
+## Understanding the difference
 
-Em ambos os casos o operador é executado como uma única ação sobre o resultado final, não como vários comandos separados. Embora tenham resultados parecidos, os dois comandos sõ interpretados de forma distinta.
+Although these commands may produce similar results, they are interpreted differently.
 
-Ambos os operadores `y` e `d` armazenam o conteúdo selecionado no registrador da playlist, que funciona como uma área de transferência. Para colar o conteúdo, basta apertar `p` que representa a ação de colar.
+### Motion count
 
-<div align="center">
-    <img src="assets/gifs/copypaste.gif">
-</div>
+```text
+d2j
+```
 
-# Ações
+Meaning:
 
-Existe uma outra classe de comandos na aplicação que não realiza operações ou navega na playlist, mas executa ações imediatas sobre o player.
+```text
+delete + move two items
+```
 
-| Ação | Descrição                     |
-| ---- | ----------------------------- |
-| `h`  | Voltar 5 segundos na música   |
-| `l`  | Avançar 5 segundos na música  |
-| `:`  | Entrar em modo de comando     |
-| `q`  | Sair do player                |
-| `p`  | Colar conteúdo do registrador |
+The motion is evaluated first, producing a range. The operator is then applied to that range.
 
-Essas ações não recebem contadores nem operadores.
+---
+
+### Operator count
+
+```text
+2dj
+```
+
+Means:
+
+```text
+operator count = 2
+
+motion = j
+```
+
+The operator count extends the operation while keeping the original motion.
+
+Both commands may affect the same number of items depending on the situation, but they are parsed differently.
+
+---
+
+# Registers
+
+Both `d` and `y` store their result in the playlist register.
+
+The register behaves like a clipboard.
+
+Current behavior:
+
+* `d` deletes and copies.
+* `y` copies without deleting.
+* `p` pastes the register contents.
+* Each new operation replaces the previous register contents.
+
+Example:
+
+```text
+yy
+```
+
+Copy current item.
+
+```text
+p
+```
+
+Paste copied items.
+
+---
+
+# Actions
+
+Actions execute immediately.
+
+Unlike motions and operators, they:
+
+* do not accept counts;
+* cannot be combined with motions;
+* cannot be combined with operators.
+
+Current actions:
+
+| Action | Description                                 |
+| ------ | ------------------------------------------- |
+| `h`    | Seek backward 5 seconds of the playing song |
+| `l`    | Seek forward 5 seconds of the playing song  |
+| `m`    | Mute player                                 |
+| `n`    | Skips to the next song                      |
+| `N`    | Go back to the previous song                |
+| `:`    | Enter Command mode                          |
+| `q`    | Quit Vi-Player                              |
+| `p`    | Paste register contents                     |
+
