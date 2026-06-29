@@ -20,20 +20,6 @@ def warning(text):
         theme.style("Warning")
     )
 
-def next(app, args):
-    if app.mpv.isempty:
-        return
-
-    app.mpv.next()
-    app.cursor = app.mpv.current
-
-def prev(app, args):
-    if app.mpv.isempty:
-        return
-
-    app.mpv.prev()
-    app.cursor = app.mpv.current
-
 def skip(app, args):
     if app.mpv.isempty:
         return
@@ -89,8 +75,6 @@ def set_colorscheme(app, args):
         app.message = warning(e)
 
 COMMANDS = {
-    ":n": next,
-    ":pv": prev,
     ":sk": skip,
     ":e": open_dir,
     ":add": add_dir,

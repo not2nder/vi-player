@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from core.enums import Mode, Key 
+from core.enums import Mode, Key, PlaybackState 
 
 from enum import Enum, auto
 
@@ -179,6 +179,26 @@ def volume_down(app):
 def mute(app):
     app.mpv.mute()
 
+def next_song(app):
+    if app.mpv.isempty:
+        return
+
+    if app.mpv.state == PlaybackState.WAITING:
+        return
+
+    app.mpv.next()
+    app.cursor = app.mpv.current
+
+def prev_song(app):
+    if app.mpv.isempty:
+        return
+
+    if app.mpv.state == PlaybackState.WAITING:
+        return
+    
+    app.mpv.prev()
+    app.cursor = app.mpv.current
+
 def enter_command(app):
     app.mode = Mode.COMMAND
     app.command.text = ":"
@@ -355,9 +375,13 @@ ACTIONS = {
     "0": seek_home,
     "m": mute,
     " ": pause,
+    "n": next_song,
+    "N": prev_song,
+
 
     ":": enter_command,
     "q": exit_player,
+
     "p": paste,
 }
 
