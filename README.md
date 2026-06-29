@@ -1,7 +1,7 @@
-<h1 align="center">Vi-Player</h1>
+# <div align="center">Vi-Player</div>
 
 <p align="center">
-Um player de música para terminal focado em velocidade, simplicidade e controle por teclado. Inspirado pela filosofia do Vim e construído para fluxos de trabalho orientados ao terminal.
+A terminal music player focused on speed, simplicity and keyboard-driven navigation. Inspired by the modal philosophy of Vim and designed for terminal-oriented workflows.
 </p>
 
 <p align="center">
@@ -9,85 +9,101 @@ Um player de música para terminal focado em velocidade, simplicidade e controle
   <img src="https://img.shields.io/badge/License-GPLv3-green" />
 </p>
 
-<div align="center">
-  <img src="docs/assets/images/home.png" alt="Tela incial" width="49%">
-  <img src="docs/assets/images/player.png" alt="Player" width="49%">
-</div>
+---
 
-## Sobre
+## About
 
-O Vi-Player é um reprodutor de música para terminal desenvolvido em Python que aplica conceitos de navegação modal inspirado por ferramentas como o Vim, Ranger, Cmus e Ncmpcpp.
+Vi-Player is a terminal music player written in Python that brings modal navigation concepts to music playback.
 
-## Objetivos
+Inspired by tools such as Vim, Ranger, Cmus and Ncmpcpp, Vi-Player focuses on keyboard-driven interaction while maintaining its own workflow and interface tailored for media playback.
 
-- Navegação rápida
-- Interface modal
-- Personalização
-- Código aberto
-- Compatibilidade multiplataforma
+Rather than relying on graphical controls or mouse interaction, the player encourages a fast and predictable workflow built around motions, commands and keyboard navigation.
 
-## Funcionalidades
+---
 
-- Reprodução de músicas locais
-- Navegação modal
-- Movimentação inspirada no Vim
-- Sistema de comandos
-- Sistema de temas
+## Goals
 
-## Instalação
+* Fast navigation
+* Modal interface
+* Keyboard-driven workflow
+* Customizable
+* Open source
+* Cross-platform
 
-### Requisitos
+---
 
-Antes de clonar o repositório, tenha certeza que possui as dependências instaladas:
+## Features
 
-- Python 3.11+
-- MPV
+* Local music playback
+* Modal navigation
+* Vim-inspired motions
+* Runtime command system
+* Theme support
+* Configurable interface
 
-### Clonando o repositório
+---
+
+## Installation
+
+### Requirements
+
+Before installing Vi-Player, make sure the following dependencies are available on your system:
+
+* Python 3.11+
+* MPV
+
+### Clone the repository
 
 ```bash
 git clone https://github.com/not2nder/vi-player.git
 cd vi-player
 ```
 
-### Criando um ambiente virtual
+### Create a virtual environment
 
-Crie um ambiente virtual para isolar as dependências do projeto.
+Create a virtual environment to isolate the project's dependencies.
 
 ```bash
 python -m venv .venv
 ```
 
-Depois, ative o ambiente.
+Activate the environment:
 
 ```bash
 source .venv/bin/activate
 ```
 
-Com o ambiente ativado, execute:
+Install the project:
 
 ```bash
 pip install -e .
 ```
 
-(A instalação precisa ser realizada apenas uma vez.)
+> The installation only needs to be performed once.
 
-### Executando
+---
 
-Após a instalação, basta iniciar o player com o comando `viplay`.
+## Running
 
-Para abrir em um diretório específico:
+Start Vi-Player:
 
 ```bash
-viplay ~/Music/Minha_playlist
+viplay
 ```
 
-Também é possível iniciar o pacote diretamente pelo python:
+Open a specific music directory:
+
+```bash
+viplay ~/Music/MyPlaylist
+```
+
+Alternatively, the package can also be executed directly with Python:
+
 ```bash
 python -m vi_player
 ```
 
-Sempre que abrir um novo terminal, ative novamente o ambiente virtual antes de executar o player:
+Whenever you open a new terminal, activate the virtual environment before running the player again:
 
 ```bash
 source .venv/bin/activate
@@ -95,47 +111,72 @@ viplay
 ```
 
 > [!NOTE]
-> Essa forma de instalação é destinada ao desenvolvimento do projeto. Futuramente, o player poderá ser instalado diretamente por gerenciadores de pacotes e outras ferramentas, eliminando a necessidade de criar um ambiente virtual para utilizá-lo.
+> The current installation method is intended for development. Future releases may be distributed through package managers or other installation methods, removing the need for a virtual environment.
 
-## Primeiros passos
+---
 
-Atualmente o Vi-Player suporta arquivos locais no formato `mp3`.
+## Getting Started
 
-### Modos
+Currently, Vi-Player supports local music libraries containing **MP3** files.
 
-O player utiliza dois modos principais:
+### Modes
 
-| Modo        | Descrição                              |
-| ----------- | -------------------------------------- |
-| **NORMAL**  | Navegação pela interface               |
-| **COMANDO** | Execução de comandos iniciados por `:` |
+Vi-Player currently provides two primary modes:
 
-### Navegação Básica
+| Mode        | Description                                |
+| ----------- | ------------------------------------------ |
+| **NORMAL**  | Playlist navigation and modal interactions |
+| **COMMAND** | Execute commands starting with `:`         |
 
-| Tecla | Ação                  |
-| ----- | --------------------- |
-| `j`   | Próximo item          |
-| `k`   | Item anterior         |
-| `gg`  | Início da lista       |
-| `G`   | Final da lista        |
-| `:`   | Abrir modo de comando |
+---
 
-Informações mais detalhadas sobre navegação estão disponíveis em [docs/motions](/docs/motions.md).
+### Basic Motions
 
-### Reprodução
+| Motion | Description                           |
+| ------ | ------------------------------------- |
+| `j`    | Move to the next item                 |
+| `k`    | Move to the previous item             |
+| `gg`   | Jump to the beginning of the playlist |
+| `G`    | Jump to the end of the playlist       |
+| `:`    | Enter Command mode                    |
 
-| Comando | Ação                          |
-| ------- | ----------------------------- |
-| `:p`    | Reproduzir música selecionada |
-| `:pp`   | Pausar / Continuar            |
-| `:n`    | Próxima música                |
-| `:pv`   | Música anterior               |
-| `:q`    | Sair do player                |
+Detailed information about motions, operators and counts is available in:
 
-## Contribuindo
+* [`docs/motions.md`](docs/motions.md)
 
-O projeto ainda está em desenvolvimento e mudanças estruturais são frequentes. Sugestões, correções e novas ideias são sempre bem-vindas.
+---
 
-## Licença
+### Basic Commands
 
-Distribuído sob a licença GPL-3.0.
+| Command  | Description                                        |
+| -------- | -------------------------------------------------- |
+| `:o`     | Open a directory                                   |
+| `:add`   | Add songs from a directory to the current playlist |
+| `:clear` | Clear current playlist content                     |
+| `:q`     | Quit Vi-Player                                     |
+
+---
+
+## Documentation
+
+Additional documentation can be found in the `docs/` directory.
+
+* Installation
+* Configuration
+* Motions and Operators
+* Colorschemes
+
+---
+
+## Contributing
+
+Vi-Player is under active development, and its architecture continues to evolve.
+
+Bug reports, suggestions, discussions and pull requests are always welcome.
+
+---
+
+## License
+
+This project is distributed under the **GNU General Public License v3.0 (GPL-3.0)**.
+
