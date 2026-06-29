@@ -10,12 +10,7 @@ Os arquivos de configuração são armazenados em:
 ~/.config/vi-player/
 ```
 
-Antes de iniciar o player, mova o conteúdo da pasta `assets` para a pasta de configurações
-
-```bash
-mkdir -p ~/.config/v-player
-cp -r assets/* ~/.config/vi-player
-```
+Ao iniciar o player, ele automaticamente move os arquivos de configuração padrão para a pasta `/.config/vi-player`.
 
 Estrutura esperada:
 
@@ -23,7 +18,7 @@ Estrutura esperada:
 ~/.config/vi-player/
 ├── config.json
 └── themes/
-    ├── default.toml
+    ├── catppuccin-mocha.toml
     └── ...
 ```
 
