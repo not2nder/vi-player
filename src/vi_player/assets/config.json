@@ -4,7 +4,7 @@
   },
   "player": {
     "relativenumber": true,
-    "usearrows": false
+    "number": true,
   },
   "statusline": {
     "left": ["mode", "state"],

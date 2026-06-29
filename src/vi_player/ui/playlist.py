@@ -7,21 +7,26 @@ def draw(screen, app):
 
     visible_lines = screen.height - 3
 
-    scroll = max(0, app.cursor-visible_lines+2)
+    scroll     = max(0, app.cursor-visible_lines+2)
     max_scroll = max(0, app.mpv.count-visible_lines)
-    scroll = min(scroll, max_scroll)
+    scroll     = min(scroll, max_scroll)
     
     visible_songs = app.mpv.playlist[scroll:scroll+visible_lines]
     
     for i, song in enumerate(visible_songs):
-        index = i+scroll
+        index    = i + scroll
+        selected = index == app.cursor
 
-        number = build_index(
-            index,
-            app.cursor,
-            get_digits(app.mpv.count),
-            app.config.player["relativenumber"]
-        )
+        if app.config.get("number"):
+            number = build_index(
+                index,
+                app.cursor,
+                get_digits(app.mpv.count),
+                app.config.player["relativenumber"]
+            )
+
+        else:
+            number = ""
 
         duration = build_time(song)
         textspace = screen.width-length(number)-length(duration)
@@ -81,7 +86,7 @@ def build_line(index, title, duration, width, selected, theme):
 
     else:
         index = paint(index,theme.style("LineNr")) 
-        text = paint(text, theme.style("Normal"))
+        text  = paint(text, theme.style("Normal"))
 
     return index+text + RESET
 
