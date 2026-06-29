@@ -1,158 +1,266 @@
-# Configuração
+# Configuration
 
-O Vi-Player utiliza arquivos externos para armazenar configurações do usuário, temas e preferências da aplicação.
+Vi-Player stores user preferences outside the project directory, allowing updates without overwriting personal settings.
 
-# Diretório de Configuração
+All configuration files are automatically created the first time the player is launched.
 
-Os arquivos de configuração são armazenados em:
+---
+
+# Configuration Directory
+
+By default, Vi-Player stores its configuration in:
 
 ```text
 ~/.config/vi-player/
 ```
 
-Ao iniciar o player, ele automaticamente move os arquivos de configuração padrão para a pasta `/.config/vi-player`.
+On the first launch, the default configuration files are copied to this directory automatically.
 
-Estrutura esperada:
+The expected structure is:
 
 ```text
 ~/.config/vi-player/
 ├── config.json
 └── themes/
     ├── catppuccin-mocha.toml
-    └── ...
+    ├── dracula.toml
+    ├── everforest-dark.toml
+    ├── gruvbox.toml
+    ├── nord.toml
+    ├── nvim.toml
+    ├── rose-pine.toml
+    ├── solarized-dark.toml
+    └── tokyo-night.toml
 ```
 
-# Arquivo Principal
+---
 
-O arquivo principal de configuração é o:
+# Configuration File
+
+The main configuration file is:
 
 ```text
 config.json
 ```
 
-Exemplo:
+Example:
 
 ```json
 {
-  "general": {
-    "theme": "default"
-  },
+    "general": {
+        "theme": "nord"
+    },
 
-  "player": {
-    "relativenumbers": true
-  }
+    "player": {
+        "relativenumbers": true,
+        "number": true
+    },
+
+    "statusline": {
+        "left": ["mode", "state"],
+        "right": ["theme", "position"],
+
+        "separator": "|"
+    }
 }
 ```
 
-# Configurações Gerais
+The file is organized into independent sections, making it easy to extend as new features become available.
 
-Definidas no campo `general` do arquivo de configuração.
+---
 
-## Tema
+# General Settings
 
-Define o tema carregado durante a inicialização.
+The `general` section contains application-wide options.
+
+## Theme
+
+Defines the colorscheme loaded during startup.
 
 ```json
 {
-  "general": {
-    "theme": "default"
-  }
+    "general": {
+        "theme": "nord"
+    }
 }
 ```
 
-O tema informado deve ser um dos presentes na pasta `~/.config/vi-player/themes`, sem a extensão .toml.
+The value must match one of the files inside:
 
-Ao iniciar o player, será aplicado o esquema de cores definido no arquivo de configuração.
+```text
+~/.config/vi-player/themes/
+```
 
-<div align="center">
-    <img src="assets/images/default.png">
-    <p>Tema padrão</p>
-</div>
+without the `.toml` extension.
 
-<div align="center">
-    <img src="assets/images/everforest.png">
-    <p>everforest-dark</p>
-</div>
+For example:
 
-<div align="center">
-    <img src="assets/images/catppuccin.png">
-    <p>catppuccin-mocha</p>
-</div>
+```json
+"theme": "nord"
+```
 
-<div align="center">
-    <img src="assets/images/tokyo-night.png">
-    <p>tokyo-night</p>
-</div>
+loads `themes/nord.toml`
 
-Alguns esquemas de cores podem variar, dependendo das configurações de cor padrão do seu terminal. Para mais informações sobre o tema, leia [docs/colorschemes](/docs/colorschemes.md).
+If the requested theme cannot be found, Vi-Player automatically falls back to the default colorscheme.
 
-# Configurações do Player
+> See [`docs/colorschemes.md`](colorschemes.md) for the complete list of bundled themes and instructions for creating your own.
+
+---
+
+# Player Settings
+
+The `player` section controls playlist behavior.
 
 ## Relative Numbers
 
-Ativa ou desativa números relativos na playlist (Estilo Vim).
+Enable or disable Vim-style relative numbers.
 
 ```json
 {
-  "player": {
-    "relativenumbers": true
-  }
+    "player": {
+        "relativenumbers": true
+    }
 }
 ```
 
-Quando ativado, a linha atual representa o índice absoluto da lista, enquanto os outros índices representam a distância relativa até o índice atual.
+When enabled:
 
-<div align="center">
-    <img src="assets/gifs/relativenumber.gif">
-</div>
+* the current line displays its absolute index;
+* all other lines display the relative distance from the cursor.
 
-Isso facilita o uso de motions. Por exemplo:
+This makes motions easier to read and execute.
+
+For example:
 
 ```text
 3j
 ```
 
-Avança 3 índices baseado no índice atual.
+moves three items down.
+
+Likewise:
 
 ```text
 3k
 ```
 
-Volta 3 índices com base no índice atual.
+moves three items up.
 
-## Statusline
+---
 
-A statusline atualmente funciona como um componente individual do player, sendo possível customizar seu conteúdo. Alterando o campo `statusline` no arquivo de configuração, é possível definir o conteúdo desse componente.
+## Numbers
+
+Enable or disable indeces.
+
+# Statusline
+
+The statusline can be customized through the `statusline` section.
+
+Example:
 
 ```json
 {
-  "statusline": {
-    "left": ["mode", "state"],
-    "right": ["theme", "position"],
+    "statusline": {
+        "left": ["mode", "state"],
+        "right": ["theme", "position"],
 
-    "separator": "|"
-  }
+        "separator": "|"
+    }
 }
 ```
 
-Os campo **left** e **right** recebe uma lista de módulos a serem carregados pelo player, da esquerda e direita, respectivamente.
+The statusline is divided into two regions:
 
-| Módulo   | Descrição                                   |
-| -------- | ------------------------------------------- |
-| mode     | Modo atual do player (NORMAL/COMANDO)       |
-| state    | Estado do player (tocando/pausa/aguardando) |
-| position | Indicador da posição do cursor na lista     |
-| theme    | Esquema de cores atual                      |
-| percent  | % da playlist                               |
-| song     | Nome da música atual tocando                |
-| artist   | Nome do artista tocando                     |
-| album    | Nome do álbum da música atual               |
-|          |                                             |
+* **left**
+* **right**
 
-O campo `separator` indica o caractere usado para separar os textos da linha de status.
+Each region accepts a list of modules.
 
-```text
-NORMAL | TOCANDO | Tame Impala                 default | 2/10
+Example:
+
+```json
+{
+    "left": [
+        "mode",
+        "state",
+        "song"
+    ]
+}
 ```
 
-Conforme o projeto vai evoluindo, mais opções de customização serão adicionadas, não só da statusline, mas de todos os outros componentes individuais do player.
+Modules are rendered in the same order they appear in the list.
+
+---
+
+## Available Modules
+
+| Module     | Description         |
+| ---------- | ------------------- |
+| `mode`     | Current editor mode |
+| `state`    | Playback state      |
+| `song`     | Current song title  |
+| `artist`   | Current artist      |
+| `album`    | Current album       |
+| `theme`    | Active colorscheme  |
+| `position` | Cursor position     |
+| `percent`  | Playlist progress   |
+
+---
+
+## Separator
+
+The separator is placed between every rendered module.
+
+Example:
+
+```json
+{
+    "separator": "|"
+}
+```
+
+Produces:
+
+```text
+NORMAL | PLAYING | Song Title
+```
+
+It may be replaced with any string.
+
+Examples:
+
+```text
+•
+```
+
+```text
+>>
+```
+
+```text
+│
+```
+
+or even:
+
+```text
+—
+```
+
+---
+
+# Future Configuration
+
+The configuration system is designed to grow over time.
+
+Future versions may introduce additional sections for:
+
+* key mappings
+* plugins
+* layouts
+* command aliases
+* scripting
+* user interface customization
+
+while preserving backward compatibility with existing configuration files.
+
