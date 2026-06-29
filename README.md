@@ -94,8 +94,8 @@ source .venv/bin/activate
 viplay
 ```
 
-[!NOTE]
-Essa forma de instalação é destinada ao desenvolvimento do projeto. Futuramente, o player poderá ser instalado diretamente por gerenciadores de pacotes e outras ferramentas, eliminando a necessidade de criar um ambiente virtual para utilizá-lo.
+> [!NOTE]
+> Essa forma de instalação é destinada ao desenvolvimento do projeto. Futuramente, o player poderá ser instalado diretamente por gerenciadores de pacotes e outras ferramentas, eliminando a necessidade de criar um ambiente virtual para utilizá-lo.
 
 ## Primeiros passos
 
