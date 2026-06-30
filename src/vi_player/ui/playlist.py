@@ -29,7 +29,7 @@ def draw(screen, app):
             number = ""
 
         duration = build_time(song)
-        textspace = screen.width-length(number)-length(duration)
+        textspace = screen.width-length(number)-length(duration)-1
 
         title = build_title(song, textspace)
 
