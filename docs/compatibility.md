@@ -8,15 +8,15 @@ The project is regularly tested on multiple Linux distributions and terminal emu
 
 The table below lists the environments officially tested during development.
 
-| Operating System |    Status    | Notes                           |
-| ---------------- | :----------: | ------------------------------- |
-| Arch Linux       |   ✅ Tested   | Primary development environment |
-| Debian           |   ✅ Tested   | Clean installation              |
-| Termux (Android) |   ✅ Tested   | Mobile development environment  |
-| Ubuntu           | ⏳ Not tested | Expected to work                |
-| Fedora           | ⏳ Not tested | Expected to work                |
-| Windows          |   ⏳ Planned  | Support in progress             |
-| macOS            |   ⏳ Planned  | Not yet tested                  |
+| Operating System |    Status    | 
+| ---------------- | :----------: |
+| Arch Linux       |   ✅ Tested   |
+| Debian           |   ✅ Tested   |
+| Termux (Android) |   ✅ Tested   |
+| Ubuntu           | ⏳ Not tested |
+| Fedora           | ⏳ Not tested |
+| Windows          |   ⏳ Planned  |
+| macOS            |   ⏳ Planned  |
 
 # Terminal Emulators
 
@@ -30,7 +30,7 @@ The following terminal emulators have been tested.
 | Alacritty | ✅ Fully supported |
 | Konsole   | ✅ Fully supported |
 | WezTerm   | ✅ Fully supported |
-| WezTerm   | ✅ Fully supported |
+| Xfce Terminal | ✅ Fully supported |
 
 Support for additional terminals will be evaluated as the project evolves.
 
