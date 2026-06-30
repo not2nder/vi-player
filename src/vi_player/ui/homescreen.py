@@ -4,10 +4,15 @@ from vi_player.ui import ascii as art
 
 def draw(screen, app):
     theme = get_theme()
-    title = ["VI-PLAYER v0.0.1", "","A Vim-like music player for the terminal"]
+    title = [
+        "VI-PLAYER v0.0.1",
+        "",
+        "A Vim-like music player for the terminal",
+        "https://github.com/not2nder"
+    ]
 
     commands = [
-        (f":o <directory>", "Open a playlist"),
+        (f":o <dir>", "Open a directory"),
         (f":q", "Quit"),
     ]
 
@@ -17,17 +22,11 @@ def draw(screen, app):
         ("h / l", "Seek backward / forward"),
     ]
 
-    message = [
-        "No playlist loaded.",
-        "Open a directory with ':o <directory>'"
-    ]
-
-    WIDTH = 40
+    WIDTH = max(len(t) for t in title)
 
     total_lines = (len(title)
         +len(commands)
         +len(navigation)
-        +len(message)
         +4
     )
 
@@ -39,7 +38,6 @@ def draw(screen, app):
     start_y = build_hr(screen, start_y, WIDTH)
     start_y = build_table(screen, navigation, start_y, WIDTH)
     start_y = build_hr(screen, start_y, WIDTH)
-    start_y = build_text(screen, message, start_y, WIDTH)
 
 
 def build_text(screen, lines, start, max_width):
