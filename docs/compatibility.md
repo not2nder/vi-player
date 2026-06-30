@@ -24,10 +24,13 @@ Vi-Player communicates directly with the terminal using ANSI escape sequences.
 
 The following terminal emulators have been tested.
 
-| Terminal  |       Status      | Notes                     |
-| --------- | :---------------: | ------------------------- |
-| Kitty     | ✅ Fully supported | Primary testing terminal  |
-| Alacritty | ✅ Fully supported | Tested during development |
+| Terminal  |       Status      | 
+| --------- | :---------------: |
+| Kitty     | ✅ Fully supported | 
+| Alacritty | ✅ Fully supported |
+| Konsole   | ✅ Fully supported |
+| WezTerm   | ✅ Fully supported |
+| WezTerm   | ✅ Fully supported |
 
 Support for additional terminals will be evaluated as the project evolves.
 
