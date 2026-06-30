@@ -45,6 +45,10 @@ class Playlist:
         self.songs.append(song)
 
     def load_directory(self, path):
+        if not Path(path).expanduser().exists():
+            raise FileNotFoundError(f"Can't load playlist for '{path}': no such directory")
+            return
+
         self.clear()
         self.add_dir(path)
     

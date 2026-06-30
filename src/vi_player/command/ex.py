@@ -18,10 +18,13 @@ def open_dir(app, args):
     if len(args) < 2:
         app.message = "No directory specified."
         return
-    
-    app.mpv.playlist.load_directory(args[1])
-    app.message = f"Showing songs from: {args[1]}"
-    app.cursor = 0
+
+    try:
+        app.mpv.playlist.load_directory(args[1])
+        app.message = f"Showing songs from: {args[1]}"
+        app.cursor = 0
+    except FileNotFoundError as e:
+        app.message = e
 
 def add_dir(app, args):
     if len(args) < 2:

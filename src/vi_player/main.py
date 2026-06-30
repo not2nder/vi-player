@@ -28,7 +28,10 @@ def main():
     app = App()
 
     if args.directory:
-        app.mpv.playlist.load_directory(args.directory)
+        try: 
+            app.mpv.playlist.load_directory(args.directory)
+        except FileNotFoundError as e:
+            app.message = e
 
     app.run()
 
