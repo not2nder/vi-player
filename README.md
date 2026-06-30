@@ -1,5 +1,7 @@
 # <div align="center">Vi-Player</div>
 
+============
+
 <p align="center">
 A terminal music player focused on speed, simplicity and keyboard-driven navigation. Inspired by the modal philosophy of Vim and designed for terminal-oriented workflows.
 </p>
@@ -9,19 +11,24 @@ A terminal music player focused on speed, simplicity and keyboard-driven navigat
   <img src="https://img.shields.io/badge/License-GPLv3-green" />
 </p>
 
----
+
+<p align="center">
+    <img src="docs/assets/gifs/player.gif">
+</p>
 
 ## About
 
+============
+
 Vi-Player is a terminal music player written in Python that brings modal navigation concepts to music playback.
 
-Inspired by tools such as Vim, Ranger, Cmus and Ncmpcpp, Vi-Player focuses on keyboard-driven interaction while maintaining its own workflow and interface tailored for media playback.
+Inspired by tools such as [Vim](https://github.com/vim/vim), [Ranger](https://github.com/ranger/ranger), [Cmus](https://github.com/cmus/cmus) and [Ncmpcpp](https://github.com/ncmpcpp/ncmpcpp), Vi-Player focuses on keyboard-driven interaction while maintaining its own workflow and interface tailored for media playback.
 
 Rather than relying on graphical controls or mouse interaction, the player encourages a fast and predictable workflow built around motions, commands and keyboard navigation.
 
----
-
 ## Goals
+
+============
 
 * Fast navigation
 * Modal interface
@@ -30,9 +37,9 @@ Rather than relying on graphical controls or mouse interaction, the player encou
 * Open source
 * Cross-platform
 
----
-
 ## Features
+
+============
 
 * Local music playback
 * Modal navigation
@@ -40,8 +47,6 @@ Rather than relying on graphical controls or mouse interaction, the player encou
 * Runtime command system
 * Theme support
 * Configurable interface
-
----
 
 ## Installation
 
@@ -81,8 +86,6 @@ pip install -e .
 
 > The installation only needs to be performed once.
 
----
-
 ## Running
 
 Start Vi-Player:
@@ -112,8 +115,6 @@ viplay
 
 > [!NOTE]
 > The current installation method is intended for development. Future releases may be distributed through package managers or other installation methods, removing the need for a virtual environment.
-
----
 
 ## Getting Started
 
