@@ -1,4 +1,4 @@
-from vi_player.core.enums import Mode, Key
+from vi_player.core.enums import Mode, Key, PlaybackState
 
 def play(app):
     app.mpv.current = app.cursor
@@ -56,7 +56,7 @@ def enter_command(app):
 def clear_command(app):
     app.pending.clear()
     app.input.clear()
-    app.clear_display()
+    app.input.clear_display()
 
 def paste(app):
     count = app.mpv.playlist.paste(app.cursor)
