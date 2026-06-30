@@ -1,7 +1,5 @@
 # <div align="center">Vi-Player</div>
 
-============
-
 <p align="center">
 A terminal music player focused on speed, simplicity and keyboard-driven navigation. Inspired by the modal philosophy of Vim and designed for terminal-oriented workflows.
 </p>
@@ -18,8 +16,6 @@ A terminal music player focused on speed, simplicity and keyboard-driven navigat
 
 ## About
 
-============
-
 Vi-Player is a terminal music player written in Python that brings modal navigation concepts to music playback.
 
 Inspired by tools such as [Vim](https://github.com/vim/vim), [Ranger](https://github.com/ranger/ranger), [Cmus](https://github.com/cmus/cmus) and [Ncmpcpp](https://github.com/ncmpcpp/ncmpcpp), Vi-Player focuses on keyboard-driven interaction while maintaining its own workflow and interface tailored for media playback.
@@ -27,8 +23,6 @@ Inspired by tools such as [Vim](https://github.com/vim/vim), [Ranger](https://gi
 Rather than relying on graphical controls or mouse interaction, the player encourages a fast and predictable workflow built around motions, commands and keyboard navigation.
 
 ## Goals
-
-============
 
 * Fast navigation
 * Modal interface
@@ -38,8 +32,6 @@ Rather than relying on graphical controls or mouse interaction, the player encou
 * Cross-platform
 
 ## Features
-
-============
 
 * Local music playback
 * Modal navigation
