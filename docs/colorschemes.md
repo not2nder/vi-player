@@ -1,54 +1,99 @@
-# Esquemas de cores
+# Colorschemes
 
-O vi-player possui suporte a esquemas de cores personalizados por meio de arquivos `.toml`, permitindo personalização completa da interface do player.
+Vi-Player supports customizable colorschemes through `.toml` files, allowing the appearance of the interface to be fully customized.
 
-<div align="center">
-    <img src="assets/gifs/colorschemes.gif">
-</div>
+Each colorscheme is composed of four sections:
 
-## Organização dos temas
+* **Meta** — Theme metadata
+* **Palette** — Color definitions
+* **Highlights** — Interface styling
+* **Fillchars** — Characters used to fill empty areas of the interface
 
-Os temas são carregados a partir de:
+# Theme Directory
+
+Colorschemes are loaded from:
 
 ```text
 ~/.config/vi-player/themes/
 ```
 
-Neste repositório, já existem alguns temas disponíveis para serem usados e modificados. basta copiar o conteúdo de `.config/vi-player/themes/` deste repositório para `~/.config/vi-player/themes`.
+The repository already includes a collection of bundled themes. To install them, simply copy the contents of:
+
+```text
+src/vi_player/assets/themes/
+```
+
+into:
+
+```text
+~/.config/vi-player/themes/
+```
+
+Example:
 
 ```text
 ~/.config/vi-player/themes/
 ├── catppuccin-mocha.toml
 ├── dracula.toml
 ├── everforest-dark.toml
-└── ...
+├── gruvbox.toml
+├── nord.toml
+├── nvim.toml
+├── rose-pine.toml
+├── solarized-dark.toml
+└── tokyo-night.toml
 ```
 
-Para mudar um tema durante a execução do player, basta executar o comando:
+---
+
+# Changing the Active Theme
+
+The active colorscheme can be changed at any time while Vi-Player is running.
+
+Use the following command:
 
 ```text
-:colorscheme TEMA
+:colorscheme THEME
 ```
 
-sendo `TEMA` o nome do seu esquema de cores, sem a extensão `.toml`.
+Where `THEME` is the filename without the `.toml` extension.
 
-<div align="center">
-    <img src="assets/gifs/set colorscheme.gif">
-</div>
+Example:
 
-## Estrutura de um tema
+```text
+:colorscheme nord
+```
 
-Cada tema segue o formato `.toml`:
+loads:
+
+```text
+themes/nord.toml
+```
+
+If the requested theme cannot be found, Vi-Player automatically falls back to the default colorscheme.
+
+The default theme loaded during startup can also be configured through `config.json`. See the Configuration documentation for more information.
+
+# Theme Structure
+
+Every colorscheme follows the same TOML structure.
 
 ```toml
 [meta]
 name = "nord"
+author = "Arctic Ice Studio"
 
 [palette]
 background = "#2E3440"
 foreground = "#D8DEE9"
 accent = "#88C0D0"
+surface = "#3B4252"
+
+cyan = "#8FBCBB"
+green = "#A3BE8C"
+
 muted = "#4C566A"
+warning = "#D08770"
 
 [highlight.Normal]
 fg = "foreground"
@@ -58,8 +103,12 @@ bg = "background"
 fg = "foreground"
 bg = "surface"
 
+[highlight.CursorBlock]
+fg = "background"
+bg = "cyan"
+
 [highlight.LineNr]
-fg = "green"
+fg = "muted"
 bg = "background"
 
 [highlight.CursorLineNr]
@@ -82,132 +131,189 @@ bg = "background"
 eob = "~"
 ```
 
-### Meta
+---
 
-O campo **meta** do arquivo define os metadados do tema, como nome e autor:
+# Meta
+
+The `meta` section stores information about the theme.
 
 ```toml
 [meta]
-name = "meuTema"
-author = "not2nder"
+name = "my-theme"
+author = "John Doe"
 ```
 
-### Palette
+| Field    | Description  |
+| -------- | ------------ |
+| `name`   | Theme name   |
+| `author` | Theme author |
 
-Esse campo define as cores que o seu tema vai usar. Cada linha representa uma espécie de variável de cor, que pode ser acessada por determinados grupos.
+These values are informational only and do not affect rendering.
+
+# Palette
+
+The `palette` section defines the colors available to the theme.
+
+Each entry behaves like a named color variable that can later be referenced by highlight groups.
+
+Example:
 
 ```toml
 [palette]
-background = "#2E3440" # cor de fundo padrão
-foreground = "#D8DEE9" # cor padrão do texto
-accent = "#88C0D0" # textos destacados
-muted = "#4C566A" # textos menos importantes
+background = "#14161B"
+foreground = "#D8DAE2"
+accent = "#A0D9A9"
+surface = "#20242B"
+
+green = "#A0D9A9"
+blue = "#67BED9"
+
+muted = "#4D5056"
+warning = "#E69875"
 ```
 
-É possível definir mais do que essa quantidade de cores, dependendo de como deseja configurar cada tema.
+The palette is not limited to a fixed number of colors.
 
-### Highlights
+Additional colors may be added whenever necessary.
 
-O estilo dos componentes do player são divididos em grupos, chamados de **highlights**. Cada grupo aceita uma cor de fundo e uma cor de texto, que assume o valor da variável especificada em `[palette]`.
+For example:
 
 ```toml
-[highlight.Normal] # Cor padrão do player
+purple = "#CBA6F7"
+orange = "#FAB387"
+red = "#F38BA8"
+```
+
+Unused colors are simply ignored by the renderer.
+
+# Highlight Groups
+
+Highlight groups define the appearance of individual interface elements.
+
+Each group references colors previously declared in the palette.
+
+Every highlight group must define both:
+
+* `fg` — foreground color
+* `bg` — background color
+
+Example:
+
+```toml
+[highlight.Normal]
 fg = "foreground"
-bg = "background"
-
-[highlight.CursorLine] # Cor da linha do cursor
-fg = "foreground"
-bg = "surface"
-
-[highlight.LineNr] # Índices da playlist
-fg = "green"
-bg = "background"
-
-[highlight.CursorLineNr] # Índice da linha do cursor
-fg = "cyan"
-bg = "background"
-
-[highlight.StatusLine] # Statusline
-fg = "background"
-bg = "accent"
-
-[highlight.Muted] # Textos menos importantes, como fillchars
-fg = "muted"
-bg = "background"
-
-[highlight.Warning] # Avisos da linha de comando
-fg = "warning"
 bg = "background"
 ```
 
-Obrigatoriamente, cada grupo tem que ter um atributo **fg** e **bg** que representam a cor do texto e a cor de fundo, respectivamente.
+## Available Properties
 
-### Fillchars
+| Property | Description | Default |
+|----------|-------------|---------|
+| `fg` | Foreground color | required |
+| `bg` | Background color | required |
+| `bold` | Render text in bold | `false` |
+| `italic` | Render text in italic* | `false` |
+| `reverse` | Swap foreground and background colors | `false` |
+| `cursorblock` | Display the terminal cursor as a block while the highlight is active | `false` |
 
-São os caracteres de preenchimento do player. Atualmente só existe um fillchar, o `eob`, que é o caractere que representa linhas vazias na playlist
+Current highlight groups are:
+
+| Group          | Description                |
+| -------------- | -------------------------- |
+| `Normal`       | Default interface colors   |
+| `CursorLine`   | Selected playlist row      |
+| `LineNr`       | Playlist indexes           |
+| `CursorLineNr` | Index of the selected row  |
+| `StatusLine`   | Statusline                 |
+| `Muted`        | Secondary text             |
+| `Warning`      | Warning and error messages |
+
+Example:
+
+```toml
+[highlight.StatusLine]
+fg = "background"
+bg = "accent"
+```
+
+Changes the appearance of the statusline using the colors defined in the palette.
+
+# Fill Characters
+
+Fill characters define the symbols used to represent empty regions of the interface.
+
+Currently, Vi-Player provides one fill character:
+
+| Name  | Description                                       |
+| ----- | ------------------------------------------------- |
+| `eob` | End-of-buffer marker displayed below the playlist |
+
+Example:
 
 ```text
  1 Billie Jean
- 2 Welcome to The Jungle
+ 2 Welcome to the Jungle
  3 Forever Young
+~
 ~
 ~
 ```
 
-Para mudar ou removê-los, basta mudar o campo **eob** da tabela.
+The character can be customized:
 
 ```toml
 [fillchars]
 eob = "~"
 ```
 
-## Exemplos de temas
+or removed completely:
 
-Aqui estão os exemplos de esquemas de cores disponibilizados neste repositório:
+```toml
+[fillchars]
+eob = ""
+```
 
-<div align="center">
-    <img src="assets/images/catppuccin.png">
-    <p>catppuccin-mocha</p>
-</div>
+---
 
-<div align="center">
-    <img src="assets/images/dracula.png">
-    <p>dracula</p>
-</div>
+# Creating a Custom Theme
 
-<div align="center">
-    <img src="assets/images/everforest.png">
-    <p>everforest-dark</p>
-</div>
+The easiest way to create a new colorscheme is to duplicate one of the bundled themes.
 
-<div align="center">
-    <img src="assets/images/gruvbox.png">
-    <p>gruvbox-dark</p>
-</div>
+Example:
 
-<div align="center">
-    <img src="assets/images/nord.png">
-    <p>nord</p>
-</div>
+```text
+cp nord.toml my-theme.toml
+```
 
-<div align="center">
-    <img src="assets/images/rose-pine.png">
-    <p>rose-pine</p>
-</div>
+Then:
 
-<div align="center">
-    <img src="assets/images/solarized.png">
-    <p>solarized-dark</p>
-</div>
+1. Change the metadata.
+2. Adjust the palette.
+3. Update the highlight groups.
+4. Save the file inside `~/.config/vi-player/themes/`.
+5. Load it with:
 
-<div align="center">
-    <img src="assets/images/tokyo-night.png">
-    <p>tokyo-night</p>
-</div>
+```text
+:colorscheme my-theme
+```
 
-<div align="center">
-    <img src="assets/images/nvim.png">
-    <p>nvim</p>
-</div>
+---
 
-A coleção de temas disponível é inspirada em paletas amplamente utilizadas na comunidade de desenvolvedores.
+# Bundled Themes
+
+Vi-Player ships with a collection of colorschemes inspired by popular themes from the developer community.
+
+Current bundled themes include:
+
+* Catppuccin Mocha
+* Dracula
+* Everforest Dark
+* Gruvbox
+* Nord
+* Nvim
+* Rose Pine
+* Solarized Dark
+* Tokyo Night
+
+Screenshots and previews of each colorscheme will be available in a future version of this documentation.
+
