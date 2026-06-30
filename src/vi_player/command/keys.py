@@ -38,7 +38,13 @@ def cmd_right(app):
     app.command.right()
 
 def do_cmd(app):
-    args = shlex.split(app.command.value())
+    try:
+        args = shlex.split(app.command.value())
+    except ValueError as e:
+        app.message = e
+        return_to_normal(app)
+        return
+
     cmd = args[0]
 
     command = EX_COMMANDS.get(cmd)
