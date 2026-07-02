@@ -9,7 +9,8 @@ def draw(screen, command, motion, message, mode):
         text = draw_cursor(command, theme)
     
     elif mode == Mode.NORMAL:
-        text = justify(message, motion, width=screen.width-1)
+        freespace = screen.width - len(motion) - 1
+        text = justify(truncate(message, freespace), motion, width=screen.width-1)
     else:
         text = ""
 
