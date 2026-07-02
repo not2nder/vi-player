@@ -32,22 +32,24 @@ class Theme:
             "highlight": {
                 "Normal": {},
                 "CursorLine": {
-                   "fg": "blue",
+                   "fg": "magenta",
                 },
                 "CursorBlock": {
                     "reverse": True,
                 },
                 "LineNr": {
                     "fg": "yellow",
+                    "bold": True,
                 },
                 "CursorLineNr": {
-                    "fg": "blue",
+                    "fg": "yellow",
+                    "bold": True,
                 },
                 "StatusLine": {
-                    "reverse": True,
+                    "bg": "green",
                 },
                 "Muted": {
-                    "fg": "blue",
+                    "fg": "green",
                 }
             },
             "fillchars": {
