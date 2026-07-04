@@ -95,20 +95,19 @@ def parse(value, pending=False):
             CommandType.OPERATOR,
             Operator(count, OPERATORS[key])
         )
-
-    if key in ACTIONS:
-        return Command(
-            CommandType.ACTION,
-            Action(key)
-        )
-    
+ 
     if key in MOTIONS:
         return Command(
             CommandType.MOTION,
             Motion(count, key)
         )
-
     
+    if key in ACTIONS:
+        return Command(
+            CommandType.ACTION,
+            Action(key)
+        )
+ 
     if key == "" or isprefix(key):
         return Command(CommandType.INCOMPLETE, key)
 
