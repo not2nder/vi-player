@@ -39,17 +39,14 @@ class Theme:
                 },
                 "LineNr": {
                     "fg": "yellow",
-                    "bold": True,
                 },
                 "CursorLineNr": {
                     "fg": "yellow",
                     "bold": True,
                 },
-                "StatusLine": {
-                    "bg": "green",
-                },
+                "StatusLine": {},
                 "Muted": {
-                    "fg": "green",
+                    "fg": "cyan",
                 }
             },
             "fillchars": {

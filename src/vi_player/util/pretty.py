@@ -16,6 +16,8 @@ FG_COLORS = {
     "magenta": 35,
     "cyan": 36,
     "white": 37,
+    "gray": 90,
+    "grey": 90,
 }
 
 BG_COLORS = {
@@ -27,6 +29,8 @@ BG_COLORS = {
     "magenta": 45,
     "cyan": 46,
     "white": 47,
+    "gray": 100,
+    "grey": 100,
 }
 
 BOLD_ON = "\x1b[1m"
