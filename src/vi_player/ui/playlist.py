@@ -6,7 +6,7 @@ def draw(screen, app):
 
     visible_lines = screen.height - 3
 
-    scroll     = max(0, app.cursor-visible_lines+2)
+    scroll     = max(0, app.cursor-visible_lines+8)
     max_scroll = max(0, app.mpv.count-visible_lines)
     scroll     = min(scroll, max_scroll)
     
