@@ -39,14 +39,15 @@ def build_statusline(left: list, right: list, separator: str, width: int):
     left = [padding(t) for t in left if t]
     right = [padding(t) for t in right if t]
 
-    left_text = separator.join(left)
     right_text = separator.join(right)
+    left_text  = separator.join(left)
 
-    gap = width-length(left_text)-length(right_text)
+    gap = width - length(left_text) - length(right_text)
     gap = max(0, gap)
-    space = ' '*gap
+    space = ' ' * gap
 
     result = f"{left_text}{space}{right_text}"
+    result = truncate(result, width)
     result = paint(
         result,
         theme.style("StatusLine")
@@ -86,7 +87,7 @@ def build_percent(app):
     else:
         text = f"{percent:.0f}%"
 
-    return text.rjust(6)
+    return text.rjust(5)
 
 def build_album(app):
     album = app.mpv.get_current_song().album if app.mpv.playing_song else ""
