@@ -58,7 +58,7 @@ def build_mode(app):
     return app.mode.value
 
 def build_song(app):
-    return app.mpv.get_current_song().title if app.mpv.playing_song else "Sem Música"
+    return app.mpv.get_current_song().title if app.mpv.playing_song else ""
 
 def build_state(app):
     return app.mpv.state.value

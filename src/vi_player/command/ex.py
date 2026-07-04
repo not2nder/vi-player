@@ -34,7 +34,7 @@ def add_dir(app, args):
     count = app.mpv.playlist.add_dir(args[1])
 
     if count:
-        app.message = f'{count} song(s) loaded' if count > 1 else 'Song loaded'
+        app.message = f'{count} songs loaded' if count > 1 else 'Song loaded'
     else:
         app.message = 'Empty or invalid directory'
 
