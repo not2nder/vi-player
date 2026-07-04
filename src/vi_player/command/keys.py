@@ -48,10 +48,10 @@ def do_cmd(app):
     cmd = args[0]
 
     command = EX_COMMANDS.get(cmd)
+    app.buffer_add(app.command.value())
     
     if command:
         command(app, args)
-        app.buffer_add(app.command.value())
     else:
         app.message = f"Invalid command: {cmd.strip(':')}"
 
