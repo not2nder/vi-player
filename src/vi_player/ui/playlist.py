@@ -1,5 +1,4 @@
 from vi_player.util.pretty import *
-
 from vi_player.core.theme import get_theme
 
 def draw(screen, app):

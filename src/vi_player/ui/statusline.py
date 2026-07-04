@@ -70,10 +70,11 @@ def build_position(app):
     if app.mpv.isempty:
         return "Empty"
 
-    return f"{app.cursor+1}/{app.mpv.count}"
+    digits = len(str(app.mpv.count))
+    return f"{str(app.cursor + 1).rjust(digits)}/{app.mpv.count}"
 
 def build_percent(app):
-    if app.mpv.count <=1:
+    if app.mpv.count <= 1:
         percent = 0
     else:
         percent = (app.cursor / (app.mpv.count - 1)) * 100

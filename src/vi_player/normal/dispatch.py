@@ -1,10 +1,10 @@
+from dataclasses import dataclass
+from enum import Enum, auto
+
 from vi_player.core.enums import Mode, Key, OperatorType, PlaybackState 
 from vi_player.normal.motions import *
 from vi_player.normal.actions import *
 from vi_player.normal.ops import *
-
-from dataclasses import dataclass
-from enum import Enum, auto
 
 class CommandType(Enum):
     MOTION     = auto()

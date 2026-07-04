@@ -1,4 +1,9 @@
-import os, sys, tty, termios, select
+import os
+import sys
+import tty
+import termios
+import select
+
 from vi_player.core.enums import Key
 
 ANSI_CODES = {
