@@ -81,9 +81,9 @@ def build_percent(app):
         percent = (app.cursor / (app.mpv.count - 1)) * 100
 
     if percent > 99:
-        text = "Start"
-    elif percent < 1:
         text = "End"
+    elif percent < 1:
+        text = "Start"
     else:
         text = f"{percent:.0f}%"
 
