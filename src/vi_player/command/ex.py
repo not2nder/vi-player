@@ -24,7 +24,7 @@ def open_dir(app, args):
         app.message = f"Showing songs from: {args[1]}"
         app.cursor = 0
     except FileNotFoundError as e:
-        app.message = e
+        app.message = str(e)
 
 def add_dir(app, args):
     if len(args) < 2:
@@ -60,7 +60,7 @@ def set_colorscheme(app, args):
     try:
         set_theme(args[1])
     except Exception as e:
-        app.message = e
+        app.message = str(e)
 
 def set_cmd(app, args):
     if len(args) < 2:

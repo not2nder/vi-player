@@ -41,7 +41,7 @@ def do_cmd(app):
     try:
         args = shlex.split(app.command.value())
     except ValueError as e:
-        app.message = e
+        app.message = str(e)
         return_to_normal(app)
         return
 
