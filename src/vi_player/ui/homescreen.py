@@ -1,6 +1,5 @@
 from vi_player.util.pretty import *
 from vi_player.core.theme import get_theme
-from vi_player.ui import ascii as art
 
 def draw(screen, app):
     theme = get_theme()
