@@ -8,7 +8,7 @@ def draw(screen, app):
         "VI-PLAYER v0.0.1",
         "",
         "A Vim-like music player for the terminal",
-        "https://github.com/not2nder"
+        "https://github.com/not2nder",
     ]
 
     commands = [
@@ -27,7 +27,7 @@ def draw(screen, app):
     total_lines = (len(title)
         +len(commands)
         +len(navigation)
-        +4
+        +2
     )
 
     start_y = (screen.height-total_lines)//2
@@ -37,8 +37,6 @@ def draw(screen, app):
     start_y = build_table(screen, commands, start_y, WIDTH)
     start_y = build_hr(screen, start_y, WIDTH)
     start_y = build_table(screen, navigation, start_y, WIDTH)
-    start_y = build_hr(screen, start_y, WIDTH)
-
 
 def build_text(screen, lines, start, max_width):
     theme = get_theme()
@@ -59,6 +57,7 @@ def build_table(screen, lines, start, max_width):
 
     for cmd, desc in lines:
         row = cmd + desc.rjust(max_width-length(cmd))
+
         text = paint(
             center(row, width=screen.width),
             theme.style("Normal")
@@ -76,7 +75,7 @@ def build_hr(screen, start, max_width, char="─"):
     screen.draw(
         start,
         paint(center(hr, width=screen.width),
-            theme.style("Normal")
+            theme.style("Muted")
         )
     )
     return start+1
