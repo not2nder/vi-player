@@ -16,7 +16,7 @@ def exit_player(app, args):
 
 def open_dir(app, args):
     if len(args) < 2:
-        app.message = "No directory specified."
+        app.message = "No directory specified"
         return
 
     try:
@@ -28,23 +28,23 @@ def open_dir(app, args):
 
 def add_dir(app, args):
     if len(args) < 2:
-        app.message = "No directory specified."
+        app.message = "No directory specified"
         return
 
     count = app.mpv.playlist.add_dir(args[1])
 
     if count:
-        app.message = f'{count} song(s) loaded.'
+        app.message = f'{count} song(s) loaded' if count > 1 else 'Song loaded'
     else:
-        app.message = 'Empty or invalid directory.'
+        app.message = 'Empty or invalid directory'
 
 def clear_playlist(app, args):
     if app.mpv.isempty:
-        app.message = "No songs to remove."
+        app.message = "No songs to remove"
         return
 
     app.mpv.playlist.clear()
-    app.message = "Playlist cleared."
+    app.message = "Playlist cleared"
 
 def set_rnu(app, args):
     app.config.set_relativenumber()
