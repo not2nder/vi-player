@@ -1,5 +1,6 @@
 from vi_player.util.pretty import *
 from vi_player.core.theme import get_theme
+from vi_player import __version__
 
 def render(screen, app):
     theme = get_theme()
@@ -8,7 +9,7 @@ def render(screen, app):
     muted_style  = theme.style("Muted")
 
     title = [
-        "VI-PLAYER v0.0.1",
+        f"VI-PLAYER {__version__}",
         "",
         "A Vim-like music player for the terminal",
         "https://github.com/not2nder",
