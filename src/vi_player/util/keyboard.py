@@ -32,8 +32,40 @@ def read_key(fd):
     data = os.read(fd, 1)
 
     if data == b'\x1b':
-        while select.select([fd],[],[], TIMEOUT)[0]:
-            data += os.read(fd,1)
+        return read_esc_seq(fd, data)
+
+    return read_utf8(fd, data)
+
+def read_esc_seq(fd, data):
+    while select.select([fd],[],[],TIMEOUT)[0]:
+        data += os.read(fd,1)
+    return data
+
+def utf8_expected_len(first_byte):
+    b = first_byte[0]
+
+    if b >> 7 == 0:
+        return 1
+
+    if b >> 5 == 0b110:
+        return 2
+
+    if b >> 4 == 0b1110:
+        return 3
+
+    if b >> 3 == 0b11110:
+        return 4
+
+    return 1
+
+def read_utf8(fd, first):
+    expected = utf8_expected_len(first)
+
+    data = first
+
+    while len(data) < expected:
+        data += os.read(fd, expected - len(data))
+
     return data
 
 def getch(fd):
