@@ -37,7 +37,8 @@ def cmd_set(app, args):
     text = " ".join(args)
     expr = text[5:]
 
-    parse_option(app, expr)
+    for opt in shlex.split(expr):
+        parse_option(app, opt)
 
 def parse_value(name):
     if name.startswith("no"):
