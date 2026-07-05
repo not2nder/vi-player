@@ -101,6 +101,16 @@ class Player:
             return
 
         self.player.seek(0, reference="absolute")
+    
+    def seek_end(self):
+        if not self.state == PlaybackState.PLAYING:
+            return
+
+        if self.player.time_pos is None:
+            return
+
+        end = self.player.duration
+        self.player.seek(end - 5, reference="absolute", precision="exact")
 
     def get_current_song(self):
         if self.playing_song is None:

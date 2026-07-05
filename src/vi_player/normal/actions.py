@@ -19,6 +19,9 @@ def seek_back(app):
 def seek_home(app):
     app.mpv.seek_start()
 
+def seek_end(app):
+    app.mpv.seek_end()
+
 def volume_up(app):
     app.mpv.volumeup()
 
@@ -68,7 +71,8 @@ def exit_player(app):
 ACTIONS = {
     "l": seek_forward,
     "h": seek_back,
-    "0": seek_home,
+    "H": seek_home,
+    "L": seek_end,
     "m": mute,
     " ": pause,
     "n": next_song,
