@@ -2,14 +2,17 @@ import signal
 
 from vi_player.core.player import Player
 
-from vi_player.normal.dispatch import handle_key as normal_handler
 from vi_player.normal.dispatch import InputBuffer, PendingOperator
+from vi_player.normal.dispatch import handle_key as normal_handler
 from vi_player.command.dispatch import handle_key as command_handler
 
 from vi_player.util.screen import Screen
 from vi_player.util import ui
 
-from vi_player.ui import statusline, commandline, homescreen, playlist
+from vi_player.ui.statusline.draw import render as draw_statusline
+from vi_player.ui.playlist.draw import render as draw_playlist
+from vi_player.ui.commandline.draw import render as draw_commandline
+from vi_player.ui.home.draw import render as draw_home
 
 from vi_player.util.keyboard import getch, enter_raw_mode, restore_terminal
 
@@ -112,14 +115,14 @@ class App:
 
     def draw(self):
         ui.draw_background(self.screen)
-        statusline.draw(self.screen, self)
+        draw_statusline(self.screen, self)
         
         if self.mpv.isempty:
-            homescreen.draw(self.screen, self)
+            draw_home(self.screen, self)
         else:
-            playlist.draw(self.screen, self)
+            draw_playlist(self.screen, self)
 
-        commandline.draw(
+        draw_commandline(
             self.screen,
             self.command,
             self.input.display,

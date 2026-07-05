@@ -2,7 +2,7 @@ from vi_player.util.pretty import *
 from vi_player.core.theme import get_theme
 from vi_player.core.enums import Mode
 
-def draw(screen, command, motion, message, mode):
+def render(screen, command, motion, message, mode):
     theme = get_theme()
 
     if mode == Mode.COMMAND:
