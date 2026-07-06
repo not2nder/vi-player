@@ -19,7 +19,7 @@ def render(screen, app):
         if item in WIDGETS
     )
 
-    style = theme.style("Statusline")
+    style = theme.style("StatusLine")
 
     line = build_statusline(left, right, separator, screen.width, style)
 
