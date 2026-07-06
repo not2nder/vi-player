@@ -3,6 +3,8 @@ from pathlib import Path
 from vi_player.core.song import Song
 
 class Playlist:
+    __slots__ = ('songs', 'register')
+
     def __init__(self):
         self.songs = []
         self.register = []

@@ -42,6 +42,8 @@ class Action:
     key: str
 
 class InputBuffer:
+    __slots__ = ('value', 'display')
+
     def __init__(self):
         self.value = ""
         self.display = ""

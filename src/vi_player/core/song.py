@@ -5,7 +5,7 @@ from typing import Optional
 from mutagen.easyid3 import EasyID3
 from mutagen import File
 
-@dataclass
+@dataclass(slots=True)
 class Song:
     path: Path
 
