@@ -364,6 +364,8 @@ Current actions:
 | ------ | ------------------------------------------- |
 | `h`    | Seek backward 5 seconds of the playing song |
 | `l`    | Seek forward 5 seconds of the playing song  |
+| `H`    | Go to the beginning of the song             |
+| `L`    | Skip to the end of the song                 |
 | `m`    | Mute player                                 |
 | `n`    | Skips to the next song                      |
 | `N`    | Go back to the previous song                |
