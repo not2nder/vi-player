@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vi-player"
-version = "0.1.0"
+version = "0.1.2"
 description = "A Vim-like terminal music player"
 readme = "README.md"
 requires-python = ">=3.11"
