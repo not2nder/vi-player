@@ -19,6 +19,7 @@ This project follows Semantic Versioning:
 ### Fixed
 
 - Incorrect home screen version text
+- StatusLine widget text errors
 
 ## v0.1.1 - 2027-07-04
 
