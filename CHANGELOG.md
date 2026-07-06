@@ -10,6 +10,8 @@ This project follows Semantic Versioning:
 
 ## [Unreleased]
 
+## v0.1.2 - 2027-07-06
+
 ### Added
 
 - UTF-8 support
