@@ -5,6 +5,7 @@ import termios
 import select
 
 from vi_player.core.enums import Key
+from vi_player.input.mouse import parse_mouse
 
 ANSI_CODES = {
     b'\x7f': Key.DEL,
@@ -73,6 +74,11 @@ def getch(fd):
     return parse_key(ch)
 
 def parse_key(data):
+    mouse = parse_mouse(data)
+
+    if mouse is not None:
+        return mouse
+    
     if data in ANSI_CODES:
         return ANSI_CODES[data]
     
