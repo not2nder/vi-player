@@ -10,6 +10,10 @@ This project follows Semantic Versioning:
 
 ## [Unreleased]
 
+### Added
+
+- Mouse click events
+
 ## v0.1.2 - 2027-07-06
 
 ### Added
