@@ -68,6 +68,7 @@ class App:
         self.message = ""
         
         self.command_buffer = []
+        self.hitboxes = {} 
 
         self.buffer_index = 0
 

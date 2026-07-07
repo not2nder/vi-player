@@ -60,11 +60,18 @@ def render(screen, app):
         )
 
         screen.draw(i + 1, line)
+        app.hitboxes[i] = {
+            "field": "song",
+            "index": index,
+        }
 
     empty_line = build_empty_line(width, eob_char, styles["muted"])
 
     for i in range(len(visible_songs), visible_lines):
         screen.draw(i + 1, empty_line)
+        app.hitboxes[i] = {
+            "field": "empty",
+        }
 
 def build_index(index, cursor, digits, rnu):
     if rnu and index != cursor:
