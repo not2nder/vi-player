@@ -3,8 +3,41 @@ import sys
 import tty
 import termios
 import select
+from dataclasses import dataclass
 
 from vi_player.core.enums import Key
+
+@dataclass(slots=True)
+class MouseEvent:
+    button: int
+    x: int
+    y: int
+    pressed: bool
+    released: bool
+
+def parse_mouse(data):
+    if not data.startswith(b'\x1b[<'):
+        return None
+
+    final = data[-1:]
+
+    if final not in (b'M', b'm'):
+        return None
+
+    body = data[3:-1]
+
+    try:
+        button, x, y = map(int, body.split(b';'))
+    except ValueError:
+        return None
+
+    return MouseEvent(
+        button=button,
+        x = x - 1,
+        y = y - 1,
+        pressed=final == b'M',
+        released=final == b'm',
+    )
 
 ANSI_CODES = {
     b'\x7f': Key.DEL,
@@ -73,6 +106,11 @@ def getch(fd):
     return parse_key(ch)
 
 def parse_key(data):
+    mouse = parse_mouse(data)
+
+    if mouse is not None:
+        return mouse
+
     if data in ANSI_CODES:
         return ANSI_CODES[data]
     

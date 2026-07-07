@@ -14,7 +14,8 @@ from vi_player.ui.playlist.draw import render as draw_playlist
 from vi_player.ui.commandline.draw import render as draw_commandline
 from vi_player.ui.home.draw import render as draw_home
 
-from vi_player.util.keyboard import getch, enter_raw_mode, restore_terminal
+from vi_player.util.keyboard import getch, enter_raw_mode, restore_terminal, MouseEvent
+from vi_player.input.mouse import handle_event as mouse_handler 
 
 from vi_player.core.config import load_config, get_config
 from vi_player.core.theme import set_theme
@@ -105,6 +106,9 @@ class App:
         self.draw()
 
     def handle_key(self, key):
+        if isinstance(key, MouseEvent):
+            mouse_handler(self, key)
+
         match self.mode:
             case Mode.NORMAL:
                 normal_handler(self, key)
