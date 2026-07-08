@@ -1,40 +1,36 @@
 from vi_player.util.pretty import *
 from vi_player.core.theme import get_theme
 from vi_player.core.enums import Mode
+from vi_player.util.ui import show_cursor, hide_cursor, set_cursor
 
 def render(screen, command, motion, message, mode):
     theme = get_theme()
 
     if mode == Mode.COMMAND:
-        text = draw_cursor(command, theme)
-    
+        show_cursor()
+
+        cursor_y = screen.height
+        cursor_x = command.cursor
+
+        set_cursor(2 if cursor_x >= len(command.text) else 5)
+
+        line = paint(
+            fill(command.text, width=screen.width),
+            theme.style("Normal")
+        ) + RESET + move_cursor(cursor_y, cursor_x)
+        
     elif mode == Mode.NORMAL:
+        hide_cursor()
         freespace = screen.width - len(motion) - 1
         text = justify(truncate(message, freespace), motion, width=screen.width-1)
-    else:
-        text = ""
-
-    line = paint(
-        fill(text, width=screen.width),
-        theme.style("Normal")
-    ) + RESET
     
+        line = paint(
+            fill(text, width=screen.width),
+            theme.style("Normal")
+        ) + RESET
+        
     screen.draw(screen.height, line)
 
-def draw_cursor(command, theme):
-    text = command.text
-    cursor = command.cursor
-
-    if cursor >= len(text):
-        return text + paint(' ', theme.style("CursorBlock")) + paint(' ', theme.style("Normal"))
-
-    before = text[:cursor]
-    current = text[cursor]
-    after = text[cursor+1:]
-
-    return (
-        before
-        + paint(current, theme.style("CursorBlock"))
-        + paint(after, theme.style("Normal"))
-    )
+def move_cursor(line, col):
+    return f"\x1b[{line};{col + 1}H"
 

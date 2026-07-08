@@ -34,9 +34,6 @@ class Theme:
                 "CursorLine": {
                    "fg": "magenta",
                 },
-                "CursorBlock": {
-                    "reverse": True,
-                },
                 "LineNr": {
                     "fg": "yellow",
                 },
