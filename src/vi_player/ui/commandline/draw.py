@@ -5,6 +5,7 @@ from vi_player.util.ui import show_cursor, hide_cursor, set_cursor
 
 def render(screen, command, motion, message, mode):
     theme = get_theme()
+    style = theme.style("Normal")
 
     if mode == Mode.COMMAND:
         show_cursor()
@@ -16,7 +17,7 @@ def render(screen, command, motion, message, mode):
 
         line = paint(
             fill(command.text, width=screen.width),
-            theme.style("Normal")
+            style
         ) + RESET + move_cursor(cursor_y, cursor_x)
         
     elif mode == Mode.NORMAL:
@@ -26,7 +27,7 @@ def render(screen, command, motion, message, mode):
     
         line = paint(
             fill(text, width=screen.width),
-            theme.style("Normal")
+            style
         ) + RESET
         
     screen.draw(screen.height, line)
