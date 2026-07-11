@@ -11,25 +11,13 @@ def cmd_backspace(app):
     if app.command.value() != ":":
         app.command.backspace()
     else:
-        app.command.clear()
-        app.mode = Mode.NORMAL 
+        return_to_normal(app)
 
 def b_next(app):
-    if len(app.command_buffer) > 0:
-        app.command.text = app.command_buffer[app.buffer_index]
-        app.buffer_next()
-        app.command.cursor = len(app.command.text)
+    app.command.next()
 
 def b_prev(app):
-    if len(app.command_buffer) < 1:
-        return
-
-    if app.buffer_index == 0:
-        app.command.text = ":"
-    else:
-        app.buffer_prev()
-        app.command.text = app.command_buffer[app.buffer_index]
-        app.command.cursor = len(app.command.text)
+    app.command.prev()
 
 def cmd_left(app):
     app.command.left()
@@ -48,7 +36,7 @@ def do_cmd(app):
     cmd = args[0]
 
     command = EX_COMMANDS.get(cmd)
-    app.buffer_add(app.command.value())
+    app.command.add(app.command.value())
     
     if command:
         command(app, args)

@@ -21,35 +21,7 @@ from vi_player.core.config import load_config, get_config
 from vi_player.core.theme import set_theme
 
 from vi_player.core.enums import Mode
-
-class TextInput:
-    def __init__(self):
-        self.text   = ""
-        self.cursor = 1
-
-    def feed(self, key):
-        self.text = self.text[:self.cursor] + key + self.text[self.cursor:]
-        self.cursor += len(key)
-
-    def backspace(self):
-        if self.cursor > 1:
-            self.text = self.text[:self.cursor-1] + self.text[self.cursor:]
-            self.cursor -= 1
-
-    def left(self):
-        if self.cursor > 1:
-            self.cursor -= 1
-
-    def right(self):
-        if self.cursor < len(self.text):
-            self.cursor += 1
-
-    def clear(self):
-        self.text = ""
-        self.cursor = 1
-
-    def value(self):
-        return self.text
+from vi_player.core.buffers.cmd import CommandBuffer
 
 class App:
     def __init__(self):
@@ -60,17 +32,15 @@ class App:
         self.mode = Mode.NORMAL
 
         self.cursor = 0
+
         self.input = InputBuffer()
         self.pending = PendingOperator()
 
-        self.command = TextInput()
+        self.command = CommandBuffer()
         
         self.message = ""
         
-        self.command_buffer = []
         self.hitboxes = {} 
-
-        self.buffer_index = 0
 
         self.running = True
 
@@ -138,18 +108,6 @@ class App:
         self.screen.render()
         self.dirty = False 
     
-    def buffer_add(self, command:str):
-        if command:
-            self.command_buffer.insert(0, command)
-
-    def buffer_next(self):
-        if self.buffer_index < len(self.command_buffer) - 1:
-            self.buffer_index += 1
-
-    def buffer_prev(self):
-        if not self.buffer_index < 1:
-            self.buffer_index -= 1
-
     def exit(self):
         self.mpv.exit()
         self.running = False
