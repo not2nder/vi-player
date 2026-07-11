@@ -13,7 +13,8 @@ class CommandBuffer:
         self.buffer.insert(0, value)
 
     def next(self):
-        self.text = self.buffer[self.index]
+        if self.buffer:
+            self.text = self.buffer[self.index]
         
         if self.index < len(self.buffer) - 1:
             self.index += 1
