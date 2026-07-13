@@ -52,22 +52,33 @@ class App:
         except Exception as e:
             self.message = e
 
+        @self.mpv.player.event_callback('end-file')
+        def end_file_callback(event):
+            if event.as_dict()['reason'] == b'eof':
+                self.mpv.next()
+                self.cursor = self.mpv.current
+                self.dirty = True
+
     def run(self):
         ui.initscreen(self.screen)
         signal.signal(signal.SIGWINCH, self.handle_resize)
 
         fd, old = enter_raw_mode()
+
         try:
             while self.running:
+                key = getch(fd)
+
+                if key is not None:
+                    self.handle_key(key)
+
+                self.update_time()
+
                 if self.dirty:
                     self.draw()
 
-                key = getch(fd)
-                if key is None:
-                    continue
-
-                self.handle_key(key)
         finally:
+            self.mpv.exit()
             restore_terminal(fd, old)
             ui.exitscreen()
 
