@@ -13,6 +13,7 @@ This project follows Semantic Versioning:
 ### Added
 
 - Mouse click events
+- Autoplay system
 
 ## v0.1.2 - 2027-07-06
 
