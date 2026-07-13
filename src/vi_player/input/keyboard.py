@@ -39,7 +39,7 @@ def read_key(fd):
     return read_utf8(fd, data)
 
 def read_esc_seq(fd, data):
-    while select.select([fd],[],[],TIMEOUT)[0]:
+    while select.select([fd],[],[],ESC_TIMEOUT)[0]:
         data += os.read(fd,1)
     return data
 
