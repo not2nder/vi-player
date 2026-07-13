@@ -18,7 +18,8 @@ ANSI_CODES = {
     b'\x1b[D': Key.LEFT
 }
 
-TIMEOUT = 0.03
+ESC_TIMEOUT = 0.03
+GETCH_TIMEOUT = 0.3
 
 def enter_raw_mode():
     fd = sys.stdin.fileno()
@@ -70,6 +71,13 @@ def read_utf8(fd, first):
     return data
 
 def getch(fd):
+    ready, _, _ = select.select(
+        [fd],[],[], GETCH_TIMEOUT
+    )
+
+    if not ready:
+        return None
+
     ch = read_key(fd)
     return parse_key(ch)
 
